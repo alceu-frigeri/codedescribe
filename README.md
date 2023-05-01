@@ -3,8 +3,10 @@ codedescribe / codelisting
 ==========
 
 These are expl3 based packages for LaTeX/expl3 code documetation.
-codedescribe provides a series of macros/environments (similar to doc/docx/doc3) for package/classes documentantion
-codelisting provides a few macros for LaTeX code listing/demo.
+### codedescribe
+ provides a series of macros/environments (similar to doc/docx/doc3) for package/classes documentantion
+### codelisting
+ provides a few macros for LaTeX code listing/demo.
 
 It is designed to be 'as class independent as possible',
 no assumption about underline macros is made.
