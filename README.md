@@ -8,7 +8,7 @@ These are expl3 based packages for LaTeX/expl3 code documetation.
 ### codelisting
  provides a few macros for LaTeX code listing/demo.
 
-It is designed to be 'as class independent as possible',
+They are designed to be 'as class independent as possible',
 no assumption about underline macros is made.
 Furthermore, it's assumed that *\maketitle* and the *abstract* environment
 were modified by the underline class, so alternatives (based on the article class) are provided.

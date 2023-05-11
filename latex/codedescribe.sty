@@ -1,0 +1,964 @@
+%%%==============================================================================
+%% Copyright 2023 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0.1beta (2023/05/11)
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codedescribe
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\RequirePackage{ expl3 }
+\ProvidesExplPackage
+    {codedescribe}
+    {2023/05/11}
+    {1.0}
+    {LaTeX Code Description/Documentation}
+
+\prop_if_exist:NTF \g__codedesc_pkg_prop
+  {}
+  { \prop_new:N \g__codedesc_pkg_prop }
+  
+\prop_put_from_keyval:Nn \g__codedesc_pkg_prop
+  {
+    codedesc . name         = codedescribe ,
+    codedesc . prefix       = codedesc ,
+    codedesc . date         = 2023/05/11 ,
+    codedesc . version      = 1.0 ,
+    codedesc . description  = LaTeX Code Description/Documentation
+  }
+
+\cs_gset:Npn \__codedesc_pkg_info:nn #1#2
+  {
+    \prop_item:Nn \g__codedesc_pkg_prop {#1.#2}
+  }
+
+\cs_if_exist:NTF \PkgInfo 
+  {}
+  {
+    \NewDocumentCommand \PkgInfo {mm} { \prop_item:Nn \g__codedesc_pkg_prop {#1.#2} }  
+  }
+
+
+\use:c {@reversemargintrue}
+
+\bool_new:N \l__codedesc_loadlisting_bool
+\bool_set_true:N \l__codedesc_loadlisting_bool
+
+\keys_define:nn { codedescribe }
+{
+  nolisting.usage:n = general,
+	nolisting.bool_set_inverse:N = \l__codedesc_loadlisting_bool,
+  nolisting.default:n = {true},
+}
+\ProcessKeyOptions [codedescribe ]
+
+\RequirePackage{xcolor}
+\bool_if:nT {\l__codedesc_loadlisting_bool}
+  {
+    \RequirePackage{codelisting}
+  }
+
+
+\cs_generate_variant:Nn \tl_set:Nn {Ne}
+
+
+
+%%%%%%%
+%%%
+%%% 'simplified' bold versions of \hline and \rule
+%%% those don't peek ahead (to see if they are followed by another line)
+%%%
+%%%%%%%
+\cs_new:Npn \__codedesc_hline:nnnn #1#2#3#4 {\noalign{#1\vskip #2\vskip 0pt\hrule height #3\arrayrulewidth\vskip #4\vskip 0pt}}
+\cs_new:Npn \__codedesc_hline:nn #1#2       {\__codedesc_hline:nnnn {#1}{-0.5ex}{#2}{0.25ex}}
+\cs_new:Npn \__codedesc_hline:n #1          {\__codedesc_hline:nnnn {#1}{-0.5ex}{2}{0.25ex}}
+\cs_new:Npn \__codedesc_rule:n #1 {\hrule height #1\arrayrulewidth}
+\cs_new:Npn \__codedesc_rule:     {\hrule height 2\arrayrulewidth}
+
+
+
+%%%%%%%
+%%%
+%%% To get the 'real' columnwidth (multicolumn case)
+%%% given the current \linewidth and \textwidth
+%%%
+%%%%%%%
+
+\dim_new:N \l__codedesc_linewidth_dim
+\dim_new:N \l__codedesc_textcolwidth_dim
+
+\cs_new:Npn \__codedesc_set_textcolwidth: 
+  {
+    \dim_compare:nNnTF {\linewidth} = {\l__codedesc_linewidth_dim}
+      {}
+      {
+%        \dim_set:Nn \l__codedesc_linewidth_dim {\linewidth}
+%        \fp_set:Nn \l_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
+%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth - \fp_use:N \l_tmpa_fp \columnsep}
+
+        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth}
+      }
+    
+  }
+
+\colorlet{c__codedesc_none_color}{red!70!black}
+
+\bool_new:N  \l__codedesc_descnotes_bool 
+\bool_new:N  \l__codedesc_descdate_new_bool 
+\tl_new:N    \l__codedesc_descdate_new_tl 
+\bool_new:N  \l__codedesc_descdate_update_bool 
+\tl_new:N    \l__codedesc_descdate_update_tl
+\bool_new:N  \l__codedesc_sidenote_bool 
+\tl_new:N    \l__codedesc_sidenote_tl
+
+
+\cs_new:Npn \__codedesc_keysmetadefaults:nn #1#2
+  {
+    \tl_if_blank:nTF {#2}
+      { \keys_set:nn {codedesc / defaults} { #1 } }
+      { \keys_set:nn {codedesc / defaults} { #1 = {#2} } }
+  }
+
+\keys_define:nn { codedesc / defaults }
+{
+  meta.usage:n = general,
+	meta.code:n = { \colorlet{c__codedesc_marg_color}{#1} } ,
+	meta.default:n = { gray!60!black } ,
+	%
+  marg.usage:n = general,
+	marg.code:n = { \__codedesc_keysmetadefaults:nn {meta}{#1} } ,
+	%
+  arg.usage:n = general,
+	arg.code:n = { \__codedesc_keysmetadefaults:nn {meta}{#1} } ,
+	%
+
+  oarg.usage:n = general,
+	oarg.code:n =  { \colorlet{c__codedesc_oarg_color}{#1} } ,
+  oarg.default:n = { gray!90!black } ,
+	%
+  parg.usage:n = general,
+	parg.code:n = { \__codedesc_keysmetadefaults:nn {oarg}{#1} } ,
+	%
+  xarg.usage:n = general,
+	xarg.code:n = { \__codedesc_keysmetadefaults:nn {oarg}{#1} } ,
+	%
+
+  code.usage:n = general,
+	code.code:n = { \colorlet{c__codedesc_code_color}{#1} } ,
+  code.default:n = { blue!40!black } ,
+	%
+  macro.usage:n = general,
+	macro.code:n = { \__codedesc_keysmetadefaults:nn {code}{#1} } ,
+	%
+  function.usage:n = general,
+	function.code:n = { \__codedesc_keysmetadefaults:nn {code}{#1} } ,
+	%
+
+  syntax.usage:n = general,
+	syntax.code:n = { \colorlet{c__codedesc_syntax_color}{#1} } ,
+  syntax.default:n = { blue!60!black } ,
+	%
+
+  keyval.usage:n = general,
+	keyval.code:n = { \colorlet{c__codedesc_keyval_color}{#1} } ,
+  keyval.default:n = { teal!40!black } ,
+	%
+  key.usage:n = general,
+	key.code:n = { \__codedesc_keysmetadefaults:nn {keyval}{#1} } ,
+  %
+  keys.usage:n = general,
+	keys.code:n = { \__codedesc_keysmetadefaults:nn {keyval}{#1} } ,
+	%
+  value.usage:n = general,
+	value.code:n = { \__codedesc_keysmetadefaults:nn {keyval}{#1} } ,
+	%
+
+  option.usage:n = general,
+	option.code:n = { \colorlet{c__codedesc_options_color}{#1} } ,
+  option.default:n = { green!30!black } ,
+	%
+
+  defaultval.usage:n = general,
+	defaultval.code:n = { \colorlet{c__codedesc_defaultval_color}{#1} } ,
+  defaultval.default:n = { blue!60!black } ,
+	%
+
+  env.usage:n = general,
+	env.code:n = { \colorlet{c__codedesc_env_color}{#1} } ,
+  env.default:n = { green!30!black } ,
+	%
+
+  pkg.usage:n = general,
+	pkg.code:n = { \colorlet{c__codedesc_pkg_color}{#1} } ,
+  pkg.default:n = { green!30!black } ,
+	%
+  pack.usage:n = general,
+	pack.code:n = { \__codedesc_keysmetadefaults:nn {pkg}{#1} } ,
+	%
+  
+  allcolors.usage:n = general,
+	allcolors.meta:n = 
+    { 
+      meta = {#1} ,
+      oarg = {#1} ,
+      code = {#1} ,
+      syntax = {#1} ,
+      keyval = {#1} ,
+      option = {#1} ,
+      defaultval = {#1} ,
+      env = {#1} ,
+      pkg = {#1} ,
+    } ,
+  allcolors.default:n = { black } ,
+  
+  font.usage:n = general ,
+  font.code:n = { \tl_set:Nn \__codedesc_metafont_tl: {#1} } ,
+  font.default:n = { \ttfamily } ,
+  
+  fontsize.usage:n = general ,
+  fontsize.code:n = { \tl_set:Nn \__codedesc_metasize_tl: {#1} } ,
+  fontsize.default:n = { \small } ,
+
+  fontshape.usage:n = general ,
+  fontshape.code:n = { \tl_set:Nn \__codedesc_slshape_tl: {#1} } ,
+  fontshape.default:n = { \slshape } ,
+
+  setdefaults.usage:n = general ,
+  setdefaults.meta:n = { meta, oarg, code, syntax, keyval, option, defaultval, env, pkg , font, fontsize, fontshape} , 
+
+  unknown.usage:n = general,
+	unknown.code:n = 
+    { }, % unknown keys are silently ignored...
+}
+
+\keys_set:nn {codedesc / defaults}{setdefaults}
+
+\NewDocumentCommand \setcodefmt {m} { \keys_set:nn {codedesc / defaults}{#1}}
+
+\keys_define:nn { codedesc / format }
+{
+  meta.usage:n = general,
+	meta.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_marg_color} }
+      \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta:n }
+      \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta:o }
+    },
+  marg.usage:n = general,
+	marg.meta:n = { meta } ,
+	%
+	%
+  arg.usage:n = general,
+	arg.meta:n = { meta } ,
+	%
+
+  oarg.usage:n = general,
+	oarg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_oarg_color} }
+      \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta:n }
+      \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta:o }
+    },
+	%
+  parg.usage:n = general,
+	parg.meta:n = { oarg } ,
+	%
+  xarg.usage:n = general,
+	xarg.meta:n = { oarg } ,
+	%
+
+  code.usage:n = general,
+	code.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_code_color} }
+      \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_macro_typeset:n }
+      \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_macro_typeset:o }
+    },
+	%
+  macro.usage:n = general,
+	macro.meta:n = { code } ,
+	%
+  function.usage:n = general,
+	function.meta:n = { code } ,
+	%
+
+  syntax.usage:n = general,
+	syntax.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_syntax_color} }
+    },
+	%
+
+  keyval.usage:n = general,
+	keyval.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_keyval_color} }
+      \tl_set:Nn \__codedesc_metashape_tl: { \__codedesc_slshape_tl: }
+    },
+	%
+  key.usage:n = general,
+	key.meta:n = { keyval } ,
+  %
+  keys.usage:n = general,
+	keys.meta:n = { keyval } ,
+	%
+  value.usage:n = general,
+	value.meta:n = { keyval } ,
+	%
+
+  option.usage:n = general,
+	option.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_options_color} }
+    },
+	%
+
+  defaultval.usage:n = general,
+	defaultval.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_defaultval_color} }
+    },
+	%
+
+  env.usage:n = general,
+	env.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_env_color} }
+      \tl_set:Nn \__codedesc_metashape_tl: { \__codedesc_slshape_tl: }
+    },
+	%
+
+  pkg.usage:n = general,
+	pkg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_pkg_color} }
+      \tl_set:Nn \__codedesc_metashape_tl: { \__codedesc_slshape_tl: }
+    },
+	%
+  pack.usage:n = general,
+	pack.meta:n = { pkg } ,
+	%
+
+  sep.usage:n = general,
+	sep.code:n = 
+    {
+      \tl_set:Nn \__codedesc_lastsep_tl { ~#1~ }
+    },
+	%
+  comma.usage:n = general,
+  comma.code:n = 
+    {
+      \tl_set:Nn \__codedesc_lastsep_tl { ,~ }
+    },
+  %
+  rulecolor.usage:n = general,
+  rulecolor.code:n = 
+    {
+      \tl_set:Nn \__codedesc_rulecolor_tl: { \color{#1} }
+    },
+  %
+  new.usage:n = general,
+  new.code:n =
+    {
+      \bool_set_true:N \l__codedesc_descnotes_bool
+      \bool_set_true:N \l__codedesc_descdate_new_bool 
+      \tl_set:Nn       \l__codedesc_descdate_new_tl {#1}
+    },
+    
+  update.usage:n = general,
+  update.code:n =
+    {
+      \bool_set_true:N \l__codedesc_descnotes_bool
+      \bool_set_true:N \l__codedesc_descdate_update_bool 
+      \tl_set:Nn       \l__codedesc_descdate_update_tl {#1}
+    },
+    
+  note.usage:n = general,
+  note.code:n =
+    {
+      \bool_set_true:N \l__codedesc_descnotes_bool
+      \bool_set_true:N \l__codedesc_sidenote_bool 
+      \tl_set:Nn       \l__codedesc_sidenote_tl {#1}
+    },
+    
+  unknown.usage:n = general,
+	unknown.code:n = 
+    {
+      \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_none_color} }
+    },
+    
+}
+
+\cs_new:Npn \__codedesc_metafmt_set:n #1
+  {
+    \tl_set:Nn \__codedesc_rulecolor_tl: { \__codedesc_metacolor_tl: }
+    \tl_set:Nn \__codedesc_metashape_tl: { }
+    \tl_set:Nn \__codedesc_typeset_tl:n { }
+    \tl_set:Nn \__codedesc_typeset_tl:o { \relax }
+    \tl_set:Nn \__codedesc_sep_tl {,\ }
+    \tl_set:Nn \__codedesc_lastsep_tl {\ and\ }
+
+    \bool_set_false:N \l__codedesc_descnotes_bool
+    \bool_set_false:N \l__codedesc_descdate_new_bool 
+    \bool_set_false:N \l__codedesc_descdate_update_bool 
+    \bool_set_false:N \l__codedesc_sidenote_bool 
+
+    \keys_set:nn {codedesc / format}{#1}
+  }
+  
+\cs_generate_variant:Nn \__codedesc_metafmt_set:n {o}
+
+\cs_new:Npn \__codedesc_metafmt:n #1
+  {
+    \tl_set:Nn \__codedesc_rulecolor_tl: { \__codedesc_metacolor_tl: } 
+    \tl_set:Nn \__codedesc_metashape_tl: { }
+    \tl_set:Nn \__codedesc_typeset_tl:n { }
+    \tl_set:Nn \__codedesc_typeset_tl:o { }
+    \tl_set:Nn \__codedesc_sep_tl {,\ }
+    \tl_set:Nn \__codedesc_lastsep_tl {\ and\ }
+
+    \bool_set_false:N \l__codedesc_descnotes_bool
+    \bool_set_false:N \l__codedesc_descdate_new_bool 
+    \bool_set_false:N \l__codedesc_descdate_update_bool 
+    \bool_set_false:N \l__codedesc_sidenote_bool 
+
+    \keys_set:nn {codedesc / format}{#1}
+    %\tl_show:N \__codedesc_rulecolor_tl
+    \__codedesc_metafmt:
+  }
+
+\cs_generate_variant:Nn \__codedesc_metafmt:n {o}
+
+  
+\cs_new:Npn \__codedesc_metafmt: 
+  {
+    \__codedesc_metacolor_tl:
+    \__codedesc_metasize_tl:
+    \__codedesc_metafont_tl:
+    \__codedesc_metashape_tl:
+  }
+
+
+\keys_define:nn { codedesc / delimiters }
+{
+  oarg.usage:n = general,
+	oarg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_open_delimit_tl {[}
+      \tl_set:Nn \__codedesc_close_delimit_tl {]}
+    },
+  marg.usage:n = general,
+	marg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_open_delimit_tl {\{}
+      \tl_set:Nn \__codedesc_close_delimit_tl {\}}
+    },
+  parg.usage:n = general,
+	parg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_open_delimit_tl {(}
+      \tl_set:Nn \__codedesc_close_delimit_tl {)}
+    },
+	%
+  xarg.usage:n = general,
+	xarg.code:n = 
+    {
+      \tl_set:Nn \__codedesc_open_delimit_tl {<}
+      \tl_set:Nn \__codedesc_close_delimit_tl {>}
+    },
+	%
+  meta.usage:n = general,
+	meta.code:n = 
+    {
+      \tl_set:Nn \__codedesc_open_delimit_tl {}
+      \tl_set:Nn \__codedesc_close_delimit_tl {}
+    },
+	%
+  unknown.usage:n = general,
+	unknown.code:n = 
+    {
+%      \tl_set:Nn \__codedesc_open_delimit_tl {!}
+%      \tl_set:Nn \__codedesc_close_delimit_tl {!}
+    },
+	%
+}
+
+
+%%%%%%%
+%%%
+%%% < meta >
+%%%
+%%%%%%%
+\cs_new:Npn \__codedesc_meta:n #1
+  {
+    \ensuremath\langle #1 \ensuremath\rangle
+  }  
+  
+\cs_generate_variant:Nn \__codedesc_meta:n {o}  
+
+%%%%%%%
+%%%
+%%% < meta > 'detokenized'
+%%%
+%%%%%%%
+\cs_new:Npn \__codedesc_meta*:n #1
+  {
+    \ensuremath\langle \tl_to_str:n {#1} \ensuremath\rangle
+  }  
+
+
+\cs_generate_variant:cn {__codedesc_meta*:n} {o}  
+
+
+
+\cs_new:Npn \__codedesc_macro_typeset:n #1
+  {
+    \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
+    \regex_replace_all:nnN {\ }{}  \l_tmpb_tl
+    \regex_replace_once:nnNTF {TF}{}\l_tmpb_tl
+      {
+        \l_tmpb_tl\textsl{\underline{TF}}
+      }
+      { \l_tmpb_tl }  
+  }
+
+\cs_generate_variant:Nn \__codedesc_macro_typeset:n {o}
+
+
+
+
+
+\cs_new:Npn \__codedesc_list_typeset:nnn #1#2#3
+  {
+    \seq_set_from_clist:Nn \l_tmpa_seq {#1}
+    \bool_set:Nn \l__codedesc_bool {\seq_if_empty_p:N \l_tmpa_seq}
+    \tl_set:Nn \l__codedesc_middle_tl {}
+    \tl_set:Nn \l__codedesc_lastone_tl {}
+    \bool_until_do:Nn \l__codedesc_bool 
+      {
+        \seq_pop_left:NNTF \l_tmpa_seq \l_tmpa_tl
+          {
+            \seq_if_empty:NTF \l_tmpa_seq
+              {
+                \l__codedesc_lastone_tl
+                {
+                  \__codedesc_metafmt:
+                  \__codedesc_typeset_tl:o \l_tmpa_tl
+                }
+                \bool_set_true:N \l__codedesc_bool
+              }
+              {
+                \l__codedesc_middle_tl                
+                {
+                  \__codedesc_metafmt:
+                  \__codedesc_typeset_tl:o \l_tmpa_tl
+                }
+                \tl_set:Nn \l__codedesc_middle_tl {#2}
+                \tl_set:Nn \l__codedesc_lastone_tl {#3}
+              }
+          }
+          {}
+      }
+  }
+
+\cs_generate_variant:Nn \__codedesc_list_typeset:nnn {noo}
+
+
+
+
+\cs_new:Npn \__codedesc_args_typeset:nnnn #1#2#3#4
+  {
+    \seq_set_from_clist:Nn \l_tmpa_seq {#3}
+    \group_begin:
+      \__codedesc_metafmt:n {#1}
+      \seq_map_inline:Nn \l_tmpa_seq {~\!\!#2 \__codedesc_meta:n {##1} #4 }                                  
+    \group_end:    
+  }
+  
+  
+\bool_new:N \l__codedesc_longblock_bool
+\coffin_new:N \l__codedesc_margin_coffin
+\coffin_new:N \l__codedesc_text_coffin
+\coffin_new:N \l__codedesc_syntax_coffin
+\bool_new:N   \l__codedesc_syntax_bool
+\dim_new:N \l__codedesc_syntax_wd_dim
+\dim_new:N \l__codedesc_margin_wd_dim
+  
+  
+  
+%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%%  User/Document level commands
+%%%%
+%%%%%%%%%%%%%%%%%%%
+ 
+  
+  
+\NewDocumentEnvironment {codedescribe}{O{code}m}
+  {
+    \seq_set_from_clist:Nn \l_tmpa_seq {#2}
+    \__codedesc_set_textcolwidth: 
+    \hcoffin_set:Nn \l__codedesc_margin_coffin 
+      {
+        \__codedesc_metafmt:n {#1}
+        
+        \begin{tabular}{@{} l @{} }
+          \__codedesc_hline:nnnn {\__codedesc_rulecolor_tl:}{0.5ex}{2}{0.25ex}
+          \seq_map_inline:Nn \l_tmpa_seq { \__codedesc_typeset_tl:n {##1} \\ } 
+          \bool_if:nTF {\l__codedesc_descnotes_bool}
+            {
+             \\[-2.5ex]
+             \__codedesc_hline:nnnn {\color{black}}{0.5ex}{0.25}{0.25ex} 
+             
+             \bool_if:nT {\l__codedesc_descdate_new_bool} 
+                {\scriptsize\color{black}new:~ \l__codedesc_descdate_new_tl\\}
+             \bool_if:nT {\l__codedesc_descdate_update_bool} 
+                {\scriptsize\color{black}update:~ \l__codedesc_descdate_update_tl\\}
+             \bool_if:nT {\l__codedesc_sidenote_bool} 
+                {\scriptsize\color{black}NB:~ \l__codedesc_sidenote_tl\\}
+            }
+            {}
+          \\[-2.5ex]                                
+          \__codedesc_hline:nnnn {\__codedesc_rulecolor_tl:}{-0.25ex}{2}{1ex}
+        \end{tabular}
+      }
+    \dim_set:Nn \l__codedesc_margin_wd_dim {\coffin_wd:N \l__codedesc_margin_coffin}
+    \bool_if:nTF { \dim_compare_p:nNn \l__codedesc_margin_wd_dim > \marginparwidth}
+      {
+        \bool_set_true:N \l__codedesc_longblock_bool
+        \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }        
+      }
+      {
+        \bool_set_false:N \l__codedesc_longblock_bool
+        \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim}        
+      }
+    \coffin_clear:N \l__codedesc_syntax_coffin
+    \bool_set_false:N \l__codedesc_syntax_bool
+    \vcoffin_set:Nnw \l__codedesc_text_coffin {\l__codedesc_textcolwidth_dim}
+    \setlength\parindent{0pt}
+    \begin{minipage}[t]{\l__codedesc_textcolwidth_dim} 
+  }
+  {
+    \end{minipage}
+    \vcoffin_set_end:
+    \bool_if:NTF \l__codedesc_longblock_bool
+      { % __describeblock starting at marginpar
+        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
+        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {\marginparwidth+\marginparsep}{0pt}%{-0.25\baselineskip}
+        \par\noindent
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{0pt}              
+      }
+      { % __describeblock at marginpar
+        \coffin_attach:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
+        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {0pt}{0pt}%{-0.25\baselineskip}
+        \par\noindent
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{0pt}      
+      }
+    \\[0.25\baselineskip]
+  }
+  
+ 
+  
+\NewDocumentEnvironment{codesyntax}{}
+  {
+    \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
+    \__codedesc_metafmt:n {syntax}
+    \hspace*{2em}     %% !!! together with \parindent{-2em}
+    \begin{tabular} { @{} l @{} }
+      \__codedesc_hline:nnnn {\color{white}}{0.5ex}{2}{-1.5ex}
+      \__codedesc_metacolor_tl:
+      \begin{minipage}[t]{\l__codedesc_syntax_wd_dim}
+        \obeylines\obeyspaces\setlength\parindent{-2em}
+  }
+  {
+      \end{minipage}\\[-2.5ex]
+          \\                                
+          \__codedesc_hline:nnnn {\color{white}}{0ex}{2}{1ex}      
+    \end{tabular}
+    %\color{black}
+    \vcoffin_gset_end:
+  }
+
+
+\coffin_new:N \__codedesc_describe_coffin
+\dim_new:N \__codedesc_describelabel_wd_dim
+\dim_new:N \__codedesc_describelist_wd_dim
+\tl_new:N \__codedesc_join_tl:
+\tl_new:N \__codedesc_ragged_tl:
+
+  
+  
+  \NewDocumentEnvironment{describelist}{O{20mm}m}
+  {
+    %\vspace*{-1.5ex}
+    \mode_if_horizontal:TF 
+      {\vspace*{-0.75ex}} 
+      {}
+    \__codedesc_set_textcolwidth: 
+    \coffin_clear:N \__codedesc_describe_coffin
+    \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
+    \dim_set:Nn \__codedesc_describelist_wd_dim {\l__codedesc_textcolwidth_dim}
+    \tl_set:Nn \__codedesc_join_tl: {\coffin_attach:NnnNnnnn}
+    \tl_set:Nn \__codedesc_ragged_tl: {\raggedleft}
+    \tl_set:Nn \__codedesc_listkind_tl {#2}
+  }
+  {
+%    \par\noindent\coffin_typeset:Nnnnn \__codedesc_describe_coffin {l}{t}{0pt}{10pt}
+  }
+  
+\NewDocumentEnvironment{describelist*}{O{20mm}m}
+  {
+    %\vspace*{-1.5ex}
+    \mode_if_horizontal:TF 
+      {\vspace*{-1ex}} 
+      {}
+    \__codedesc_set_textcolwidth: 
+    \coffin_clear:N \__codedesc_describe_coffin
+    \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
+    \dim_set:Nn \__codedesc_describelist_wd_dim {\l__codedesc_textcolwidth_dim - \__codedesc_describelabel_wd_dim -\marginparsep}
+    \tl_set:Nn \__codedesc_join_tl: {\coffin_join:NnnNnnnn}
+    \tl_set:Nn \__codedesc_ragged_tl: {}
+    \tl_set:Nn \__codedesc_listkind_tl {#2}
+  }
+  {
+%    \par\noindent\coffin_typeset:Nnnnn \__codedesc_describe_coffin {l}{t}{0pt}{10pt}
+  }
+
+\NewDocumentCommand \describe {mm}
+  {
+    
+    \hcoffin_set:Nn \l_tmpb_coffin 
+      { 
+        \__codedesc_metafmt:o { \__codedesc_listkind_tl }
+        \__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
+      }
+      
+      \dim_compare:nNnTF {\coffin_wd:N \l_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
+        {
+          \vcoffin_set:Nnn \l_tmpa_coffin 
+            { \__codedesc_describelabel_wd_dim } 
+            {  ~\ ~ }
+          \coffin_attach:NnnNnnnn
+            \l_tmpa_coffin {r}{t}
+            \l_tmpb_coffin    {r}{t}
+            {0pt}{0pt}
+        
+        }
+        {
+          \vcoffin_set:Nnn \l_tmpa_coffin 
+            { \__codedesc_describelabel_wd_dim } 
+            { 
+              \__codedesc_metafmt:o { \__codedesc_listkind_tl }
+              \noindent\__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
+            }          
+        }
+
+    \vcoffin_set:Nnn \l_tmpb_coffin 
+      { \__codedesc_describelist_wd_dim } 
+      { 
+        \noindent
+        \begin{minipage}[t]{ \__codedesc_describelist_wd_dim }
+          #2
+        \end{minipage}
+      }
+      
+      
+    \__codedesc_join_tl: 
+      \l_tmpb_coffin {l}{t} 
+      \l_tmpa_coffin {r}{t} 
+      {-\marginparsep}{0pt}
+
+    \mode_if_horizontal:TF 
+      {
+        \\ 
+%        \tl_set:Nn \l_tmpa_tl {~\ ~}
+      }
+      {
+%        \tl_set:Nn \l_tmpa_tl {~\ ~}
+      }
+      \noindent%\vspace*{-1ex}
+    \coffin_typeset:Nnnnn 
+      \l_tmpb_coffin {l}{t} {0pt}{0pt}
+    \\[-0.5\baselineskip] 
+    
+  }
+
+
+  
+\NewDocumentCommand \typesetmeta {m} {\__codedesc_meta:n {#1}}
+
+\cs_new_eq:NN \tsmeta \typesetmeta  
+
+
+\NewDocumentCommand \typesetargs {O{meta}m}
+  { 
+    \keys_set:nn {codedesc / delimiters}{#1}
+    \__codedesc_args_typeset:nnnn {#1} \__codedesc_open_delimit_tl {#2} \__codedesc_close_delimit_tl
+  }
+  
+\cs_new_eq:NN \tsargs \typesetargs  
+
+
+
+\NewDocumentCommand \typesetmacro {mO{}m} 
+  {
+    \__codedesc_metafmt_set:n {code} %.... argh!
+    \__codedesc_list_typeset:nnn{#1}{,~}{,~}
+%    \__codedesc_macro_typeset:n{#1}
+    \,\__codedesc_args_typeset:nnnn {oarg} [ {#2} ]
+    \__codedesc_args_typeset:nnnn {marg} \{ {#3} \}
+  }
+\cs_new_eq:NN \tsmacro \typesetmacro
+
+
+\NewDocumentCommand \typesetverb {O{code}m} 
+  {
+    \group_begin:
+      \__codedesc_metafmt:n {#1}
+      \tl_to_str:n {#2}
+    \group_end:
+  }
+\cs_new_eq:NN \tsverb \typesetverb
+
+\NewDocumentCommand \typesetobj {O{code}m} 
+  {
+    \__codedesc_metafmt_set:n {#1}
+    \__codedesc_list_typeset:noo{#2}{\__codedesc_sep_tl}{\__codedesc_lastsep_tl}
+  }
+
+\cs_new_eq:NN \tsobj \typesetobj
+
+
+\NewDocumentCommand \typesetmarginnote {m}{\marginpar{{\scriptsize\raggedleft #1 \par}}}
+\cs_new_eq:NN \tsmarginnote \typesetmarginnote
+
+
+\NewDocumentEnvironment {tsremark} {O{Note:}}
+  {
+%    \par\vspace*{0.5\baselineskip}
+    \mode_if_horizontal:TF 
+      {\par\vspace*{0.25\baselineskip}}%\vspace*{-1.5ex}} 
+      {\vspace*{0.75\baselineskip}}   
+    \__codedesc_set_textcolwidth:
+    \group_begin:
+      \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
+      \begin{minipage}{0.8\l__codedesc_textcolwidth_dim}
+        \setlength\parindent{0pt}\small
+        \textsl{\textbf{#1}} %\dim_to_decimal:n {\linewidth}
+  }
+  {
+      \end{minipage}
+    \group_end:
+    \par
+  }
+
+
+%%%% ARGH !!!!
+
+\keys_define:nn { codedesc / title }
+  {
+    title    .usage:n = general ,
+  	title    .tl_set:N = \l__codedesc_title_tl ,
+
+    author   .usage:n = general ,
+  	author   .tl_set:N = \l__codedesc_author_tl ,
+
+    date     .usage:n = general ,
+  	date     .tl_set:N = \l__codedesc_descdate_tl ,
+
+    abstract .usage:n = general ,
+  	abstract .tl_set:N = \l__codedesc_abstract_tl ,
+  }
+
+
+\cs_new:Npn \__codedesc_make_title: {%
+	\newpage
+	\null
+	\vskip 2em%
+	\begin{center}%
+		\let \footnote \thanks
+		{\LARGE \l__codedesc_title_tl \par}%
+		\vskip 1.5em%
+		{\large
+			\lineskip .5em%
+			\begin{tabular}[t]{c}%
+				\l__codedesc_author_tl
+			\end{tabular}\par}%
+		\vskip 1em%
+		{\large \l__codedesc_descdate_tl}%
+	\end{center}%
+	\par
+	\vskip 1.5em
+}
+
+
+%%%ARGH !!!!!
+%%% 'adapted' from 'abstract.cls'
+%%%
+%%%
+
+\makeatletter
+
+
+\NewDocumentCommand \typesettitle {m}
+  {
+    \keys_set:nn {codedesc / title}{#1}
+  
+  	\group_begin:
+    	\renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    	\def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    	\long\def\@makefntext##1{\parindent 1em\noindent
+    		\hb@xt@1.8em{%
+    			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    	\if@twocolumn
+      	\ifnum \col@number=\@ne
+        	\__codedesc_make_title:
+    	  \else
+        	\twocolumn[\__codedesc_make_title:]%
+    	  \fi
+    	\else
+      	\newpage
+      	\global\@topnum\z@   % Prevents figures from going at top of page.
+      	\__codedesc_make_title:
+    	\fi
+    	\thispagestyle{plain}\@thanks
+  	\group_end:
+  }
+
+\cs_new_eq:NN \tstitle \typesettitle
+
+
+\NewDocumentEnvironment{tsabstract}{}
+  {
+   	\if@twocolumn
+     	\section*{\abstractname}%
+   	\else
+     	\small
+     	\begin{center}%
+     		{\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+     	\end{center}%
+     	\quotation
+   	\fi
+  }
+  {
+    \if@twocolumn\else\endquotation\fi
+  }
+\cs_new_eq:NN \typesetabstract \tsabstract
+\cs_new_eq:NN \endtypesetabstractend \endtsabstract
+
+\makeatother
+
+
+
