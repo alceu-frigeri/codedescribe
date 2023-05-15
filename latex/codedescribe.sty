@@ -78,6 +78,36 @@
 \cs_generate_variant:Nn \tl_to_str:n {o , e}
  
 
+\msg_new:nnnn {codedesc} {format-err}
+  {
+    (ID:#1)~Format~Key~(#2)~not~defined!
+  }
+  {
+    You~tried~to~use~a~non~defined~format~key:#2.
+    ~Error~Code~ ID:<#1>.
+  }
+
+\msg_new:nnnn {codedesc} {group-err}
+  {
+    (ID:#1)~Format~group~(#2)~not~defined!
+  }
+  {
+    You~tried~to~use~a~non~defined~format~group:#2.
+    ~Error~Code~ ID:<#1>.
+  }
+
+\msg_new:nnnn {codedesc} {object-err}
+  {
+    (ID:#1)~Objetc~Type~(#2)~not~defined!
+  }
+  {
+    You~tried~to~use~a~non~defined~object~type:#2.
+    ~Error~Code~ ID:<#1>.
+  }
+
+
+
+
 %%%%%%%
 %%%
 %%% 'simplified' bold versions of \hline and \rule
@@ -117,13 +147,6 @@
   }
 
 
-\bool_new:N  \l__codedesc_descnotes_bool 
-\bool_new:N  \l__codedesc_descdate_new_bool 
-\tl_new:N    \l__codedesc_descdate_new_tl 
-\bool_new:N  \l__codedesc_descdate_update_bool 
-\tl_new:N    \l__codedesc_descdate_update_tl
-\bool_new:N  \l__codedesc_sidenote_bool 
-\tl_new:N    \l__codedesc_sidenote_tl
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,48 +156,64 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \keys_define:nn { codedesc / scratch_def }
 {
   meta.usage:n = general ,
+  meta .value_forbidden:n = true ,
   meta .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {meta} } ,
   
   xmeta.usage:n = general ,
+  xmeta .value_forbidden:n = true ,
   xmeta .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {xmeta} } ,
   
   code.usage:n = general ,
+  code .value_forbidden:n = true ,
   code .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {code} } ,
   
   verb.usage:n = general ,
+  verb .value_forbidden:n = true ,
   verb .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {verb} } ,
   
   xverb.usage:n = general ,
+  xverb .value_forbidden:n = true ,
   xverb .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {xverb} } ,
   
   nofmt.usage:n = general ,
+  nofmt .value_forbidden:n = true ,
   nofmt .code:n = {\tl_clear:N \l__codedesc_tmpfmt_tl } ,
 
   slshape.usage:n = general ,
+  slshape .value_forbidden:n = true ,
   slshape .code:n ={ \tl_set:Nn \l__codedesc_tmpshape_tl { slshape} } ,
   
   itshape.usage:n = general ,
+  itshape .value_forbidden:n = true ,
   itshape .code:n ={ \tl_set:Nn \l__codedesc_tmpshape_tl { itshape} } ,
   
   noshape.usage:n = general ,
+  noshape .value_forbidden:n = true ,
   noshape .code:n ={ \tl_clear:N \l__codedesc_tmpshape_tl } ,
     
   color.usage:n = general ,
+  color .value_required:n = true ,
   color.code:n = { \tl_set:Nn \l__codedesc_tmpcolor_tl { #1 } } ,
   
   lbracket .usage:n = general ,
+  lbracket .value_required:n = true ,
   lbracket .code:n = { \tl_set:Nn \l__codedesc_tmplbracket_tl { #1 } } ,
 
   rbracket .usage:n = general ,
+  rbracket .value_required:n = true ,
   rbracket .code:n = { \tl_set:Nn \l__codedesc_tmprbracket_tl { #1 } } ,
   
-  unknown.usage:n = general ,
-  unknown.code:n = {},
+	unknown.code:n = 
+    {
+     \msg_error:nnxx { codedesc } {format-err} {format}{\l_keys_key_str}
+    },    
+
 }
 
 
@@ -234,14 +273,6 @@
   }
 
 
-\msg_new:nnnn {codedesc} {group-err}
-  {
-    (ID:#1)~Format~group~(#2)~not~defined!
-  }
-  {
-    You~tried~to~use~a~non~defined~format~group:#2.
-    ~Error~Code~ ID:<#1>.
-  }
 
 
 \keys_define:nn { codedesc / grp_fmt }
@@ -283,6 +314,10 @@
 
   \colorlet{c__codedesc_none_color}{red!70!black}
 
+	\colorlet{c__codedesc_verb_color}{ black }
+\__codedesc_group_define:nn {verb} {color=c__codedesc_verb_color}
+\__codedesc_object_define:nnn {verb}{verb}{verb}
+\__codedesc_object_define:nnn {xverb}{verb}{xverb}
 
 	\colorlet{c__codedesc_marg_color}{ gray!60!black }
 \__codedesc_group_define:nn {meta} {meta,color=c__codedesc_marg_color}
@@ -332,65 +367,67 @@
 \__codedesc_object_define:nnn {pack}{pkg}{}
 
 
-\msg_new:nnnn {codedesc} {object-err}
-  {
-    (ID:#1)~Objetc~Type~(#2)~not~defined!
-  }
-  {
-    You~tried~to~use~a~non~defined~object~type:#2.
-    ~Error~Code~ ID:<#1>.
-  }
 
 
 \keys_define:nn { codedesc / base_fmt }
 {
   meta .usage:n = general , 
+  meta .value_forbidden:n = true ,
   meta .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta:n }
     \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta:o }
    } ,
 
   xmeta .usage:n = general , 
+  xmeta .value_forbidden:n = true ,
   xmeta .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta*:n }
     \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta*:o }
    } ,
 
   verb .usage:n = general , 
+  verb .value_forbidden:n = true ,
   verb .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \tl_to_str:n }
     \tl_set:Nn \__codedesc_typeset_tl:o { \tl_to_str:o }   
    } ,
    
   xverb .usage:n = general , 
+  xverb .value_forbidden:n = true ,
   xverb .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_verb_nospc_typeset:n }
     \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_verb_nospc_typeset:o }   
    } ,
    
   code .usage:n = general , 
+  code .value_forbidden:n = true ,
   code .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_macro_typeset:n }
     \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_macro_typeset:o }   
    } ,
    
   slshape .usage:n = general , 
+  slshape .value_forbidden:n = true ,
   slshape .code:n  = { 
     \tl_set:Nn \__codedesc_metashape_tl: { \slshape}
    } ,
    
   itshape .usage:n = general , 
+  itshape .value_forbidden:n = true ,
   itshape .code:n  = { 
     \tl_set:Nn \__codedesc_metashape_tl: { \itshape }
    } , 
   
   lbracket .usage:n = general ,
+  lbracket .value_required:n = true ,
   lbracket .code:n = { \tl_set:Nn \__codedesc_Lbracket_tl { #1 } } ,
 
   rbracket .usage:n = general ,
+  rbracket .value_required:n = true ,
   rbracket .code:n = { \tl_set:Nn \__codedesc_Rbracket_tl { #1 } } ,
 
   color .usage:n = general ,
+  color .value_required:n = true ,
   color .code:n = {
     \tl_set:Nn \__codedesc_metacolor_tl: { \color{#1} }
   } ,
@@ -584,6 +621,13 @@
       \seq_map_inline:Nn \l_tmpa_seq {~\!\!#2 \__codedesc_meta:n {##1} #4 }                                  
     \group_end:    
   }
+
+
+%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%%  Variables used in the codedescibe environment
+%%%%
+%%%%%%%%%%%%%%%%%%%
   
   
 \bool_new:N \l__codedesc_longblock_bool
@@ -594,6 +638,22 @@
 \dim_new:N \l__codedesc_syntax_wd_dim
 \dim_new:N \l__codedesc_margin_wd_dim
   
+\bool_new:N  \l__codedesc_descnotes_bool 
+\bool_new:N  \l__codedesc_descdate_new_bool 
+\tl_new:N    \l__codedesc_descdate_new_tl 
+\bool_new:N  \l__codedesc_descdate_update_bool 
+\tl_new:N    \l__codedesc_descdate_update_tl
+\bool_new:N  \l__codedesc_sidenote_bool 
+\tl_new:N    \l__codedesc_sidenote_tl
+
+
+\coffin_new:N \__codedesc_describe_coffin
+\dim_new:N \__codedesc_describelabel_wd_dim
+\dim_new:N \__codedesc_describelist_wd_dim
+\tl_new:N \__codedesc_join_tl:
+\tl_new:N \__codedesc_ragged_tl:
+
+\dim_new:N \__codedesc_paradvance_dim  
   
   
 %%%%%%%%%%%%%%%%%%%
@@ -615,6 +675,13 @@
   
 \NewDocumentEnvironment {codedescribe}{O{code}m}
   {
+    \mode_if_horizontal:TF
+      {
+        \dim_set:Nn \__codedesc_paradvance_dim {\baselineskip}
+      }
+      {
+        \dim_set:Nn \__codedesc_paradvance_dim {0pt}
+      }
     \seq_set_from_clist:Nn \l_tmpa_seq {#2}
     \__codedesc_set_textcolwidth: 
     \hcoffin_set:Nn \l__codedesc_margin_coffin 
@@ -665,17 +732,18 @@
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
         \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
-        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {\marginparwidth+\marginparsep}{0pt}%{-0.25\baselineskip}
+        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {\marginparwidth+\marginparsep}{\baselineskip}
         \par\noindent
-        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{0pt}              
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{\__codedesc_paradvance_dim}              
       }
       { % __describeblock at marginpar
         \coffin_attach:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
-        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {0pt}{0pt}%{-0.25\baselineskip}
+        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {0pt}{\baselineskip}
         \par\noindent
-        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{0pt}      
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{\__codedesc_paradvance_dim}      
       }
-    \\[0.25\baselineskip]
+    \\[0.5\baselineskip]
+    %\\[\__codedesc_paradvance_dim]%[-0.5\baselineskip]
   }
   
  
@@ -700,20 +768,13 @@
     \vcoffin_gset_end:
   }
 
-
-\coffin_new:N \__codedesc_describe_coffin
-\dim_new:N \__codedesc_describelabel_wd_dim
-\dim_new:N \__codedesc_describelist_wd_dim
-\tl_new:N \__codedesc_join_tl:
-\tl_new:N \__codedesc_ragged_tl:
-
   
   
   \NewDocumentEnvironment{describelist}{O{20mm}m}
   {
     %\vspace*{-1.5ex}
     \mode_if_horizontal:TF 
-      {\vspace*{-0.75ex}} 
+      {\\[-0.5\baselineskip]} 
       {}
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
@@ -731,7 +792,7 @@
   {
     %\vspace*{-1.5ex}
     \mode_if_horizontal:TF 
-      {\vspace*{-1ex}} 
+      {\\[-0.5\baselineskip]}%{\vspace*{-1ex}} 
       {}
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
@@ -746,34 +807,31 @@
   }
 
 \NewDocumentCommand \describe {mm}
-  {
-    
+  {    
     \hcoffin_set:Nn \l_tmpb_coffin 
       { 
         \__codedesc_metafmt:o { \__codedesc_listkind_tl }
         \__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
-      }
+      }      
+    \dim_compare:nNnTF {\coffin_wd:N \l_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
+      {
+        \vcoffin_set:Nnn \l_tmpa_coffin 
+          { \__codedesc_describelabel_wd_dim } 
+          {  ~\ ~ }
+        \coffin_attach:NnnNnnnn
+          \l_tmpa_coffin {r}{t}
+          \l_tmpb_coffin    {r}{t}
+          {0pt}{0pt}
       
-      \dim_compare:nNnTF {\coffin_wd:N \l_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
-        {
-          \vcoffin_set:Nnn \l_tmpa_coffin 
-            { \__codedesc_describelabel_wd_dim } 
-            {  ~\ ~ }
-          \coffin_attach:NnnNnnnn
-            \l_tmpa_coffin {r}{t}
-            \l_tmpb_coffin    {r}{t}
-            {0pt}{0pt}
-        
-        }
-        {
-          \vcoffin_set:Nnn \l_tmpa_coffin 
-            { \__codedesc_describelabel_wd_dim } 
-            { 
-              \__codedesc_metafmt:o { \__codedesc_listkind_tl }
-              \noindent\__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
-            }          
-        }
-
+      }
+      {
+        \vcoffin_set:Nnn \l_tmpa_coffin 
+          { \__codedesc_describelabel_wd_dim } 
+          { 
+            \__codedesc_metafmt:o { \__codedesc_listkind_tl }
+            \noindent\__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
+          }          
+      }
     \vcoffin_set:Nnn \l_tmpb_coffin 
       { \__codedesc_describelist_wd_dim } 
       { 
@@ -781,26 +839,21 @@
         \begin{minipage}[t]{ \__codedesc_describelist_wd_dim }
           #2
         \end{minipage}
-      }
-      
-      
+      }      
     \__codedesc_join_tl: 
       \l_tmpb_coffin {l}{t} 
       \l_tmpa_coffin {r}{t} 
       {-\marginparsep}{0pt}
-
     \mode_if_horizontal:TF 
       {
         \\[-\baselineskip] 
-%        \tl_set:Nn \l_tmpa_tl {~\ ~}
       }
-      {
-%        \tl_set:Nn \l_tmpa_tl {~\ ~}
-      }
-      \noindent%\vspace*{-1ex}
+      {   }
+
+    \noindent
     \coffin_typeset:Nnnnn 
       \l_tmpb_coffin {l}{t} {0pt}{0pt}
-    \\ %[-0.5\baselineskip] 
+    \\ 
     
   }
 
@@ -859,7 +912,6 @@
 
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
-%    \par\vspace*{0.5\baselineskip}
     \mode_if_horizontal:TF 
       {\par\vspace*{0.25\baselineskip}}%\vspace*{-1.5ex}} 
       {\vspace*{0.75\baselineskip}}   
@@ -873,7 +925,7 @@
   {
       \end{minipage}
     \group_end:
-    \par
+    \\[0.5\baselineskip]
   }
 
 
@@ -882,16 +934,16 @@
 \keys_define:nn { codedesc / title }
   {
     title    .usage:n = general ,
+    title    .value_required:n = true ,
   	title    .tl_set:N = \l__codedesc_title_tl ,
 
     author   .usage:n = general ,
+    author   .value_required:n = true ,
   	author   .tl_set:N = \l__codedesc_author_tl ,
 
     date     .usage:n = general ,
+    date     .value_required:n = true ,
   	date     .tl_set:N = \l__codedesc_descdate_tl ,
-
-    abstract .usage:n = general ,
-  	abstract .tl_set:N = \l__codedesc_abstract_tl ,
   }
 
 
