@@ -86,5 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.0 (this)
+* Version 1.1 (this)
+    - Added two commands to allow <obj-types> customization 
+    - requiring (now) pifont for EXP/rEXP <format-keys>
+    - Added a date command (auxiliary command)
+
+* Version 1.0 
     - Initial release by CTAN
