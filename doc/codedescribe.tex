@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0 (2023/05/11)
+%% This is version 1.1 (2023/05/16)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,13 +34,13 @@
 
 \tstitle{
   author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/codedescribe}}},
-  date={2023/05/11},
-  title={The codedescribe and codelisting Packages\break Version \PkgInfo{codedesc}{version}}
+  date={\tsdate},
+  title={The codedescribe and codelisting Packages\break Version \PkgInfo{codedescribe}{version}}
   }
   
 \begin{typesetabstract}
 
-This documentation package is designed to be `as class independent as possible', depending only on \tsobj[pkg]{expl3,scontents,listing}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an 'object type' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual 'one set of macros/environments' for each object type).
+This documentation package is designed to be `as class independent as possible', depending only on \tsobj[pkg]{expl3,scontents,listing,pifont}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an 'object type' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual 'one set of macros/environments' for each object type).
 
 No assumption about page layout is made (besides `having a marginpar'),  or underlying macros, so that it can be used with any document class.
 
@@ -51,7 +51,7 @@ No assumption about page layout is made (besides `having a marginpar'),  or unde
 \section{Introduction}
 
 
-This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages are used to typeset code snippets.
+This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
 No other package/class is needed, any class can be used as the base one, which allows to demonstrate the documented commands with any desired layout.
@@ -62,7 +62,7 @@ No other package/class is needed, any class can be used as the base one, which a
 This package 'can' be used with multi-column classes, given that the \tsobj[code]{\linewidth,\columnsep} are defined appropriately. \tsobj{\linewidth} shall defaults to text/column real width, whilst \tsobj{\columnsep}, if needed (2 or more columns) shall be greater than \tsobj{\marginparwidth} plus \tsobj{\marginparsep}.
 
 \subsection{Current Version}
-This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedesc}{version}~ and \tsobj[pkg]{codelisting} version \PkgInfo{codedesc}{version}. Those two packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see below, \ref{obj-type-def}) it can be easily extended without changing it's interface.
+This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{version}~ and \tsobj[pkg]{codelisting} version \PkgInfo{codelisting}{version}. Those two packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see below, \ref{obj-type-def}) it can be easily extended without changing it's interface.
 
 \section{codelisting Package}
 
@@ -90,7 +90,7 @@ This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[
 		\tsmacro{\setcodekeys}{code-keys}
 	\end{codesyntax}
 
-One has the option to setting \tsmeta{code-keys} (see \ref{code-keys}) per \tsmacro{\tscode}{}/\tsmacro{\tsdemo}{} call, or \emph{globally}, better said, \emph{in the called context group} .\\
+One has the option to set \tsmeta{code-keys} (see \ref{code-keys}) per \tsmacro{\tscode}{}/\tsmacro{\tsdemo}{} call, or \emph{globally}, better said, \emph{in the called context group} .\\
 \begin{tsremark}[N.B.:]
 All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \tsmeta{code-keys} are defined, and discarded once said local group is closed. \tsmacro{\setcodekeys}{} defines those keys in the \emph{current} context/group.
 \end{tsremark}
@@ -273,7 +273,7 @@ Similarly, there is a set of predefined ones, as follow:
 One can add user defined groups/objects or change the pre-defined ones with the following commands:
 
 
-\begin{codedescribe}[code,new=2023/05/17]{\defgroupfmt}
+\begin{codedescribe}[code,new=2023/05/16]{\defgroupfmt}
 \begin{codesyntax} %
 	\tsmacro{\defgroupfmt}{format-group,format-keys}
 \end{codesyntax}
@@ -283,7 +283,7 @@ One can add user defined groups/objects or change the pre-defined ones with the 
 For example, one can redefine the \tsobj[key]{code group} standard color with \tsobj{\defgroupfmt{code}{color=red}} and all \tsobj[key]{obj-types} based on it will be typeset in red (in the standard case: \tsobj[key]{code, macro, function} objects).
 
 
-\begin{codedescribe}[code,new=2023/05/17]{\defobjectfmt}
+\begin{codedescribe}[code,new=2023/05/16]{\defobjectfmt}
 \begin{codesyntax} %
 	\tsmacro{\defobjectfmt}{obj-type,format-group,format-keys}
 \end{codesyntax}
@@ -309,16 +309,19 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
 \ldots
 \tsmacro{\end{codedescribe}}{}
-\end{codesyntax}
+\end{codesyntax}[Note 1:]
 This is the main environment to describe \tsobj[env]{Macros, Functions, Variable, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} defines the object-type format. 
 \end{codedescribe}
 \begin{tsremark}
 One can change the rule color with the key \tsobj[keys]{rulecolor}, for instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will remove the rules.
 \end{tsremark}
-\begin{tsremark}
+\begin{tsremark}[Note 2:]
 Besides that, one can use the keys \tsobj[keys]{new,update,note} to further customize it as: \tsverb{\begin{codedescribe}[new=2023/05/01,update=2023/05/1,note={this is an example}]}
 \end{tsremark}
 
+\begin{tsremark}[Note 3:]
+Finally, one can use \tsobj[key]{EXP,rEXP} to add a star \ding{72} or a hollow star \ding{73}, as per expl3/doc3 conventions (if expandable, restricted expandable or not).
+\end{tsremark}
 
 \begin{codedescribe}[env]{codesyntax}
 \begin{codesyntax}
@@ -474,5 +477,12 @@ This is based on the \tsobj[code]{\maketitle} from the \tsobj[pkg]{article} clas
 This is the \tsobj[env]{abstract} environment from the \tsobj[pkg]{article} class.
 \end{codedescribe}
 
+\begin{codedescribe}[code,new=2023/05/16]{typesetdate,tsdate}
+\begin{codesyntax}
+\tsmacro{\typesetdate}{}
+\tsmacro{\tsdate}{}
+\end{codesyntax}
+This provides the current date (Month Year, format).
+\end{codedescribe}
 
 \end{document} 

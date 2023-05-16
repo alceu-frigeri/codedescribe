@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0 (2023/05/11)
+%% This is version 1.1 (2023/05/16)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,33 +22,37 @@
 \RequirePackage{ expl3 }
 \ProvidesExplPackage
     {codedescribe}
-    {2023/05/11}
-    {1.0}
+    {2023/05/16}
+    {1.1}
     {LaTeX Code Description/Documentation}
 
-\prop_if_exist:NTF \g__codedesc_pkg_prop
-  {}
-  { \prop_new:N \g__codedesc_pkg_prop }
-  
-\prop_put_from_keyval:Nn \g__codedesc_pkg_prop
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { codedescribe / pkg info}
   {
-    codedesc . name         = codedescribe ,
-    codedesc . prefix       = codedesc ,
-    codedesc . date         = 2023/05/11 ,
-    codedesc . version      = 1.0 ,
-    codedesc . description  = LaTeX Code Description/Documentation
+     name        .code:n = codedescribe ,
+     prefix      .code:n = codedesc ,
+     date        .code:n = 2023/05/16 ,
+     version     .code:n = 1.1 ,
+     description .code:n = \LaTeX~Code~Description/Documentation
   }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
 
-\cs_gset:Npn \__codedesc_pkg_info:nn #1#2
-  {
-    \prop_item:Nn \g__codedesc_pkg_prop {#1.#2}
-  }
 
-\cs_if_exist:NTF \PkgInfo 
-  {}
-  {
-    \NewDocumentCommand \PkgInfo {mm} { \prop_item:Nn \g__codedesc_pkg_prop {#1.#2} }  
-  }
+
 
 
 \use:c {@reversemargintrue}
@@ -64,7 +68,9 @@
 }
 \ProcessKeyOptions [codedescribe ]
 
+%% bbding is need for those hollow stars...
 \RequirePackage{xcolor}
+\RequirePackage{pifont}
 \bool_if:nT {\l__codedesc_loadlisting_bool}
   {
     \RequirePackage{codelisting}
@@ -132,7 +138,7 @@
 \dim_new:N \l__codedesc_linewidth_dim
 \dim_new:N \l__codedesc_textcolwidth_dim
 
-\cs_new:Npn \__codedesc_set_textcolwidth: 
+\cs_new_protected:Npn \__codedesc_set_textcolwidth: 
   {
     \dim_compare:nNnTF {\linewidth} = {\l__codedesc_linewidth_dim}
       {}
@@ -222,7 +228,7 @@
     unknown .code:n = {}
   }
 
-\cs_new:Npn \__codedesc_group_define:nn #1#2
+\cs_new_protected:Npn \__codedesc_group_define:nn #1#2
   {
     \tl_clear:N \l__codedesc_tmpfmt_tl
     \tl_clear:N \l__codedesc_tmpshape_tl
@@ -281,7 +287,7 @@
   }
 
 
-\cs_new:Npn \__codedesc_object_define:nnn #1#2#3
+\cs_new_protected:Npn \__codedesc_object_define:nnn #1#2#3
   {
     \tl_if_blank:nTF {#3}
       {
@@ -435,6 +441,18 @@
 
 \keys_define:nn { codedesc / format }
 {
+  EXP.usage:n = general,
+  EXP.code:n = 
+    {
+      \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{72}} }
+    },
+	%
+  rEXP.usage:n = general,
+  rEXP.code:n = 
+    {
+      \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{73}} }
+    },
+	%
   sep.usage:n = general,
   sep.code:n = 
     {
@@ -485,7 +503,7 @@
     },    
 }
 
-\cs_new:Npn \__codedesc_metafmt_set:n #1
+\cs_new_protected:Npn \__codedesc_metafmt_set:n #1
   {
     \tl_set:Nn \__codedesc_rulecolor_tl: { \__codedesc_metacolor_tl: }
     \tl_set:Nn \__codedesc_metashape_tl: { }
@@ -495,6 +513,8 @@
     \tl_set:Nn \__codedesc_Rbracket_tl { }
     \tl_set:Nn \__codedesc_sep_tl {,\ }
     \tl_set:Nn \__codedesc_lastsep_tl {\ and\ }
+    \tl_set:Nn \__codedesc_exp_tl { }
+    
 
     \bool_set_false:N \l__codedesc_descnotes_bool
     \bool_set_false:N \l__codedesc_descdate_new_bool 
@@ -506,7 +526,7 @@
   
 \cs_generate_variant:Nn \__codedesc_metafmt_set:n {o}
 
-\cs_new:Npn \__codedesc_metafmt:n #1
+\cs_new_protected:Npn \__codedesc_metafmt:n #1
   {
     \__codedesc_metafmt_set:n {#1}
     \__codedesc_metafmt:
@@ -515,7 +535,7 @@
 \cs_generate_variant:Nn \__codedesc_metafmt:n {o}
 
   
-\cs_new:Npn \__codedesc_metafmt: 
+\cs_new_protected:Npn \__codedesc_metafmt: 
   {
     \__codedesc_metacolor_tl:
     \__codedesc_metasize_tl:
@@ -529,7 +549,7 @@
 %%% < meta >
 %%%
 %%%%%%%
-\cs_new:Npn \__codedesc_meta:n #1
+\cs_new_protected:Npn \__codedesc_meta:n #1
   {
     \ensuremath\langle #1 \ensuremath\rangle
   }  
@@ -541,7 +561,7 @@
 %%% < meta > 'detokenized'
 %%%
 %%%%%%%
-\cs_new:Npn \__codedesc_meta*:n #1
+\cs_new_protected:Npn \__codedesc_meta*:n #1
   {
     \ensuremath\langle \tl_to_str:n {#1} \ensuremath\rangle
   }  
@@ -551,7 +571,7 @@
 
 
 
-\cs_new:Npn \__codedesc_macro_typeset:n #1
+\cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
     \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
     \regex_replace_all:nnN {\ }{}  \l_tmpb_tl
@@ -564,7 +584,7 @@
 
 \cs_generate_variant:Nn \__codedesc_macro_typeset:n {o}
 
-\cs_new:Npn \__codedesc_verb_nospc_typeset:n #1
+\cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
     \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
     \regex_replace_all:nnN {\ }{}  \l_tmpb_tl
@@ -575,7 +595,7 @@
 
 
 
-\cs_new:Npn \__codedesc_list_typeset:nnn #1#2#3
+\cs_new_protected:Npn \__codedesc_list_typeset:nnn #1#2#3
   {
     \seq_set_from_clist:Nn \l_tmpa_seq {#1}
     \bool_set:Nn \l__codedesc_bool {\seq_if_empty_p:N \l_tmpa_seq}
@@ -613,7 +633,7 @@
 
 
 
-\cs_new:Npn \__codedesc_args_typeset:nnnn #1#2#3#4
+\cs_new_protected:Npn \__codedesc_args_typeset:nnnn #1#2#3#4
   {
     \seq_set_from_clist:Nn \l_tmpa_seq {#3}
     \group_begin:
@@ -690,7 +710,7 @@
         
         \begin{tabular}{@{} l @{} }
           \__codedesc_hline:nnnn {\__codedesc_rulecolor_tl:}{0.5ex}{2}{0.25ex}
-          \seq_map_inline:Nn \l_tmpa_seq { \__codedesc_typeset_tl:n {##1} \\ } 
+          \seq_map_inline:Nn \l_tmpa_seq { \__codedesc_typeset_tl:n {##1} \__codedesc_exp_tl \\ } 
           \bool_if:nTF {\l__codedesc_descnotes_bool}
             {
               \\[-2.5ex]
@@ -947,7 +967,7 @@
   }
 
 
-\cs_new:Npn \__codedesc_make_title: {%
+\cs_new_protected:Npn \__codedesc_make_title: {%
 	\newpage
 	\null
 	\vskip 2em%
@@ -967,6 +987,29 @@
 	\vskip 1.5em
 }
 
+
+
+\NewDocumentCommand \typesetdate {}
+  {
+    \int_case:nn {\month}
+      {
+        {1}{January}
+        {2}{February}
+        {3}{March}
+        {4}{April}
+        {5}{May}
+        {6}{June}
+        {7}{July}
+        {8}{August}
+        {9}{September}
+        {10}{October}
+        {11}{November}
+        {12}{December}
+      }
+      \use:n {~} \int_to_arabic:n {\year}
+  }
+  
+\cs_new_eq:NN \tsdate \typesetdate
 
 %%%ARGH !!!!!
 %%% 'adapted' from 'abstract.cls'
