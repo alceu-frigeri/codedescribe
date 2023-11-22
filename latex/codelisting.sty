@@ -12,14 +12,14 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.1 (2023/05/16)
+%% This is version {1.1} {2023/05/16}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
 %%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\RequirePackage{ expl3 }
+
 \ProvidesExplPackage
     {codelisting}
     {2023/05/16}
@@ -34,11 +34,11 @@
 %%%%%%%
 \keys_define:nn { codelisting / pkg info}
   {
-     name        .code:n = codelisting ,
-     prefix      .code:n = codelist ,
-     date        .code:n = 2023/05/16 ,
-     version     .code:n = 1.1 ,
-     description .code:n = \LaTeX~Code~Listing
+     name        .code:n = {codelisting} ,
+     prefix      .code:n = {codelist} ,
+     date        .code:n = {2023/05/16} ,
+     version     .code:n = {1.1} ,
+     description .code:n = {\LaTeX~Code~Listing}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
   {
@@ -47,6 +47,13 @@
   }
 \cs_if_exist:NF \PkgInfo
   { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -262,6 +269,12 @@
   ruleht        .usage:n   =   general,
   ruleht        .code:n    =  { \tl_set:Nn \l__codelist_ruleheight_tl {#1} },
   ruleht        .default:n =  1,
+  
+  basicstyle    .usage:n   =   general,
+  basicstyle    .code:n    =  { \tl_set:Nn \l__codelist_basicstyle_tl {#1} },
+  basicstyle    .default:n =  \footnotesize\ttfamily ,
+  
+  \l__codelist_basicstyle_tl
 
   default       .usage:n   =   general,
   default       .meta:n    = {
@@ -280,7 +293,8 @@
 		  numbers      , numberstyle ,
       parindent    ,
       codeprefix   , resultprefix ,
-      ruleht   ,
+      ruleht   , 
+      basicstyle ,
   },
 
 }
@@ -414,7 +428,7 @@
 	frame        =   none,
 	aboveskip    =   0pt,%-2ex,
   belowskip    =   0pt,%-2ex,
-	basicstyle   =   \footnotesize\ttfamily ,  
+	basicstyle   =   {\l__codelist_basicstyle_tl}, %%\footnotesize\ttfamily ,  
 	rulesep      =   0pt,
 	breaklines   =   true,
 	breakindent  =   3em,

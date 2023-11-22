@@ -12,14 +12,14 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.1 (2023/05/16)
+%% This is version {1.1} {2023/05/16}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
 %%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\RequirePackage{ expl3 }
+
 \ProvidesExplPackage
     {codedescribe}
     {2023/05/16}
@@ -34,11 +34,11 @@
 %%%%%%%
 \keys_define:nn { codedescribe / pkg info}
   {
-     name        .code:n = codedescribe ,
-     prefix      .code:n = codedesc ,
-     date        .code:n = 2023/05/16 ,
-     version     .code:n = 1.1 ,
-     description .code:n = \LaTeX~Code~Description/Documentation
+     name        .code:n = {codedescribe} ,
+     prefix      .code:n = {codedesc} ,
+     date        .code:n = {2023/05/16} ,
+     version     .code:n = {1.1} ,
+     description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
   {
@@ -47,6 +47,13 @@
   }
 \cs_if_exist:NF \PkgInfo
   { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%

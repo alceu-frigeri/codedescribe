@@ -197,6 +197,13 @@ Sets the indentation to be used when 'demonstrating' \LaTeX\ code (\tsobj[code]{
 When typesetting the 'code demo' (\tsobj{\tsdemo}) a set of rules is drawn. The Default, 1, equals to \tsobj{\arrayrulewidth} (usually 0.4pt).
 \end{codedescribe}
 
+\begin{codedescribe}[key,new=2023/11/18]{basicstyle}%-very-long-long-long,xyz,xyh,kjh,ljd,kls}
+\begin{codesyntax} %
+	\tsobj[key]{basicstyle}
+\end{codesyntax}
+Sets the base font style used when typesetting the 'code demo', default being \tsobj{\footnotesize\ttfamily}
+\end{codedescribe}
+
 
 \section{codedescribe Package}
 
@@ -309,17 +316,17 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
 \ldots
 \tsmacro{\end{codedescribe}}{}
-\end{codesyntax}[Note 1:]
+\end{codesyntax}
 This is the main environment to describe \tsobj[env]{Macros, Functions, Variable, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} defines the object-type format. 
 \end{codedescribe}
-\begin{tsremark}
+\begin{tsremark}[Note~1:]
 One can change the rule color with the key \tsobj[keys]{rulecolor}, for instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will remove the rules.
 \end{tsremark}
-\begin{tsremark}[Note 2:]
-Besides that, one can use the keys \tsobj[keys]{new,update,note} to further customize it as: \tsverb{\begin{codedescribe}[new=2023/05/01,update=2023/05/1,note={this is an example}]}
+\begin{tsremark}[Note~2:]
+Besides that, one can use the keys \tsobj[keys]{new,update,note} to further customize it as: \tsverb{\begin{codedescribe} [new=2023/05/01, update=2023/05/1, note={this is an example}]}
 \end{tsremark}
 
-\begin{tsremark}[Note 3:]
+\begin{tsremark}[Note~3:]
 Finally, one can use \tsobj[key]{EXP,rEXP} to add a star \ding{72} or a hollow star \ding{73}, as per expl3/doc3 conventions (if expandable, restricted expandable or not).
 \end{tsremark}
 
@@ -421,10 +428,10 @@ This is just a short-cut for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj
 \tsmacro{\typesetverb}[obj-type]{verbatim text}
 \tsmacro{\tsverb}[obj-type]{verbatim text}
 \end{codesyntax}
- Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{something} can contain commas (which, otherwise, would be interpreted as a list separator in \tsobj{\tsobj}.
+ Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator in \tsobj{\tsobj}.
 \end{codedescribe}
 \begin{tsremark}
-This is meant to short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors may pop out.
+This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors may pop out.
 \end{tsremark}
 
 

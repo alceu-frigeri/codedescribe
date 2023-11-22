@@ -86,7 +86,11 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.1 (this)
+
+* Version 1.2 (this)
+    - Added of format key: basicstyle
+    
+* Version 1.1
     - Added two commands to allow <obj-types> customization 
     - requiring (now) pifont for EXP/rEXP <format-keys>
     - Added a date command (auxiliary command)
