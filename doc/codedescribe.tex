@@ -2,7 +2,7 @@
 % !TEX ext =  --interaction=nonstopmode --enable-etex --enable-write18
 % !BIB program = none
 %%%==============================================================================
-%% Copyright 2023 by Alceu Frigeri
+%% Copyright 2023-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.1 (2023/05/16)
+%% This is version {1.3} (2023/05/16)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -67,7 +67,7 @@ This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{ver
 \section{codelisting Package}
 
 It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore} and 
- 2 main commands: \tsobj[code]{\tscode,\tsdemo} and 1 auxiliary command: \tsobj{\setcodekeys}.
+ 3 main commands: \tsobj[code]{\tscode,\tsdemo,\tsresult} and 1 auxiliary command: \tsobj{\setcodekeys}.
 
 \subsection{In Memory Code Storage}
 Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX~ code snippets in a \tsobj[pkg]{expl3} key.
@@ -96,14 +96,18 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}{\tscode*,\tsdemo*}
+\begin{codedescribe}[code,new=2024-01-06]{\tscode*,\tsdemo*,\tsresult*}
 	\begin{codesyntax}%
 		\tsmacro{\tscode*}[code-keys]{st-name}
 		\tsmacro{\tsdemo*}[code-keys]{st-name}
+		\tsmacro{\tsresult*}[code-keys]{st-name}
 	\end{codesyntax}
 \tsmacro{\tscode}{} just typesets \tsobj[meta]{st-name} (the key-name created with \tsobj[env]{stcode}), in verbatim mode with syntax highlight. The non-star version centers it and use just half of the base line. The star version uses the full text width.
 
 \tsmacro{\tsdemo*}{} first typesets \tsobj[meta]{st-name}, as above, then it \emph{executes} said code. The non-start versions place them side-by-side, whilst the star versions places one following the other.
+
+(new) \tsmacro{\tsresult*}{} only \emph{executes} said code. The non-start versions centers it and use just half of the base line, whilst the star versions uses the full text width.
+
 \end{codedescribe}
 
 

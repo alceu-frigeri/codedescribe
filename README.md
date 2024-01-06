@@ -52,7 +52,7 @@ Please do not use the issue page for generic help on how to use the package.
 * git: https://github.com/alceu-frigeri/codedescribe
 
 -------------
-Copyright 2023 by Alceu Frigeri
+Copyright 2023-present by Alceu Frigeri
 
  This work may be distributed and/or modified under the
  conditions of
@@ -87,7 +87,11 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 
-* Version 1.2 (this)
+* Version 1.3 (this)
+    - Added \tsresult, a command to just show the result of a stored code (codelisting specific).
+
+
+* Version 1.2
     - Added of format key: basicstyle
     
 * Version 1.1
