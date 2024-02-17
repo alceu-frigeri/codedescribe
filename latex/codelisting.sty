@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.3} {2024/01/06}
+%% This is version {1.4} {2024/02/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codelisting}
-    {2024/01/06}
-    {1.3}
+    {2024/02/17}
+    {1.4}
     {LaTeX Code Listing}
 
 %%%%%%%
@@ -36,24 +36,16 @@
   {
      name        .code:n = {codelisting} ,
      prefix      .code:n = {codelist} ,
-     date        .code:n = {2024/01/06} ,
-     version     .code:n = {1.3} ,
+     date        .code:n = {2024/02/17} ,
+     version     .code:n = {1.4} ,
      description .code:n = {\LaTeX~Code~Listing}
   }
-\cs_if_exist:NF \__codedesc_pkg_info:nn 
+\cs_if_exist:NF \PkgInfo 
   {
-    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
-      { \keys_set:nn {#1 / pkg info}{#2} }
-  }
-\cs_if_exist:NF \PkgInfo
-  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
-\cs_if_exist:NF \PkgDescription
-  { 
+    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
     \NewDocumentCommand \PkgDescription {m} 
-      { 
-        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
-      } 
-  }
+      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
+  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%

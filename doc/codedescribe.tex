@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.3} (2023/05/16)
+%% This is version {1.4} {2024/02/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -96,7 +96,7 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2024-01-06]{\tscode*,\tsdemo*,\tsresult*}
+\begin{codedescribe}[code,update=2024/01/06]{\tscode*,\tsdemo*,\tsresult*}
 	\begin{codesyntax}%
 		\tsmacro{\tscode*}[code-keys]{st-name}
 		\tsmacro{\tsdemo*}[code-keys]{st-name}
@@ -106,7 +106,7 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 
 \tsmacro{\tsdemo*}{} first typesets \tsobj[meta]{st-name}, as above, then it \emph{executes} said code. The non-start versions place them side-by-side, whilst the star versions places one following the other.
 
-(new) \tsmacro{\tsresult*}{} only \emph{executes} said code. The non-start versions centers it and use just half of the base line, whilst the star versions uses the full text width.
+(new 2024/01/06) \tsmacro{\tsresult*}{} only \emph{executes} said code. The non-start versions centers it and use just half of the base line, whilst the star versions uses the full text width.
 
 \end{codedescribe}
 
@@ -261,7 +261,7 @@ Using \tsobj{\defgroupfmt} one can (re-)define custom \tsobj[arg]{format-groups}
 \tsobj[keys]{color} was used in the list above just as a 'reminder' that a color is defined/associated with the given group.
 \end{tsremark}
 
-\subsubsection{Object Types}
+\subsubsection{Object Types}\label{obj-types}
 Using \tsobj{\defobjectfmt} one can (re-)define custom \tsobj[arg]{obj-types}.
 Similarly, there is a set of predefined ones, as follow:
 
@@ -315,21 +315,20 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 
 \subsection{Environments}
 
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/1,note={this is an example}]{codedescribe}
+\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={this is an example},update=2024/02/16]{codedescribe}
 \begin{codesyntax}
 \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
 \ldots
 \tsmacro{\end{codedescribe}}{}
 \end{codesyntax}
-This is the main environment to describe \tsobj[env]{Macros, Functions, Variable, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} defines the object-type format. 
+This is the main environment to describe \tsobj[env]{Macros, Functions, Variable, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} (see \ref{obj-type-def} and \ref{obj-types}) defines the object-type format. 
 \end{codedescribe}
 \begin{tsremark}[Note~1:]
 One can change the rule color with the key \tsobj[keys]{rulecolor}, for instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will remove the rules.
 \end{tsremark}
 \begin{tsremark}[Note~2:]
-Besides that, one can use the keys \tsobj[keys]{new,update,note} to further customize it as: \tsverb{\begin{codedescribe} [new=2023/05/01, update=2023/05/1, note={this is an example}]}
+Besides that, one can use the keys \tsobj[keys]{new,update,note} to further customize it. (2024/02/16 these keys can also be used multiple times).
 \end{tsremark}
-
 \begin{tsremark}[Note~3:]
 Finally, one can use \tsobj[key]{EXP,rEXP} to add a star \ding{72} or a hollow star \ding{73}, as per expl3/doc3 conventions (if expandable, restricted expandable or not).
 \end{tsremark}
@@ -354,7 +353,7 @@ The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro
 For example, the code for  \tsobj[env]{codedescribe} (entry above) is:
 
 \begin{codestore}[demoD]
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/1,note={this is an example}]{codedescribe}
+\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={this is an example},update=2024/02/16]{codedescribe}
   \begin{codesyntax}
     \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
     \ldots

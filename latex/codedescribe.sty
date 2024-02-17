@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.3} {2024/01/06}
+%% This is version {1.4} {2024/02/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2024/01/06}
-    {1.3}
+    {2024/02/17}
+    {1.4}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,24 +36,16 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2024/01/06} ,
-     version     .code:n = {1.3} ,
+     date        .code:n = {2024/02/17} ,
+     version     .code:n = {1.4} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
-\cs_if_exist:NF \__codedesc_pkg_info:nn 
+\cs_if_exist:NF \PkgInfo 
   {
-    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
-      { \keys_set:nn {#1 / pkg info}{#2} }
-  }
-\cs_if_exist:NF \PkgInfo
-  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
-\cs_if_exist:NF \PkgDescription
-  { 
+    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
     \NewDocumentCommand \PkgDescription {m} 
-      { 
-        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
-      } 
-  }
+      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
+  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -483,7 +475,8 @@
     {
       \bool_set_true:N \l__codedesc_descnotes_bool
       \bool_set_true:N \l__codedesc_descdate_new_bool 
-      \tl_set:Nn       \l__codedesc_descdate_new_tl {#1}
+%      \tl_set:Nn       \l__codedesc_descdate_new_tl {#1}
+      \seq_put_right:Nn \l__codedesc_descdate_new_seq {#1}
     },
     
   update.usage:n = general,
@@ -491,7 +484,8 @@
     {
       \bool_set_true:N \l__codedesc_descnotes_bool
       \bool_set_true:N \l__codedesc_descdate_update_bool 
-      \tl_set:Nn       \l__codedesc_descdate_update_tl {#1}
+      %\tl_set:Nn       \l__codedesc_descdate_update_tl {#1}
+      \seq_put_right:Nn \l__codedesc_descdate_update_seq {#1}
     },
     
   note.usage:n = general,
@@ -499,7 +493,8 @@
     {
       \bool_set_true:N \l__codedesc_descnotes_bool
       \bool_set_true:N \l__codedesc_sidenote_bool 
-      \tl_set:Nn       \l__codedesc_sidenote_tl {#1}
+%      \tl_set:Nn       \l__codedesc_sidenote_tl {#1}
+      \seq_put_right:Nn \l__codedesc_sidenote_seq {#1}
     },
     
   unknown.usage:n = general,
@@ -667,12 +662,14 @@
   
 \bool_new:N  \l__codedesc_descnotes_bool 
 \bool_new:N  \l__codedesc_descdate_new_bool 
-\tl_new:N    \l__codedesc_descdate_new_tl 
+%\tl_new:N    \l__codedesc_descdate_new_tl 
+\seq_new:N    \l__codedesc_descdate_new_seq 
 \bool_new:N  \l__codedesc_descdate_update_bool 
-\tl_new:N    \l__codedesc_descdate_update_tl
+%\tl_new:N    \l__codedesc_descdate_update_tl
+\seq_new:N    \l__codedesc_descdate_update_seq
 \bool_new:N  \l__codedesc_sidenote_bool 
-\tl_new:N    \l__codedesc_sidenote_tl
-
+%\tl_new:N    \l__codedesc_sidenote_tl
+\seq_new:N    \l__codedesc_sidenote_seq
 
 \coffin_new:N \__codedesc_describe_coffin
 \dim_new:N \__codedesc_describelabel_wd_dim
@@ -723,12 +720,27 @@
               \\[-2.5ex]
               \__codedesc_hline:nnnn {\color{black}}{0.5ex}{0.25}{0.25ex} 
               
+%%%              \bool_if:nT {\l__codedesc_descdate_new_bool} 
+%%%                {\scriptsize\color{black}new:~ \l__codedesc_descdate_new_tl\\[-1ex]}
               \bool_if:nT {\l__codedesc_descdate_new_bool} 
-                {\scriptsize\color{black}new:~ \l__codedesc_descdate_new_tl\\[-1ex]}
+                {
+                  \seq_map_inline:Nn \l__codedesc_descdate_new_seq
+                    {\scriptsize\color{black}new:~ ##1\\[-1ex]}
+                }
+%%%              \bool_if:nT {\l__codedesc_descdate_update_bool} 
+%%%                {\scriptsize\color{black}update:~ \l__codedesc_descdate_update_tl\\[-1ex]}
               \bool_if:nT {\l__codedesc_descdate_update_bool} 
-                {\scriptsize\color{black}update:~ \l__codedesc_descdate_update_tl\\[-1ex]}
+                {
+                  \seq_map_inline:Nn \l__codedesc_descdate_update_seq
+                    {\scriptsize\color{black}update:~ ##1\\[-1ex]}
+                }
+%%%              \bool_if:nT {\l__codedesc_sidenote_bool} 
+%%%                {\scriptsize\color{black}NB:~ \l__codedesc_sidenote_tl\\[-1ex]}
               \bool_if:nT {\l__codedesc_sidenote_bool} 
-                {\scriptsize\color{black}NB:~ \l__codedesc_sidenote_tl\\[-1ex]}
+                {
+                  \seq_map_inline:Nn \l__codedesc_sidenote_seq
+                    {\scriptsize\color{black}NB:~ ##1\\[-1ex]}
+                }
               \\[-1.5ex]
             }
             {

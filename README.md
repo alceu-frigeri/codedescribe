@@ -87,7 +87,10 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 
-* Version 1.3 (this)
+* Version 1.4 (this)
+    - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
+
+* Version 1.3
     - Added \tsresult, a command to just show the result of a stored code (codelisting specific).
 
 
