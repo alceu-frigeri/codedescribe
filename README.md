@@ -87,7 +87,7 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 * Version 1.5 (this)
-    - fixing #1 (wrong spacing when missing a `codesyntax` inner environment. 
+    - fixing #1 (misalignment when missing a `codesyntax` inner environment). 
 
 * Version 1.4
     - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
