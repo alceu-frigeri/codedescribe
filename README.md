@@ -86,8 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
+* Version 1.5 (this)
+    - fixing #1 (wrong spacing when missing a `codesyntax` inner environment. 
 
-* Version 1.4 (this)
+* Version 1.4
     - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
 
 * Version 1.3
@@ -95,7 +97,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 * Version 1.2
-    - Added of format key: basicstyle
+    - Added format key: basicstyle
     
 * Version 1.1
     - Added two commands to allow <obj-types> customization 

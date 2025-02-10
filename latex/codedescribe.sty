@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.4} {2024/02/17}
+%% This is version {1.5} {2025/02/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2024/02/17}
-    {1.4}
+    {2025/02/10}
+    {1.5}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2024/02/17} ,
-     version     .code:n = {1.4} ,
+     date        .code:n = {2025/02/10} ,
+     version     .code:n = {1.5} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -768,6 +768,23 @@
   {
     \end{minipage}
     \vcoffin_set_end:
+    \bool_if:NF \l__codedesc_syntax_bool
+      {
+        \vcoffin_gset:Nnn \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
+          {
+            \__codedesc_metafmt:n {syntax}
+            \hspace*{2em}     %% !!! together with \parindent{-2em}
+            \begin{tabular} { @{} l @{} }
+              \__codedesc_hline:nnnn {\color{white}}{0.5ex}{2}{-1.5ex}
+              \__codedesc_metacolor_tl:
+              \begin{minipage}[t]{\l__codedesc_syntax_wd_dim}
+                \obeylines\obeyspaces\setlength\parindent{-2em}
+              \end{minipage}\\[-2.5ex]
+                  \\                                
+                  \__codedesc_hline:nnnn {\color{white}}{0ex}{2}{1ex}      
+            \end{tabular}
+          }
+      }
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
         \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
@@ -805,6 +822,7 @@
     \end{tabular}
     %\color{black}
     \vcoffin_gset_end:
+    \bool_set_true:N \l__codedesc_syntax_bool
   }
 
   
