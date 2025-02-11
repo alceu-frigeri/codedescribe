@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.5} {2025/02/10}
+%% This is version {1.5b} {2025/02/12}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/02/10}
-    {1.5}
+    {2025/02/12}
+    {1.5b}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/02/10} ,
-     version     .code:n = {1.5} ,
+     date        .code:n = {2025/02/12} ,
+     version     .code:n = {1.5b} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -650,7 +650,7 @@
 \coffin_new:N \l__codedesc_margin_coffin
 \coffin_new:N \l__codedesc_text_coffin
 \coffin_new:N \l__codedesc_syntax_coffin
-\bool_new:N   \l__codedesc_syntax_bool
+\bool_new:N   \g__codedesc_syntax_bool
 \dim_new:N \l__codedesc_syntax_wd_dim
 \dim_new:N \l__codedesc_margin_wd_dim
   
@@ -754,7 +754,7 @@
         \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim}        
       }
     \coffin_clear:N \l__codedesc_syntax_coffin
-    \bool_set_false:N \l__codedesc_syntax_bool
+    \bool_gset_false:N \g__codedesc_syntax_bool
     \vcoffin_set:Nnw \l__codedesc_text_coffin {\l__codedesc_textcolwidth_dim}
     \setlength\parindent{0pt}
     \begin{minipage}[t]{\l__codedesc_textcolwidth_dim} 
@@ -762,7 +762,7 @@
   {
     \end{minipage}
     \vcoffin_set_end:
-    \bool_if:NF \l__codedesc_syntax_bool
+    \bool_if:NF \g__codedesc_syntax_bool
       {
         \vcoffin_gset:Nnn \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
           {
@@ -816,7 +816,7 @@
     \end{tabular}
     %\color{black}
     \vcoffin_gset_end:
-    \bool_set_true:N \l__codedesc_syntax_bool
+    \bool_gset_true:N \g__codedesc_syntax_bool
   }
 
   

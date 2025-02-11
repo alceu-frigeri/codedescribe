@@ -86,7 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.5 (this)
+* Version 1.5b (this)
+    - fixing issue #2 (reverting `codesyntax` bug introduced by v1.5). 
+
+* Version 1.5
     - fixing issue #1 (misalignment when missing a `codesyntax` inner environment). 
 
 * Version 1.4
