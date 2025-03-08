@@ -86,7 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.5b (this)
+* Version 1.6 (this)
+    - fixing issue #3 (long standing (hidden) bug. \tsresult now fully respects optional keys.
+
+* Version 1.5b 
     - fixing issue #2 (reverting `codesyntax` bug introduced by v1.5). 
 
 * Version 1.5

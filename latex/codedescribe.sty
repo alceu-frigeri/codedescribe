@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.5b} {2025/02/12}
+%% This is version {1.6} {2025/03/08}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/02/12}
-    {1.5b}
+    {2025/03/08}
+    {1.6}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/02/12} ,
-     version     .code:n = {1.5b} ,
+     date        .code:n = {2025/03/08} ,
+     version     .code:n = {1.6} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -963,9 +963,13 @@
 
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
+%    %%% WAS
+%    \mode_if_horizontal:TF 
+%      {\par\vspace*{0.25\baselineskip}}%\vspace*{-1.5ex}} 
+%      {\vspace*{0.75\baselineskip}}      
     \mode_if_horizontal:TF 
-      {\par\vspace*{0.25\baselineskip}}%\vspace*{-1.5ex}} 
-      {\vspace*{0.75\baselineskip}}   
+      {\skip_vertical:n{-0.125\baselineskip}}
+      {\skip_vertical:n{0.25\baselineskip}}
     \__codedesc_set_textcolwidth:
     \group_begin:
       \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
@@ -976,7 +980,9 @@
   {
       \end{minipage}
     \group_end:
-    \\[0.5\baselineskip]
+%    %%% WAS
+%    \\[0.25\baselineskip]
+    \skip_vertical:n{0.25\baselineskip}
   }
 
 
