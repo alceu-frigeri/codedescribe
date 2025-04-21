@@ -87,16 +87,16 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 * Version 1.7 (this)
-    - fixing issues #4 and #5 (hopefully) for good. Added an environment <tsremark*> (see documentation). 
+    - fixing issues [#4](https://github.com/alceu-frigeri/codedescribe/issues/4) and [#5](https://github.com/alceu-frigeri/codedescribe/issues/5) (hopefully) for good. Added an environment <tsremark*> (see documentation). 
 
 * Version 1.6
-    - fixing issue #3 (long standing (hidden) bug. \tsresult now fully respects optional keys.
+    - fixing issue [#3](https://github.com/alceu-frigeri/codedescribe/issues/3) (long standing (hidden) bug. \tsresult now fully respects optional keys.
 
 * Version 1.5b 
-    - fixing issue #2 (reverting `codesyntax` bug introduced by v1.5). 
+    - fixing issue [#2](https://github.com/alceu-frigeri/codedescribe/issues/2) (reverting `codesyntax` bug introduced by v1.5). 
 
 * Version 1.5
-    - fixing issue #1 (misalignment when missing a `codesyntax` inner environment). 
+    - fixing issue [#1](https://github.com/alceu-frigeri/codedescribe/issues/1) (misalignment when missing a `codesyntax` inner environment). 
 
 * Version 1.4
     - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
