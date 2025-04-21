@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.6} {2025/03/08}
+%% This is version {1.7} {2025/04/21}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/03/08}
-    {1.6}
+    {2025/04/21}
+    {1.7}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/03/08} ,
-     version     .code:n = {1.6} ,
+     date        .code:n = {2025/04/21} ,
+     version     .code:n = {1.7} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -772,7 +772,7 @@
               \__codedesc_hline:nnnn {\color{white}}{0.5ex}{2}{-1.5ex}
               \__codedesc_metacolor_tl:
               \begin{minipage}[t]{\l__codedesc_syntax_wd_dim}
-                \obeylines\obeyspaces\setlength\parindent{-2em}
+                \obeylines\obeyspaces\setlength\parindent{-2em} 
               \end{minipage}\\[-2.5ex]
                   \\                                
                   \__codedesc_hline:nnnn {\color{white}}{0ex}{2}{1ex}      
@@ -792,8 +792,7 @@
         \par\noindent
         \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{\__codedesc_paradvance_dim}      
       }
-    \\[0.5\baselineskip]
-    %\\[\__codedesc_paradvance_dim]%[-0.5\baselineskip]
+    \skip_vertical:n{0.375\baselineskip}
   }
   
  
@@ -823,10 +822,10 @@
   
   \NewDocumentEnvironment{describelist}{O{20mm}m}
   {
-    %\vspace*{-1.5ex}
     \mode_if_horizontal:TF 
-      {\\[-0.5\baselineskip]} 
-      {}
+      {\skip_vertical:n{-0.25\baselineskip}}
+      {\skip_vertical:n{0.125\baselineskip}}
+
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
     \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
@@ -836,15 +835,14 @@
     \tl_set:Nn \__codedesc_listkind_tl {#2}
   }
   {
-%    \par\noindent\coffin_typeset:Nnnnn \__codedesc_describe_coffin {l}{t}{0pt}{10pt}
   }
   
 \NewDocumentEnvironment{describelist*}{O{20mm}m}
   {
-    %\vspace*{-1.5ex}
     \mode_if_horizontal:TF 
-      {\\[-0.5\baselineskip]}%{\vspace*{-1ex}} 
-      {}
+      {\skip_vertical:n{-0.25\baselineskip}}
+      {\skip_vertical:n{0.125\baselineskip}}
+
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
     \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
@@ -854,9 +852,9 @@
     \tl_set:Nn \__codedesc_listkind_tl {#2}
   }
   {
-%    \par\noindent\coffin_typeset:Nnnnn \__codedesc_describe_coffin {l}{t}{0pt}{10pt}
   }
 
+\cs_generate_variant:Nn \skip_set:Nn {Ne}
 \NewDocumentCommand \describe {mm}
   {    
     \hcoffin_set:Nn \l_tmpb_coffin 
@@ -890,24 +888,20 @@
         \begin{minipage}[t]{ \__codedesc_describelist_wd_dim }
           #2
         \end{minipage}
-      }      
+      }   
     \__codedesc_join_tl: 
       \l_tmpb_coffin {l}{t} 
       \l_tmpa_coffin {r}{t} 
-      {-\marginparsep}{0pt}
-    \mode_if_horizontal:TF 
-      {
-        \\[-\baselineskip] 
-      }
-      {   }
+      {-\marginparsep}{-.12\baselineskip}
 
+    \mode_if_horizontal:TF 
+      {\skip_vertical:n{0.1667\baselineskip}}
+      {\skip_vertical:n{0.3667\baselineskip}}
     \noindent
     \coffin_typeset:Nnnnn 
       \l_tmpb_coffin {l}{t} {0pt}{0pt}
-    \\ 
-    
   }
-
+  
 
   
 \NewDocumentCommand \typesetmeta {m} {\__codedesc_meta:n {#1}}
@@ -961,28 +955,32 @@
 \cs_new_eq:NN \tsmarginnote \typesetmarginnote
 
 
+
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
-%    %%% WAS
-%    \mode_if_horizontal:TF 
-%      {\par\vspace*{0.25\baselineskip}}%\vspace*{-1.5ex}} 
-%      {\vspace*{0.75\baselineskip}}      
     \mode_if_horizontal:TF 
-      {\skip_vertical:n{-0.125\baselineskip}}
-      {\skip_vertical:n{0.25\baselineskip}}
+      {\skip_vertical:n{0.1667\baselineskip}}
+      {\skip_vertical:n{0.4167\baselineskip}}
+      
     \__codedesc_set_textcolwidth:
     \group_begin:
       \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
-      \begin{minipage}{0.8\l__codedesc_textcolwidth_dim}
+      \begin{minipage}[b]{0.8\l__codedesc_textcolwidth_dim}
         \setlength\parindent{0pt}\small
-        \textsl{\textbf{#1}} %\dim_to_decimal:n {\linewidth}
+        \textsl{\textbf{#1}} %\l_tmpa_tl %\dim_to_decimal:n {\linewidth} 
   }
   {
       \end{minipage}
     \group_end:
-%    %%% WAS
-%    \\[0.25\baselineskip]
-    \skip_vertical:n{0.25\baselineskip}
+  }
+
+\NewDocumentEnvironment {tsremark*} {O{Note:}}
+  {
+    \begin{tsremark}[#1]
+  }
+  {      
+    \end{tsremark}
+    \skip_vertical:n{0.4167\baselineskip}
   }
 
 

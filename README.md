@@ -86,7 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.6 (this)
+* Version 1.7 (this)
+    - fixing issues #4 and #5 (hopefully) for good. Added an environment <tsremark*> (see documentation). 
+
+* Version 1.6
     - fixing issue #3 (long standing (hidden) bug. \tsresult now fully respects optional keys.
 
 * Version 1.5b 

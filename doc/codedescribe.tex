@@ -1,5 +1,10 @@
+%%%==============================================================================
+% WinEdt pragmas
+% !Mode:: "TeX:EN"
+% Default Compile engines:
 % !TEX program = pdflatex
-% !TEX ext =  --interaction=nonstopmode --enable-etex --enable-write18
+% !PDFTeXify ext =  --enable-etex  --restrict-write18
+% !PDFLaTeX ext  =  --enable-etex  --restrict-write18
 % !BIB program = none
 %%%==============================================================================
 %% Copyright 2023-present by Alceu Frigeri
@@ -15,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.6} {2025/03/08}
+%% This is version {1.7} {2025/04/21}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -27,6 +32,7 @@
 \usepackage{codedescribe}
 \usepackage{enumitem}
 
+\RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
 
 %%% TO BE DETERMINED !! \parindent
@@ -217,7 +223,7 @@ This package aims at minimizing the number of commands, having the object kind (
 It has a single package option:
 
 \begin{describelist}{option}
-\describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it's not necessary or one wants to use a differen package for \LaTeX\ code listing.}
+\describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
 \end{describelist}
 
 \subsection{Object Type keys}\label{obj-type-def}
@@ -281,7 +287,7 @@ Similarly, there is a set of predefined ones, as follow:
 
 \subsubsection{Customization}\label{format-custom}
 
-One can add user defined groups/objects or change the pre-defined ones with the following commands:
+To create  user defined groups/objects or change the pre-defined ones:
 
 
 \begin{codedescribe}[code,new=2023/05/16]{\defgroupfmt}
@@ -321,7 +327,7 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 \ldots
 \tsmacro{\end{codedescribe}}{}
 \end{codesyntax}
-This is the main environment to describe \tsobj[env]{Macros, Functions, Variable, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} (see \ref{obj-type-def} and \ref{obj-types}) defines the object-type format. 
+This is the main environment to describe \tsobj[env]{Macros, Functions, Variables, Environments, etc.}  \tsobj[meta]{csv-list} is typeset in the margin. The optional \tsobj[oarg]{obj-type} (see \ref{obj-type-def} and \ref{obj-types}) defines the object-type format. 
 \end{codedescribe}
 \begin{tsremark}[Note~1:]
 One can change the rule color with the key \tsobj[keys]{rulecolor}, for instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will remove the rules.
@@ -341,14 +347,10 @@ Finally, one can use \tsobj[key]{EXP,rEXP} to add a star \ding{72} or a hollow s
 \end{codesyntax}
 The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line.
 \end{codedescribe}
-\begin{tsremark}
+
+\begin{tsremark*}
 \tsobj[env]{codesyntax} environment shall appear only once, inside of a \tsobj[env]{codedescribe} environment. Take note, as well, this is not a verbatim environment!
-%\begin{describelist*}{code}
-%\describe{something}{ a text}
-%\describe{some}{ some text}
-%\end{describelist*}
-%
-\end{tsremark}
+\end{tsremark*}
 
 For example, the code for  \tsobj[env]{codedescribe} (entry above) is:
 
@@ -398,7 +400,7 @@ This is the \tsobj[env]{describelist} companion macro. In case of the \tsobj[env
 This is the main typesetting command (most of the others are based on this). It can be used to typeset a single 'object' or a list thereof. In the case of a list, each term will be separated by commas. The last two  by \tsobj[key]{sep} (defaults to: and).
 \end{codedescribe}
 \begin{tsremark}
-One can change the last 'separator' with the key \tsobj[keys]{sep}, for instance \tsverb[code]{\tsobj[env,sep=or] {}} (in case one wants to produce an 'or' list of environments). Additionally, one can use the key \tsobj[keys]{comma} to change the last separator to a single comma, like \tsverb[code]{\tsobj[env,comma] {}}.
+The last 'separator' can be changed with the key \tsobj[keys]{sep}, for instance \tsverb[code]{\tsobj[env,sep=or] {}} (it will produce an 'or' list of environments). Additionally,  the key \tsobj[keys]{comma} will change the last separator to a single comma, as in \tsverb[code]{\tsobj[env,comma] {}}.
 \end{tsremark}
 
 \begin{codedescribe}[code]{\typesetargs,\tsargs}
@@ -446,12 +448,12 @@ This is meant for short expressions, and not multi-line, complex code (one is be
 Typesets a small note at the margin.
 \end{codedescribe}
 
-\begin{codedescribe}[env]{tsremark}
+\begin{codedescribe}[env,update=2025-04-21]{tsremark,tsremark*}
 \begin{codesyntax}
 \tsmacro{\begin{tsremark}}[NB]{}
 \tsmacro{\end{tsremark}}{}
 \end{codesyntax}
- The environment body will be typeset as a text note. \tsobj[oarg]{NB} (defaults to Note:) is the note begin (in boldface). For instance:
+ The environment body will be typeset as a text note. \tsobj[oarg]{NB} (defaults to Note:) is the note begin (in boldface). The non-star version doesn't finishes a paragraph (\TeX\ stays in horizontal mode), whilst the (new) star version does and introduces a vertical space at the end. For instance:
  \begin{codestore}[demo.remark]
  Sample text. Sample test.
   \begin{tsremark}[N.B.]
@@ -461,10 +463,10 @@ Typesets a small note at the margin.
  \tsdemo{demo.remark}
 \end{codedescribe}
 
-\subsection{Auxiliary Command / Environment}
-In case the used Document Class redefines the \tsobj[code]{\maketitle} command and/or \tsobj[env]{abstract} environment, alternatives are provided (based on the article class).
+\subsection{Auxiliary Commands and Environment}
+In case the Document Class being used redefines the \tsobj[code]{\maketitle} command and/or \tsobj[env]{abstract} environment, alternatives are provided (based on the article class).
 
-\begin{codedescribe}[code]{typesettitle,tstitle}
+\begin{codedescribe}[code]{\typesettitle,\tstitle}
 \begin{codesyntax}
 \tsmacro{\typesettitle}{title-keys}
 \tsmacro{\tstitle}{title-keys}
@@ -474,7 +476,7 @@ This is based on the \tsobj[code]{\maketitle} from the \tsobj[pkg]{article} clas
 
 \begin{describelist}{key}
 \describe{title}{The used title.}
-\describe{author}{Author's name. It's possible to use \tsobj[code]{\footnote} command in it.}
+\describe{author}{Author's name. It's possible to use the \tsobj[code]{\footnote} command in it.}
 \describe{date}{Title's date.}
 \end{describelist}
 
@@ -487,7 +489,7 @@ This is based on the \tsobj[code]{\maketitle} from the \tsobj[pkg]{article} clas
 This is the \tsobj[env]{abstract} environment from the \tsobj[pkg]{article} class.
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2023/05/16]{typesetdate,tsdate}
+\begin{codedescribe}[code,new=2023/05/16]{\typesetdate,\tsdate}
 \begin{codesyntax}
 \tsmacro{\typesetdate}{}
 \tsmacro{\tsdate}{}
