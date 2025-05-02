@@ -88,7 +88,7 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 * Version 1.8 (this)
-    - fixex
+    - fixes
       [#6](https://github.com/alceu-frigeri/codedescribe/issues/6), [#7](https://github.com/alceu-frigeri/codedescribe/issues/7) and
       [#8](https://github.com/alceu-frigeri/codedescribe/issues/7).
     - Added an (optional) index parameter to the code display/demo commands.
