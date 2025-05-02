@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.7} {2025/04/21}
+%% This is version {1.8} {2025/05/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codelisting}
-    {2025/04/21}
-    {1.7}
+    {2025/05/02}
+    {1.8}
     {LaTeX Code Listing}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codelisting} ,
      prefix      .code:n = {codelist} ,
-     date        .code:n = {2025/04/21} ,
-     version     .code:n = {1.7} ,
+     date        .code:n = {2025/05/02} ,
+     version     .code:n = {1.8} ,
      description .code:n = {\LaTeX~Code~Listing}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -50,77 +50,117 @@
 %%% End of cut-n-paste
 %%%%%%%
 
-
-
-
-
 \RequirePackage{listings,scontents}
+
+\msg_new:nnnn {codelist} {invalid key}
+  {
+    (ID:#1)~Key (#2) ~not~defined!
+  }
+  {
+    You~tried~to~use~a~non~defined~key:#2.
+    ~Error~Code~ ID:<#1>.
+  }
 
 \dim_new:N \l__codelist_demo_parindent_dim
 \dim_new:N \l__codelist_org_parindent_dim
 
 \dim_set:Nn\l__codelist_org_parindent_dim{\parindent}
 
-
+\colorlet{c__codelist_lightred_color}{white!97!red}
+\colorlet{c__codelist_lightgreen_color}{white!97!green}
+\colorlet{c__codelist_lightblue_color}{white!97!blue}
+\colorlet{c__codelist_lightmagenta_color}{white!97!magenta}
+\colorlet{c__codelist_lightyellow_color}{white!97!yellow}
+\colorlet{c__codelist_lightteal_color}{white!97!teal}
 \colorlet{c__codelist_lightcyan_color}{white!97!cyan}
+
 \colorlet{c__codelist_lightgray_color}{white!97!black}
-\definecolor{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
-
-\colorlet{c__codelist_darkred_color}{red!45!black!100}
-\colorlet{c__codelist_darkgreen_color}{green!45!black!100}
-\colorlet{c__codelist_darkblue_color}{blue!40!black!100}
-\colorlet{c__codelist_darkmagenta_color}{magenta!45!black!100}
-\colorlet{c__codelist_darkyellow_color}{yellow!45!black!100}
-\colorlet{c__codelist_darkteal_color}{teal!45!black!100}
-
-\colorlet{c__codelist_redishblack_color}{red!60!black!100}
-\colorlet{c__codelist_greenishblack_color}{green!65!black!100}
-\colorlet{c__codelist_blueishblack_color}{blue!85!black!100}
-\colorlet{c__codelist_magentaishblack_color}{magenta!65!black!100}
-\colorlet{c__codelist_yellowishblack_color}{yellow!65!black!100}
-\colorlet{c__codelist_tealishblack_color}{teal!65!black!100}
-
-\colorlet{c__codelist_redblack_color}{red!90!black!100}
-\colorlet{c__codelist_greenblack_color}{green!90!black!100}
-\colorlet{c__codelist_blueblack_color}{blue!90!black!100}
-\colorlet{c__codelist_magentablack_color}{magenta!90!black!100}
-\colorlet{c__codelist_yellowblack_color}{yellow!80!black!100}
-\colorlet{c__codelist_tealblack_color}{teal!90!black!100}
-
 \colorlet{c__codelist_gray_color}{gray}
+\definecolor{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
+\definecolor{c__codelist_blackgray_color}{rgb}{0.8,0.8,0.8}
+
+\colorlet{c__codelist_darkred_color}{red!30!black!100}
+\colorlet{c__codelist_darkgreen_color}{green!30!black!100}
+\colorlet{c__codelist_darkblue_color}{blue!30!black!100}
+\colorlet{c__codelist_darkmagenta_color}{magenta!30!black!100}
+\colorlet{c__codelist_darkyellow_color}{yellow!30!black!100}
+\colorlet{c__codelist_darkteal_color}{teal!30!black!100}
+\colorlet{c__codelist_darkcyan_color}{cyan!30!black!100}
+
+\colorlet{c__codelist_redishblack_color}{red!50!black!100}
+\colorlet{c__codelist_greenishblack_color}{green!50!black!100}
+\colorlet{c__codelist_blueishblack_color}{blue!50!black!100}
+\colorlet{c__codelist_magentaishblack_color}{magenta!50!black!100}
+\colorlet{c__codelist_yellowishblack_color}{yellow!50!black!100}
+\colorlet{c__codelist_tealishblack_color}{teal!50!black!100}
+\colorlet{c__codelist_cyanishblack_color}{cyan!50!black!100}
+
+\colorlet{c__codelist_redblack_color}{red!75!black!100}
+\colorlet{c__codelist_greenblack_color}{green!75!black!100}
+\colorlet{c__codelist_blueblack_color}{blue!75!black!100}
+\colorlet{c__codelist_magentablack_color}{magenta!75!black!100}
+\colorlet{c__codelist_yellowblack_color}{yellow!75!black!100}
+\colorlet{c__codelist_tealblack_color}{teal!75!black!100}
+\colorlet{c__codelist_cyanblack_color}{cyan!75!black!100}
+
+\colorlet{c__codelist_grayred_color}{red!30!gray!100}
+\colorlet{c__codelist_graygreen_color}{green!30!gray!100}
+\colorlet{c__codelist_grayblue_color}{blue!30!gray!100}
+\colorlet{c__codelist_graymagenta_color}{magenta!30!gray!100}
+\colorlet{c__codelist_grayyellow_color}{yellow!30!gray!100}
+\colorlet{c__codelist_grayteal_color}{teal!30!gray!100}
+\colorlet{c__codelist_graycyan_color}{cyan!30!gray!100}
+
+\colorlet{c__codelist_redishgray_color}{red!50!gray!100}
+\colorlet{c__codelist_greenishgray_color}{green!50!gray!100}
+\colorlet{c__codelist_blueishgray_color}{blue!50!gray!100}
+\colorlet{c__codelist_magentaishgray_color}{magenta!50!gray!100}
+\colorlet{c__codelist_yellowishgray_color}{yellow!50!gray!100}
+\colorlet{c__codelist_tealishgray_color}{teal!50!gray!100}
+\colorlet{c__codelist_cyanishgray_color}{cyan!50!gray!100}
+
+\colorlet{c__codelist_redgray_color}{red!75!gray!100}
+\colorlet{c__codelist_greengray_color}{green!75!gray!100}
+\colorlet{c__codelist_bluegray_color}{blue!75!gray!100}
+\colorlet{c__codelist_magentagray_color}{magenta!75!gray!100}
+\colorlet{c__codelist_yellowgray_color}{yellow!75!gray!100}
+\colorlet{c__codelist_tealgray_color}{teal!75!gray!100}
+\colorlet{c__codelist_cyangray_color}{cyan!75!gray!100}
 
 \tl_set:Nn \l__codelist_bckgnd_color_default_tl{c__codelist_lightgray_color}%
 \tl_set:Nn \l__codelist_string_color_default_tl{c__codelist_darkteal_color}
 \tl_set:Nn \l__codelist_comment_color_default_tl{c__codelist_darkgreen_color}
 
-\tl_set:Nn \l__codelist_texcs_color_default_tl{c__codelist_darkblue_color}
-\tl_set:Nn \l__codelist_keywd_color_default_tl{c__codelist_darkgreen_color}
-\tl_set:Nn \l__codelist_emph_color_default_tl{c__codelist_darkred_color}
-
+\tl_set:Nn \l__codelist_texcsA_color_default_tl{c__codelist_darkblue_color}
 \tl_set:Nn \l__codelist_texcsB_color_default_tl{c__codelist_blueishblack_color}
-\tl_set:Nn \l__codelist_keywdB_color_default_tl{c__codelist_greenishblack_color}
-\tl_set:Nn \l__codelist_emphB_color_default_tl{c__codelist_redishblack_color}
-
 \tl_set:Nn \l__codelist_texcsC_color_default_tl{c__codelist_blueblack_color}
-\tl_set:Nn \l__codelist_keywdC_color_default_tl{c__codelist_greenblack_color}
+\tl_set:Nn \l__codelist_texcsD_color_default_tl{c__codelist_blueishgray_color}
+
+\tl_set:Nn \l__codelist_keywdA_color_default_tl{c__codelist_darkcyan_color}
+\tl_set:Nn \l__codelist_keywdB_color_default_tl{c__codelist_cyanishblack_color}
+\tl_set:Nn \l__codelist_keywdC_color_default_tl{c__codelist_cyanblack_color}
+\tl_set:Nn \l__codelist_keywdD_color_default_tl{c__codelist_cyanishgray_color}
+
+\tl_set:Nn \l__codelist_emphA_color_default_tl{c__codelist_darkred_color}
+\tl_set:Nn \l__codelist_emphB_color_default_tl{c__codelist_redishblack_color}
 \tl_set:Nn \l__codelist_emphC_color_default_tl{c__codelist_redblack_color}
+\tl_set:Nn \l__codelist_emphD_color_default_tl{c__codelist_redishgray_color}
 
 \tl_set:Nn \l__codelist_rule_color_default_tl{c__codelist_gray_color}
 \tl_set:Nn \l__codelist_number_color_default_tl{c__codelist_gray_color}
 
-\keys_define:nn {CodeListingOptions} {
+\keys_define:nn {codelist / options} {
   settexcs      .usage:n   =  general,
-  settexcs      .code:n    =  { \tl_set:Nn \l__codelist_texcs_tl {#1} },
+  settexcs      .code:n    =  { \tl_set:Nn \l__codelist_texcsA_tl {#1} },
   settexcs      .default:n =   ,
   
   texcs         .usage:n   =   general,
-  texcs         .code:n    =  { \tl_put_right:Nn \l__codelist_texcs_tl { , #1} },
+  texcs         .code:n    =  { \tl_put_right:Nn \l__codelist_texcsA_tl { , #1} },
   texcs         .default:n =  ,
 
   texcsstyle    .usage:n   =   general,
-  texcsstyle    .code:n    =  { \tl_set:Nn \l__codelist_texcsstyle_tl {#1} },
-  texcsstyle    .default:n =  \bfseries\color{ \l__codelist_texcs_color_default_tl },
-
+  texcsstyle    .code:n    =  { \tl_set:Nn \l__codelist_texcsAstyle_tl {#1} },
+  texcsstyle    .default:n =  \bfseries\color{ \l__codelist_texcsA_color_default_tl },
 
   settexcs2     .usage:n   =   general,
   settexcs2     .code:n    =  { \tl_set:Nn \l__codelist_texcsB_tl {#1} },
@@ -132,8 +172,7 @@
 
   texcs2style   .usage:n   =   general,
   texcs2style   .code:n    =  { \tl_set:Nn \l__codelist_texcsBstyle_tl {#1} },
-  texcs2style   .default:n =  \bfseries\color{ \l__codelist_texcs_color_default_tl } ,
-
+  texcs2style   .default:n =  \bfseries\color{ \l__codelist_texcsB_color_default_tl } ,
 
   settexcs3     .usage:n   =   general,
   settexcs3     .code:n    =  { \tl_set:Nn \l__codelist_texcsC_tl {#1} },
@@ -147,18 +186,29 @@
   texcs3style   .code:n    =  { \tl_set:Nn \l__codelist_texcsCstyle_tl {#1} },
   texcs3style   .default:n =  \bfseries\color{ \l__codelist_texcsC_color_default_tl } ,
 
+  settexcs4     .usage:n   =   general,
+  settexcs4     .code:n    =  { \tl_set:Nn \l__codelist_texcsD_tl {#1} },
+  settexcs4     .default:n =  ,
+
+  texcs4        .usage:n   =   general,
+  texcs4        .code:n    =  { \tl_put_right:Nn \l__codelist_texcsD_tl { , #1} },
+  texcs4        .default:n =  ,
+
+  texcs4style   .usage:n   =   general,
+  texcs4style   .code:n    =  { \tl_set:Nn \l__codelist_texcsDstyle_tl {#1} },
+  texcs4style   .default:n =  \bfseries\color{ \l__codelist_texcsD_color_default_tl } ,
 
   setkeywd      .usage:n   =   general,
-  setkeywd      .code:n    =  { \tl_set:Nn \l__codelist_keywd_tl {#1} },
+  setkeywd      .code:n    =  { \tl_set:Nn \l__codelist_keywdA_tl {#1} },
   setkeywd      .default:n =  ,
 
   keywd         .usage:n   =   general,
-  keywd         .code:n    =  { \tl_put_right:Nn \l__codelist_keywd_tl { , #1} },
+  keywd         .code:n    =  { \tl_put_right:Nn \l__codelist_keywdA_tl { , #1} },
   keywd         .default:n =  ,
 
   keywdstyle    .usage:n   =   general,
   keywdstyle    .code:n    =  { \tl_set:Nn \l__codelist_keywdstyle_tl {#1} },
-  keywdstyle    .default:n =  \bfseries\color{ \l__codelist_keywd_color_default_tl } ,
+  keywdstyle    .default:n =  \bfseries\color{ \l__codelist_keywdA_color_default_tl } ,
 
   setkeywd2     .usage:n   =   general,
   setkeywd2     .code:n    =  { \tl_set:Nn \l__codelist_keywdB_tl {#1} },
@@ -184,17 +234,29 @@
   keywd3style   .code:n    =  { \tl_set:Nn \l__codelist_keywdCstyle_tl {#1} },
   keywd3style   .default:n =  \bfseries\color{ \l__codelist_keywdC_color_default_tl } ,
 
+  setkeywd4     .usage:n   =   general,
+  setkeywd4     .code:n    =  { \tl_set:Nn \l__codelist_keywdD_tl {#1} },
+  setkeywd4     .default:n =  ,
+
+  keywd4        .usage:n   =   general,
+  keywd4        .code:n    =  { \tl_put_right:Nn \l__codelist_keywdD_tl { , #1} },
+  keywd4        .default:n =  ,
+
+  keywd4style   .usage:n   =   general,
+  keywd4style   .code:n    =  { \tl_set:Nn \l__codelist_keywdDstyle_tl {#1} },
+  keywd4style   .default:n =  \bfseries\color{ \l__codelist_keywdD_color_default_tl } ,
+
   setemph       .usage:n   =   general,
-  setemph       .code:n    =  { \tl_set:Nn \l__codelist_emph_tl {#1} },
+  setemph       .code:n    =  { \tl_set:Nn \l__codelist_emphA_tl {#1} },
   setemph       .default:n =  ,
 
   emph          .usage:n   =   general,
-  emph          .code:n    =  { \tl_put_right:Nn \l__codelist_emph_tl { , #1} },
+  emph          .code:n    =  { \tl_put_right:Nn \l__codelist_emphA_tl { , #1} },
   emph          .default:n =  ,
 
   emphstyle     .usage:n   =   general,
-  emphstyle     .code:n    =  { \tl_set:Nn \l__codelist_emphstyle_tl {#1} },
-  emphstyle     .default:n =  \bfseries\color{ \l__codelist_emph_color_default_tl } ,
+  emphstyle     .code:n    =  { \tl_set:Nn \l__codelist_emphAstyle_tl {#1} },
+  emphstyle     .default:n =  \bfseries\color{ \l__codelist_emphA_color_default_tl } ,
 
   setemph2      .usage:n   =   general,
   setemph2      .code:n    =  { \tl_set:Nn \l__codelist_emphB_tl {#1} },
@@ -220,6 +282,18 @@
   emph3style    .code:n    =  { \tl_set:Nn \l__codelist_emphCstyle_tl {#1} },
   emph3style    .default:n =  \bfseries\color{ \l__codelist_emphC_color_default_tl } ,
 
+  setemph4      .usage:n   =   general,
+  setemph4      .code:n    =  { \tl_set:Nn \l__codelist_emphD_tl {#1} },
+  setemph4      .default:n =  ,
+
+  emph4         .usage:n   =   general,
+  emph4         .code:n    =  { \tl_put_right:Nn \l__codelist_emphD_tl { , #1} },
+  emph4         .default:n =  ,
+
+  emph4style    .usage:n   =   general,
+  emph4style    .code:n    =  { \tl_set:Nn \l__codelist_emphDstyle_tl {#1} },
+  emph4style    .default:n =  \bfseries\color{ \l__codelist_emphD_color_default_tl } ,
+
   stringstyle   .usage:n   =   general,
   stringstyle   .code:n    =  { \tl_set:Nn \l__codelist_stringstyle_tl {#1} },
   stringstyle   .default:n =  \color{ \l__codelist_string_color_default_tl } ,
@@ -244,11 +318,9 @@
   numberstyle   .code:n    =  { \tl_set:Nn \l__codelist_numberstyle_tl {#1} },
   numberstyle   .default:n =  \tiny\color{ \l__codelist_number_color_default_tl },
 
-
   parindent     .usage:n   =   general,
   parindent     .code:n    =  { \dim_set:Nn\l__codelist_demo_parindent_dim{#1} },
   parindent     .default:n =  \l__codelist_org_parindent_dim,
-
 
 	codeprefix    .usage:n   =   general,
 	codeprefix    .code:n    =  { \tl_set:Nn \l__codelist_codeprefix_tl {#1} },
@@ -265,20 +337,21 @@
   basicstyle    .usage:n   =   general,
   basicstyle    .code:n    =  { \tl_set:Nn \l__codelist_basicstyle_tl {#1} },
   basicstyle    .default:n =  \footnotesize\ttfamily ,
-  
-  \l__codelist_basicstyle_tl
 
   default       .usage:n   =   general,
   default       .meta:n    = {
       settexcs     , texcsstyle  , 
       settexcs2    , texcs2style , 
       settexcs3    , texcs3style ,
+      settexcs4    , texcs4style ,
 		  setkeywd     , keywdstyle  , 
       setkeywd2    , keywd2style , 
       setkeywd3    , keywd3style ,
+      setkeywd4    , keywd4style ,
 		  setemph      , emphstyle   , 
       setemph2     , emph2style  , 
       setemph3     , emph3style  ,
+      setemph4     , emph4style  ,
 		  stringstyle  , 
       commentstyle , 
       bckgndcolor  , rulecolor   ,
@@ -288,13 +361,12 @@
       ruleht   , 
       basicstyle ,
   },
-
 }
 
 %%%%%%
-%%% This one can't be proteced
+%%% This one can't be protected
 %%%%%%
-\cs_new:Npn \__codelist_set_options:n #1 {\keys_set:nn {CodeListingOptions}{#1}}
+\cs_new:Npn \__codelist_set_options:n #1 {\keys_set:nn {codelist / options}{#1}}
 
 \__codelist_set_options:n{default}
 
@@ -424,24 +496,30 @@
 	rulesep      =   0pt,
 	breaklines   =   true,
 	breakindent  =   3em,
-	moretexcs    =      {\l__codelist_texcs_tl},
+	moretexcs    =      {\l__codelist_texcsA_tl},
   moretexcs    =  [2] {\l__codelist_texcsB_tl},
   moretexcs    =  [3] {\l__codelist_texcsC_tl},
-  texcsstyle   = *    {\l__codelist_texcsstyle_tl},
+  moretexcs    =  [4] {\l__codelist_texcsD_tl},
+  texcsstyle   = *    {\l__codelist_texcsAstyle_tl},
 	texcsstyle   = *[2] {\l__codelist_texcsBstyle_tl},
 	texcsstyle   = *[3] {\l__codelist_texcsCstyle_tl},
-	morekeywords =      {\l__codelist_keywd_tl},
+	texcsstyle   = *[4] {\l__codelist_texcsDstyle_tl},
+	morekeywords =      {\l__codelist_keywdA_tl},
 	morekeywords =  [2] {\l__codelist_keywdB_tl},
 	morekeywords =  [3] {\l__codelist_keywdC_tl},
+	morekeywords =  [4] {\l__codelist_keywdD_tl},
   keywordstyle =      {\l__codelist_keywdstyle_tl},
 	keywordstyle =  [2] {\l__codelist_keywdBstyle_tl},
 	keywordstyle =  [3] {\l__codelist_keywdCstyle_tl},
-	emph         =      {\l__codelist_emph_tl},
+	keywordstyle =  [4] {\l__codelist_keywdDstyle_tl},
+	emph         =      {\l__codelist_emphA_tl},
 	emph         =  [2] {\l__codelist_emphB_tl},
 	emph         =  [3] {\l__codelist_emphC_tl},
-  emphstyle    =      {\l__codelist_emphstyle_tl},
+	emph         =  [4] {\l__codelist_emphD_tl},
+  emphstyle    =      {\l__codelist_emphAstyle_tl},
   emphstyle    =  [2] {\l__codelist_emphBstyle_tl},
   emphstyle    =  [3] {\l__codelist_emphCstyle_tl},
+  emphstyle    =  [4] {\l__codelist_emphDstyle_tl},
 }
 \lstset{style=codestyle}
 
@@ -461,7 +539,6 @@
  }
 
 \newenvsc{codestore}
-
 
 
 %%%%%%%%%
@@ -495,15 +572,18 @@
           \exp_args:Ne \lstset
             {
               style=codestyle,
-              moretexcs     =     {\l__codelist_texcs_tl},
+              moretexcs     =     {\l__codelist_texcsA_tl},
               moretexcs     =[2]  {\l__codelist_texcsB_tl},
               moretexcs     =[3]  {\l__codelist_texcsC_tl},
-        		  morekeywords  =     {\l__codelist_keywd_tl},
+              moretexcs     =[4]  {\l__codelist_texcsD_tl},
+        		  morekeywords  =     {\l__codelist_keywdA_tl},
               morekeywords  =[2]  {\l__codelist_keywdB_tl},
               morekeywords  =[3]  {\l__codelist_keywdC_tl},
-        		  emph          =     {\l__codelist_emph_tl}, 
+              morekeywords  =[4]  {\l__codelist_keywdD_tl},
+        		  emph          =     {\l__codelist_emphA_tl}, 
               emph          =[2]  {\l__codelist_emphB_tl}, 
               emph          =[3]  {\l__codelist_emphC_tl},
+              emph          =[4]  {\l__codelist_emphD_tl},
         	    numbers       =     \l__codelist_numbers_tl
             }
         }
@@ -525,13 +605,13 @@
           \exp_args:Ne \lstset
             {
               style=codestyle,
-              moretexcs     =     {\l__codelist_texcs_tl},
+              moretexcs     =     {\l__codelist_texcsA_tl},
               moretexcs     =[2]  {\l__codelist_texcsB_tl},
               moretexcs     =[3]  {\l__codelist_texcsC_tl},
-        		  morekeywords  =     {\l__codelist_keywd_tl},
+        		  morekeywords  =     {\l__codelist_keywdA_tl},
               morekeywords  =[2]  {\l__codelist_keywdB_tl},
               morekeywords  =[3]  {\l__codelist_keywdC_tl},
-        		  emph          =     {\l__codelist_emph_tl}, 
+        		  emph          =     {\l__codelist_emphA_tl}, 
               emph          =[2]  {\l__codelist_emphB_tl}, 
               emph          =[3]  {\l__codelist_emphC_tl},
         	    numbers       =     \l__codelist_numbers_tl
@@ -544,110 +624,148 @@
 
 \NewDocumentCommand \setcodekeys {m}
   {
-    \keys_set:nn {CodeListingOptions}{#1}
+    \keys_set:nn {codelist / options}{#1}
   }
 
-\NewDocumentCommand{\typesetcode}{sO{}m}
+\NewDocumentCommand \setnewcodekey {mm}
   {
-  \__codedesc_set_textcolwidth:
-    \group_begin:
-      \par\noindent
-      \bool_if:nTF {#1}
-      { % paragraph wide
+    \keys_define:nn {codelist / options}
+      {
+        #1 .meta:nn = {codelist / options} { #2 } ,
+        #1 .value_forbidden:n = true ,
+      }
+  }  
+
+\cs_new_protected:Npn \__codelist_ts_settings:nn #1#2
+  {
+    \bool_if:nTF {#1}
+      { % paragraph wide OR one below the other
         \dim_set:Nn \l__codedesc_width_dim {\l__codedesc_textcolwidth_dim}
         \dim_set:Nn \l__codedesc_offset_dim {0pt}
+        \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+        \tl_set:Nn \l__codedesc_rule_out_tl {}
       }
-      { % half as wide
+      { % half as wide OR side-by-side
         \dim_set:Nn \l__codedesc_width_dim {0.5\l__codedesc_textcolwidth_dim}
         \dim_set:Nn \l__codedesc_offset_dim {0.5\l__codedesc_width_dim}
+        \tl_set:Nn \l__codedesc_rule_in_tl {}
+        \tl_set:Nn \l__codedesc_rule_out_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
       }
   
       \__codelist_set_verbsc:n {#2}
-      \vcoffin_set:Nnn \__codelist_display_label_coffin {\l__codedesc_width_dim}
+      \tl_if_blank:VTF \l__codelist_codeprefix_tl
         {
-          \raggedright
-          \l__codelist_codeprefix_tl
+          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codedesc_width_dim}
+            {}
         }
-      \vcoffin_set:Nnn \__codelist_display_coffin {\l__codedesc_width_dim}
         {
-          \raggedright
-          \typestored{#3}
+          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codedesc_width_dim}
+            {
+              \raggedright
+              \l__codelist_codeprefix_tl
+            }
         }
+
+      \tl_if_blank:VTF \l__codelist_resultprefix_tl
+        {
+          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
+            {}
+        }
+        {
+          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
+            {
+              \raggedright
+              \l__codelist_resultprefix_tl
+            }
+        }
+  }
+
+\cs_new_protected:Npn \__codelist_codecoffin:nnnn #1#2#3#4
+  {
+    \vcoffin_set:Nnn \__codelist_code_coffin {\l__codedesc_width_dim}
+      {
+        \raggedright #4
+        \tl_if_blank:nTF {#2}
+          { #3 {#1} }
+          { #3 [#2]{#1} }
+      }
+  }
+
+\cs_new_protected:Npn \__codelist_democoffin:nn #1#2
+  {
+    \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
+      { 
+        \l__codedesc_rule_in_tl
+        \group_begin:\vspace*{0.5\baselineskip}%\vspace*{-1ex}
+        \setlength\parindent{\l__codelist_demo_parindent_dim}
+        \tl_if_blank:nTF {#2}
+          { \getstored {#1} }
+          { \getstored [#2]{#1} }
+        \group_end:
+        \l__codedesc_rule_in_tl
+      }
+  }
+
+\cs_new_protected:Npn \__codelist_ts_code:nnnnn #1#2#3#4#5
+  {
+    \__codedesc_set_textcolwidth:
+    \group_begin:
+      \par\noindent
+      \__codelist_ts_settings:nn {#1}{#2}
+      \__codelist_codecoffin:nnnn {#3}{#4}{#5}{}
+      
         \coffin_join:NnnNnnnn
-          \__codelist_display_label_coffin {l}{b}
-          \__codelist_display_coffin {l}{t}
+          \__codelist_code_label_coffin {l}{b}
+          \__codelist_code_coffin {l}{t}
           {0pt}{-1ex}
         \vspace*{-1ex}
-        \coffin_typeset:Nnnnn \__codelist_display_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
+        \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
         \vspace*{2ex}
         \par
     \group_end: 
   }
 
-\cs_new_eq:NN \tscode \typesetcode
+\NewDocumentCommand{\tscode}{sO{}mO{}}
+  {
+    \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored}
+  }
+
+\cs_new_eq:NN \typesetcode \tscode 
 
 
+\NewDocumentCommand{\tsmergedcode}{sO{}m}
+  {
+    \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]}
+  }
+  
+\cs_new_eq:NN \typesetmergedcode \tsmergedcode
 
-\coffin_new:N \__codelist_display_coffin
-\coffin_new:N \__codelist_display_label_coffin
+\coffin_new:N \__codelist_code_coffin
+\coffin_new:N \__codelist_code_label_coffin
 \coffin_new:N \__codelist_demo_coffin
 \coffin_new:N \__codelist_demo_label_coffin
 
 \dim_new:N \l__codedesc_width_dim
 \dim_new:N \l__codedesc_offset_dim
 
-\NewDocumentCommand{\typesetdemo}{sO{}mO{1ex}}
+\NewDocumentCommand{\tsdemo}{sO{}mO{}}
   {
     \__codedesc_set_textcolwidth:
     \group_begin:
       \par\setlength\parindent{0pt}
-      \bool_if:nTF {#1}
-        { % one below the other
-          \dim_set:Nn \l__codedesc_width_dim {\l__codedesc_textcolwidth_dim}
-          \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-          \tl_set:Nn \l__codedesc_rule_out_tl {}
-        }
-        { % side-by-side
-          \dim_set:Nn \l__codedesc_width_dim {0.5\l__codedesc_textcolwidth_dim}
-          \tl_set:Nn \l__codedesc_rule_in_tl {}
-          \tl_set:Nn \l__codedesc_rule_out_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-        }
-        
-      \__codelist_set_verbsc:n {#2}
-      \vcoffin_set:Nnn \__codelist_display_label_coffin {\l__codedesc_width_dim}
-        {
-          \raggedright
-          \l__codelist_codeprefix_tl
-        }
-      \vcoffin_set:Nnn \__codelist_display_coffin {\l__codedesc_width_dim}
-        {
-          \raggedright\vspace*{0.1ex}
-          \typestored{#3}
-        }
-
-      \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
-        {
-          \raggedright
-          \l__codelist_resultprefix_tl
-        }
-      \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
-        { 
-          \l__codedesc_rule_in_tl
-          \group_begin:\vspace*{0.5\baselineskip}%\vspace*{-1ex}
-          \setlength\parindent{\l__codelist_demo_parindent_dim}
-          \getstored{#3}%\vspace*{-1ex}
-          \group_end:
-          \l__codedesc_rule_in_tl
-        }
+      \__codelist_ts_settings:nn {#1}{#2}
+      
+      \__codelist_codecoffin:nnnn {#3}{#4}{\typestored}{\vspace*{0.1ex}}
+      \__codelist_democoffin:nn {#3}{#4}
 
       \bool_if:nTF {#1}
         { % one below the other
           \coffin_join:NnnNnnnn
-            \__codelist_display_label_coffin {l}{b}
-            \__codelist_display_coffin {l}{t}
+            \__codelist_code_label_coffin {l}{b}
+            \__codelist_code_coffin {l}{t}
             {0pt}{-1ex}
           \vspace*{-1ex}
-          \coffin_typeset:Nnnnn \__codelist_display_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}
+          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}
           \par
           \coffin_join:NnnNnnnn
             \__codelist_demo_label_coffin {l}{b}
@@ -659,17 +777,17 @@
         }
         { % side-by-side
           \coffin_join:NnnNnnnn
-            \__codelist_display_label_coffin {r}{b}
+            \__codelist_code_label_coffin {r}{b}
             \__codelist_demo_label_coffin {l}{b}
             {0pt}{0pt}    
           \coffin_join:NnnNnnnn
-            \__codelist_display_coffin {r}{vc}
+            \__codelist_code_coffin {r}{vc}
             \__codelist_demo_coffin {l}{vc}
             {0pt}{0pt}    
         
-          \coffin_typeset:Nnnnn \__codelist_display_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}\par
+          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}\par
           \l__codedesc_rule_out_tl
-          \coffin_typeset:Nnnnn \__codelist_display_coffin {l}{t}{0pt}{0pt}
+          \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
           \vspace*{0.25ex}
           \l__codedesc_rule_out_tl
           \vspace*{\baselineskip}
@@ -679,42 +797,25 @@
   }
 
 
-\cs_new_eq:NN \tsdemo \typesetdemo
+\cs_new_eq:NN \typesetdemo \tsdemo 
 
+\NewDocumentCommand{\tsexec}{mO{}}
+  {
+    \tl_if_blank:nTF {#2}
+      { \getstored{#1} }
+      { \getstored[#2]{#1} }
+  }
 
-
-\NewDocumentCommand{\typesetresult}{sO{}mO{1ex}}
+\cs_new_protected:Npn \__codelist_ts_demo:nnnn #1#2#3#4
   {
     \__codedesc_set_textcolwidth:
     \group_begin:
       \par\setlength\parindent{0pt}
-      \__codelist_set_verbsc:n {#2}
-      \bool_if:nTF {#1}
-        { % full width
-          \dim_set:Nn \l__codedesc_width_dim {\l__codedesc_textcolwidth_dim}
-          \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-          \dim_set:Nn \l__codedesc_offset_dim {0pt}
-        }
-        { % half width
-          \dim_set:Nn \l__codedesc_width_dim {0.5\l__codedesc_textcolwidth_dim}
-          \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-          \dim_set:Nn \l__codedesc_offset_dim {0.5\l__codedesc_width_dim}
-        }
-        
-      \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
-        {
-          \raggedright
-          \l__codelist_resultprefix_tl
-        }
-      \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
-        { 
-          \l__codedesc_rule_in_tl
-          \group_begin:\vspace*{0.5\baselineskip}%\vspace*{-1ex}
-          \setlength\parindent{\l__codelist_demo_parindent_dim}
-          \getstored{#3}%\vspace*{-1ex}
-          \group_end:
-          \l__codedesc_rule_in_tl
-        }
+      \__codelist_ts_settings:nn {#1}{#2}
+      
+      \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+    
+      \__codelist_democoffin:nn {#3}{#4}
 
       \coffin_join:NnnNnnnn
         \__codelist_demo_label_coffin {l}{b}
@@ -726,11 +827,12 @@
     \group_end:
   }
 
-\cs_new_eq:NN \tsresult \typesetresult
+\NewDocumentCommand{\tsresult}{sO{}mO{}}
+  {
+    \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4}
+  }
 
-%%%
-%%% Using scontents package !!!!
-%%%
+\cs_new_eq:NN \typesetresult \tsresult 
 
 
 %%%
@@ -751,8 +853,5 @@
   {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
   {€}{{\EUR}}1 {£}{{\pounds}}1
 }
-
-  
-  
   
 \endinput

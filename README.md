@@ -77,6 +77,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - quick introduction
 
 * codedescribe.tex
+* codedescribe.bib
     - package documentation
 
 * codedescribe.pdf
@@ -86,7 +87,15 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.7 (this)
+* Version 1.8 (this)
+    - fixex
+      [#6](https://github.com/alceu-frigeri/codedescribe/issues/6), [#7](https://github.com/alceu-frigeri/codedescribe/issues/7) and
+      [#8](https://github.com/alceu-frigeri/codedescribe/issues/7).
+    - Added an (optional) index parameter to the code display/demo commands.
+    - New command: \tsmergedcode, \tsexec and \setnewcodekey (see documentation).
+
+
+* Version 1.7
     - fixing  [#4](https://github.com/alceu-frigeri/codedescribe/issues/4) (hopefully) for good and working on [#5](https://github.com/alceu-frigeri/codedescribe/issues/5). Added an environment <tsremark*> (see documentation). 
 
 * Version 1.6

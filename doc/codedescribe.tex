@@ -5,7 +5,7 @@
 % !TEX program = pdflatex
 % !PDFTeXify ext =  --enable-etex  --restrict-write18
 % !PDFLaTeX ext  =  --enable-etex  --restrict-write18
-% !BIB program = none
+% !BIB program = biber
 %%%==============================================================================
 %% Copyright 2023-present by Alceu Frigeri
 %%
@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.7} {2025/04/21}
+%% This is version {1.8} {2025/05/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -31,6 +31,9 @@
 \RequirePackage[verbose,a4paper,marginparwidth=28mm,top=3cm,bottom=1.5cm,hmargin={45mm,25mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
 \usepackage{codedescribe}
 \usepackage{enumitem}
+
+\RequirePackage[backend=biber]{biblatex}
+\addbibresource{codedescribe.bib}
 
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
@@ -57,7 +60,7 @@ No assumption about page layout is made (besides `having a marginpar'),  or unde
 \section{Introduction}
 
 
-This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
+This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
 No other package/class is needed, any class can be used as the base one, which allows to demonstrate the documented commands with any desired layout.
@@ -72,11 +75,10 @@ This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{ver
 
 \section{codelisting Package}
 
-It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore} and 
- 3 main commands: \tsobj[code]{\tscode,\tsdemo,\tsresult} and 1 auxiliary command: \tsobj{\setcodekeys}.
+It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore}, commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
 
 \subsection{In Memory Code Storage}
-Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX~ code snippets in a \tsobj[pkg]{expl3} key.
+Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX~ code snippets in a \tsobj[pkg]{expl3} sequence variable.
 
 
 \begin{codedescribe}[env,rulecolor=white]{codestore}
@@ -84,41 +86,40 @@ Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to sto
 		\tsmacro{\begin{codestore}}[stcontents-keys]{}
     \tsmacro{\end{codestore}}{}
 	\end{codesyntax}
-This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[pkg]{scontents} package), all \tsobj[pkg]{scontents} keys are valid, with two additional ones: \tsobj[key]{st,store-at} which are aliases to the \tsobj[key]{store-env} key. If an 'isolated' \tsobj[key,meta]{st-name} is given (unknown \tsobj[key]{key}), it is assumed 'by Default' that the environment body shall be stored in it (for use with \tsobj[code]{\tscode,\tsdemo}).
+This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[pkg]{scontents} package, see \cite{SCONTENTS}), all \tsobj[pkg]{scontents} keys are valid, with two additional ones: \tsobj[key]{st,store-at} which are aliases to the \tsobj[key]{store-env} key. If an 'isolated' \tsobj[key,meta]{st-name} is given (unknown \tsobj[key]{key}), it is assumed that the environment body shall be stored in it (for use with \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec}).
 \end{codedescribe}
+\begin{tsremark}
+  From \tsobj[pkg]{scontents}, \tsobj[marg]{st-name} \tsobj[oarg]{index}ed (The code is stored in a sequence variable). It is possible to store as many code snippets as needed under the same name. The first one will be \tsobj[oarg]{index}$\rightarrow 1$, the second $2$, and so on.
+\end{tsremark}
 
-
+%\subsection{Setting Keys}
 
 \subsection{Code Display/Demo}\label{codelist}
 
-\begin{codedescribe}{\setcodekeys}
-	\begin{codesyntax}%
-		\tsmacro{\setcodekeys}{code-keys}
-	\end{codesyntax}
 
-One has the option to set \tsmeta{code-keys} (see \ref{code-keys}) per \tsmacro{\tscode}{}/\tsmacro{\tsdemo}{} call, or \emph{globally}, better said, \emph{in the called context group} .\\
-\begin{tsremark}[N.B.:]
-All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \tsmeta{code-keys} are defined, and discarded once said local group is closed. \tsmacro{\setcodekeys}{} defines those keys in the \emph{current} context/group.
+
+\begin{codedescribe}[code,update=2024/01/06,update=2025/04/29]{\tscode*,\tsdemo*,\tsresult*}
+	\begin{codesyntax}%
+		\tsmacro{\tscode*}[code-keys]{st-name}\tsargs[oarg]{index}
+		\tsmacro{\tsdemo*}[code-keys]{st-name}\tsargs[oarg]{index}
+		\tsmacro{\tsresult*}[code-keys]{st-name}\tsargs[oarg]{index}
+	\end{codesyntax}
+\tsmacro{\tscode}{} just typesets \tsobj[meta]{st-name} (created with \tsobj[env]{codestore}), in verbatim mode and syntax highlight (from \tsobj[pkg]{listings} package \cite{listings}). The non-star version centers it and use just half of the base line. The star version uses the full text width.
+
+\tsmacro{\tsdemo*}{} first typesets \tsobj[meta]{st-name}, as above, then \emph{executes} it. The non-start version place them side-by-side, whilst the star version places one following the other.
+
+(new 2024/01/06) \tsmacro{\tsresult*}{} only \emph{executes} it. The non-start version centers it and use just half of the base line, whilst the star version uses the full text width.
+
+\end{codedescribe}
+\begin{tsremark}
+  (from \tsobj[pkg]{stcontents} package) \tsobj[oarg]{index} can be from $1$ up to the number of stored codes under the same \tsobj[marg]{st-name}. Defaults to $1$.
 \end{tsremark}
-\end{codedescribe}
 
-\begin{codedescribe}[code,update=2024/01/06]{\tscode*,\tsdemo*,\tsresult*}
-	\begin{codesyntax}%
-		\tsmacro{\tscode*}[code-keys]{st-name}
-		\tsmacro{\tsdemo*}[code-keys]{st-name}
-		\tsmacro{\tsresult*}[code-keys]{st-name}
-	\end{codesyntax}
-\tsmacro{\tscode}{} just typesets \tsobj[meta]{st-name} (the key-name created with \tsobj[env]{stcode}), in verbatim mode with syntax highlight. The non-star version centers it and use just half of the base line. The star version uses the full text width.
-
-\tsmacro{\tsdemo*}{} first typesets \tsobj[meta]{st-name}, as above, then it \emph{executes} said code. The non-start versions place them side-by-side, whilst the star versions places one following the other.
-
-(new 2024/01/06) \tsmacro{\tsresult*}{} only \emph{executes} said code. The non-start versions centers it and use just half of the base line, whilst the star versions uses the full text width.
-
-\end{codedescribe}
-
+\begin{tsremark}
+  All are executed in a local group which is discarded at the end. This is to avoid unwanted side effects, but might disrupt code execution that, for instance, depends on local variables being set. That for, see \tsobj{\tsexec} below.
+\end{tsremark}
 
 For Example:
-
 \begin{codestore}[st=democodestore]
 \begin{codestore}[stmeta]
 		Some \LaTeX~coding, for example: \ldots.
@@ -130,37 +131,79 @@ and this will demonstrate it, side by side with source code:
     codeprefix={inner sample code},
     resultprefix={inner sample result}] {stmeta}
 \end{codestore}
-\tsdemo*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}
+\tscode*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
+
+\tsresult*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
+
+
+
+\begin{codedescribe}[code,new=2025/04/29]{\tsmergedcode*}
+	\begin{codesyntax}%
+		\tsmacro{\tsmergedcode*}[code-keys]{st-name-index list}
+	\end{codesyntax}
+This will typeset (as \tsobj{\tscode}) the merged contents from \tsobj[marg]{st-name-index list}. The list syntax comes from \tsobj[pkg]{scontents} (command \tsobj{\mergesc}), where it is possible to refer to a single index \tsargs[marg]{st-name A}\tsargs[oarg]{index}, a index range \tsargs[marg]{st-name B}\tsargs[oarg]{indexA-indexB}, or all indexes from a \tsobj[marg]{st-name}, \tsargs[marg]{st-name C}\tsargs[oarg]{1-end}. The special index \tsobj[oarg]{1-end} refers to all indexes stored under a given \tsobj[marg]{st-name}.
+\end{codedescribe}
+\begin{tsremark}
+  The brackets aren't optional. For instance \tsmacro{\tsmergedcode*}[code-keys]{} {\color{red}\{} \tsargs[marg]{st-name A}\tsargs[oarg]{index} , \tsargs[marg]{st-name B}\tsargs[oarg]{indexA-indexB} , \tsargs[marg]{st-name C}\tsargs[oarg]{1-end} {\color{red}\}}
+
+\end{tsremark}
+
+
+\begin{codedescribe}[code,new=2025/04/29]{\tsexec}
+	\begin{codesyntax}%
+		\tsmacro{\tsexec}{st-name}\tsargs[oarg]{index}
+	\end{codesyntax}
+Unlike the previous commands which are all executed in a local group (discarded at the end) this will execute the code stored at \tsobj[marg]{st-name}\tsargs[oarg]{index} in the current \LaTeX\  group.
+
+\end{codedescribe}
 
 
 
 \subsubsection{Code Keys}\label{code-keys}
-Using a \tsobj[key]{key}\,=\tsobj[value]{value} syntax, one can fine tune \tsobj[pkg]{listings} syntax highlight.
 
-\begin{codedescribe}[key]{settexcs,texcs,texcsstyle}
+\begin{codedescribe}{\setcodekeys}
+	\begin{codesyntax}%
+		\tsmacro{\setcodekeys}{code-keys}
+	\end{codesyntax}
+
+One has the option to set \tsmeta{code-keys}  per \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult} call (see \ref{codelist}), or \emph{globally}, better said, \emph{in the called context group} .\\
+\begin{tsremark}[N.B.:]
+All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \tsmeta{code-keys} are defined, and discarded once said local group is closed. \tsmacro{\setcodekeys}{} defines those keys in the \emph{current} context/group.
+\end{tsremark}
+\end{codedescribe}
+
+\begin{codedescribe}[code,new=2025-05-01]{\setnewcodekey}
+	\begin{codesyntax}%
+		\tsmacro{\setnewcodekey}{new-key,code-keys}
+	\end{codesyntax}
+This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
+\end{codedescribe}
+
+
+\begin{codedescribe}[key,update=2025-05-01]{settexcs,texcs,texcsstyle}
 \begin{codesyntax}% Also
-	\tsobj[key]{settexcs,settexcs2,settexcs3}
-	\tsobj[key]{texcs,texcs2,texcs3}
-	\tsobj[key]{texcsstyle,texcs2style,texcs3style}
+	\tsobj[key]{settexcs,settexcs2,settexcs3,settexcs4}
+	\tsobj[key]{texcs,texcs2,texcs3,texcs4}
+	\tsobj[key]{texcsstyle,texcs2style,texcs3style,texcs4style}
 \end{codesyntax}
 Those define sets of \LaTeX~commands (csnames), the \tsobj[key]{set} variants initialize/redefine those sets (an empty list, clears the set), while the others extend those sets. The \tsobj[key]{style} ones redefines the command display style (an empty \tsobj[meta]{value} resets the style to it's default).\\
 \end{codedescribe}
 
 
-\begin{codedescribe}[key]{setkeywd,keywd,keywdstyle}
+\begin{codedescribe}[key,update=2025-05-01]{setkeywd,keywd,keywdstyle}
 \begin{codesyntax}	%
-	\tsobj[key]{setkeywd,setkeywd2,setkeywd3}
-	\tsobj[key]{keywd,keywd2,keywd3}
-	\tsobj[key]{keywdstyle,keywd2style,keywd3style}
+	\tsobj[key]{setkeywd,setkeywd2,setkeywd3,setkeywd4}
+	\tsobj[key]{keywd,keywd2,keywd3,keywd4}
+	\tsobj[key]{keywdstyle,keywd2style,keywd3style,keywd4style}
 \end{codesyntax}
 Same for other \emph{keywords} sets.\\
 \end{codedescribe}
 
-\begin{codedescribe}[key]{setemph,emph,emphstyle}
+\begin{codedescribe}[key,update=2025-05-01]{setemph,emph,emphstyle}
 \begin{codesyntax}	%
-	\tsobj[key]{setemph,setemph2,setemph3}
-	\tsobj[key]{emph,emph2,emph3}
-	\tsobj[key]{emphstyle,emph2style,emph3style}
+	\tsobj[key]{setemph,setemph2,setemph3,setemph4}
+	\tsobj[key]{emph,emph2,emph3,emph4}
+	\tsobj[key]{emphstyle,emph2style,emph3style,emph4style}
 \end{codesyntax}
 for some extra emphasis sets.\\
 \end{codedescribe}
@@ -496,5 +539,9 @@ This is the \tsobj[env]{abstract} environment from the \tsobj[pkg]{article} clas
 \end{codesyntax}
 This provides the current date (Month Year, format).
 \end{codedescribe}
+
+\printbibliography
+
+
 
 \end{document} 
