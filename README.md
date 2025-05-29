@@ -87,7 +87,16 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.8 (this)
+* Version 1.10 (this)
+    - added a few option keys to further customize \tsobj (bnf style lists, see manual)
+    - documentation review (typos, clarity).
+    - code cleanup.
+
+* Version 1.9
+    - added two keys (letter and other) to Code Keys (see manual)
+    - setting, by default, _:@ as letters (for expl3) [#9](https://github.com/alceu-frigeri/codedescribe/issues/9)
+
+* Version 1.8
     - fixes
       [#6](https://github.com/alceu-frigeri/codedescribe/issues/6), [#7](https://github.com/alceu-frigeri/codedescribe/issues/7) and
       [#8](https://github.com/alceu-frigeri/codedescribe/issues/7).

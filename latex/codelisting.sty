@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.8} {2025/05/02}
+%% This is version {1.10} {2025/05/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codelisting}
-    {2025/05/02}
-    {1.8}
+    {2025/05/29}
+    {1.10}
     {LaTeX Code Listing}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codelisting} ,
      prefix      .code:n = {codelist} ,
-     date        .code:n = {2025/05/02} ,
-     version     .code:n = {1.8} ,
+     date        .code:n = {2025/05/29} ,
+     version     .code:n = {1.10} ,
      description .code:n = {\LaTeX~Code~Listing}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -334,6 +334,14 @@
   ruleht        .code:n    =  { \tl_set:Nn \l__codelist_ruleheight_tl {#1} },
   ruleht        .default:n =  1,
   
+  letter        .usage:n   =   general,
+  letter        .code:n    =  { \tl_set:Nn \l__codelist_alsoletter_tl {#1} },
+  letter        .default:n =  { _ , : , @ },
+  
+  other        .usage:n    =   general,
+  other        .code:n     =  { \tl_set:Nn \l__codelist_alsoother_tl {#1} },
+  other        .default:n  =  { _ , : , @ },
+  
   basicstyle    .usage:n   =   general,
   basicstyle    .code:n    =  { \tl_set:Nn \l__codelist_basicstyle_tl {#1} },
   basicstyle    .default:n =  \footnotesize\ttfamily ,
@@ -358,8 +366,10 @@
 		  numbers      , numberstyle ,
       parindent    ,
       codeprefix   , resultprefix ,
-      ruleht   , 
-      basicstyle ,
+      ruleht       , 
+      letter       ,
+      other        ,
+      basicstyle   ,
   },
 }
 
@@ -481,7 +491,8 @@
 \lstloadlanguages{[LaTeX]TeX}
 \lstdefinestyle{codestyle}{
   style        =  lstDocStyleBase,
-  language     =  [LaTeX]{TeX},
+  alsoletter   =  {\l__codelist_alsoletter_tl},
+  alsoother    =  {\l__codelist_alsoother_tl},
   numbers      =   none, %\l__codelist_numbers_tl,
   rulecolor    =      {\l__codelist_rulecolor_tl},
 	backgroundcolor  =  {\l__codelist_bckgndcolor_tl},
@@ -572,6 +583,8 @@
           \exp_args:Ne \lstset
             {
               style=codestyle,
+              alsoletter    =     {\l__codelist_alsoletter_tl},
+              alsoother     =     {\l__codelist_alsoother_tl},
               moretexcs     =     {\l__codelist_texcsA_tl},
               moretexcs     =[2]  {\l__codelist_texcsB_tl},
               moretexcs     =[3]  {\l__codelist_texcsC_tl},
@@ -665,6 +678,8 @@
               \l__codelist_codeprefix_tl
             }
         }
+        
+%       \coffin_show_structure:N \__codelist_code_label_coffin
 
       \tl_if_blank:VTF \l__codelist_resultprefix_tl
         {
@@ -720,7 +735,7 @@
           {0pt}{-1ex}
         \vspace*{-1ex}
         \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
-        \vspace*{2ex}
+        \vspace*{1.5\baselineskip}
         \par
     \group_end: 
   }
@@ -772,7 +787,7 @@
             \__codelist_demo_coffin {l}{t}
             {0pt}{-1ex}
           \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{0pt}{0pt}
-          \vspace*{\baselineskip}
+          \vspace*{1.5\baselineskip}
           %\vspace*{1ex}
         }
         { % side-by-side
@@ -790,7 +805,7 @@
           \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
           \vspace*{0.25ex}
           \l__codedesc_rule_out_tl
-          \vspace*{\baselineskip}
+          \vspace*{1.5\baselineskip}
         }
       \par
     \group_end:
@@ -822,7 +837,7 @@
         \__codelist_demo_coffin {l}{t}
         {0pt}{-1ex}
       \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
-      \vspace*{\baselineskip}
+      \vspace*{1.5\baselineskip}
       \par
     \group_end:
   }

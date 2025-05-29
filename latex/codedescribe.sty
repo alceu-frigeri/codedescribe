@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.8} {2025/05/02}
+%% This is version {1.10} {2025/05/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/05/02}
-    {1.8}
+    {2025/05/29}
+    {1.10}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/05/02} ,
-     version     .code:n = {1.8} ,
+     date        .code:n = {2025/05/29} ,
+     version     .code:n = {1.10} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -374,35 +374,35 @@
   meta .value_forbidden:n = true ,
   meta .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta:n }
-    \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta:o }
+    \tl_set:Nn \__codedesc_typeset_tl:V { \__codedesc_meta:V }
    } ,
 
   xmeta .usage:n = general , 
   xmeta .value_forbidden:n = true ,
   xmeta .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_meta*:n }
-    \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_meta*:o }
+    \tl_set:Nn \__codedesc_typeset_tl:V { \__codedesc_meta*:V }
    } ,
 
   verb .usage:n = general , 
   verb .value_forbidden:n = true ,
   verb .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \tl_to_str:n }
-    \tl_set:Nn \__codedesc_typeset_tl:o { \tl_to_str:o }   
+    \tl_set:Nn \__codedesc_typeset_tl:V { \tl_to_str:V }   
    } ,
    
   xverb .usage:n = general , 
   xverb .value_forbidden:n = true ,
   xverb .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_verb_nospc_typeset:n }
-    \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_verb_nospc_typeset:o }   
+    \tl_set:Nn \__codedesc_typeset_tl:V { \__codedesc_verb_nospc_typeset:V }   
    } ,
    
   code .usage:n = general , 
   code .value_forbidden:n = true ,
   code .code:n  = { 
     \tl_set:Nn \__codedesc_typeset_tl:n { \__codedesc_macro_typeset:n }
-    \tl_set:Nn \__codedesc_typeset_tl:o { \__codedesc_macro_typeset:o }   
+    \tl_set:Nn \__codedesc_typeset_tl:V { \__codedesc_macro_typeset:V }   
    } ,
    
   slshape .usage:n = general , 
@@ -446,6 +446,13 @@
       \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{73}} }
     },
 	%
+  mid~ sep.usage:n = general,
+  mid~ sep.code:n = 
+    {
+      \tl_set:Nn \__codedesc_sep_tl { ~#1~ }
+    },
+	%
+	%
   sep.usage:n = general,
   sep.code:n = 
     {
@@ -458,6 +465,24 @@
       \tl_set:Nn \__codedesc_lastsep_tl { ,~ }
     },
   %
+  meta~ or .usage:n = general,
+  meta~ or .code:n =
+    {
+      \tl_set:Nn \__codedesc_sep_tl { $|$ }
+      \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
+      \tl_set:Nn \__codedesc_Lbrace_tl {\ensuremath\langle}
+      \tl_set:Nn \__codedesc_Rbrace_tl {\ensuremath\rangle}
+    },
+    
+  bnf~ or .usage:n = general,
+  bnf~ or .code:n =
+    {
+      \tl_set:Nn \__codedesc_sep_tl { $|$ }
+      \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
+      \tl_set:Nn \__codedesc_Lbrace_tl {[}
+      \tl_set:Nn \__codedesc_Rbrace_tl {]}
+    },
+
   rulecolor.usage:n = general,
   rulecolor.code:n = 
     {
@@ -504,12 +529,15 @@
     \tl_set:Nn \__codedesc_rulecolor_tl: { \__codedesc_metacolor_tl: }
     \tl_set:Nn \__codedesc_metashape_tl: { }
     \tl_set:Nn \__codedesc_typeset_tl:n { }
-    \tl_set:Nn \__codedesc_typeset_tl:o { }
+    \tl_set:Nn \__codedesc_typeset_tl:V { }
     \tl_set:Nn \__codedesc_Lbracket_tl { }
     \tl_set:Nn \__codedesc_Rbracket_tl { }
     \tl_set:Nn \__codedesc_sep_tl {,\ }
     \tl_set:Nn \__codedesc_lastsep_tl {\ and\ }
     \tl_set:Nn \__codedesc_exp_tl { }
+    \tl_set:Nn \__codedesc_Lbrace_tl { }
+    \tl_set:Nn \__codedesc_Rbrace_tl { }
+    
     
 
     \bool_set_false:N \l__codedesc_descnotes_bool
@@ -520,7 +548,8 @@
     \keys_set:nn {codedesc / format}{#1}
   }
   
-\cs_generate_variant:Nn \__codedesc_metafmt_set:n {o}
+  %%% prob ok {o} => {V}
+\cs_generate_variant:Nn \__codedesc_metafmt_set:n {V}
 
 \cs_new_protected:Npn \__codedesc_metafmt:n #1
   {
@@ -528,7 +557,8 @@
     \__codedesc_metafmt:
   }
 
-\cs_generate_variant:Nn \__codedesc_metafmt:n {o}
+  %%% prob ok {o} => {V}
+\cs_generate_variant:Nn \__codedesc_metafmt:n {V}
 
   
 \cs_new_protected:Npn \__codedesc_metafmt: 
@@ -550,7 +580,7 @@
     \ensuremath\langle #1 \ensuremath\rangle
   }  
   
-\cs_generate_variant:Nn \__codedesc_meta:n {o}  
+\cs_generate_variant:Nn \__codedesc_meta:n {V}  
 
 %%%%%%%
 %%%
@@ -563,7 +593,7 @@
   }  
 
 
-\cs_generate_variant:cn {__codedesc_meta*:n} {o}  
+\cs_generate_variant:cn {__codedesc_meta*:n} {V}  
 
 
 
@@ -578,7 +608,7 @@
       { \l_tmpb_tl }  
   }
 
-\cs_generate_variant:Nn \__codedesc_macro_typeset:n {o}
+\cs_generate_variant:Nn \__codedesc_macro_typeset:n {V}
 
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
@@ -587,7 +617,7 @@
     \l_tmpb_tl
   }
 
-\cs_generate_variant:Nn \__codedesc_verb_nospc_typeset:n {o}
+\cs_generate_variant:Nn \__codedesc_verb_nospc_typeset:n {V}
 
 
 
@@ -597,6 +627,9 @@
     \bool_set:Nn \l__codedesc_bool {\seq_if_empty_p:N \l_tmpa_seq}
     \tl_set:Nn \l__codedesc_middle_tl {}
     \tl_set:Nn \l__codedesc_lastone_tl {}
+
+    \__codedesc_Lbrace_tl
+
     \bool_until_do:Nn \l__codedesc_bool 
       {
         \seq_pop_left:NNTF \l_tmpa_seq \l_tmpa_tl
@@ -606,7 +639,7 @@
                 \l__codedesc_lastone_tl
                 {
                   \__codedesc_metafmt:
-                  \__codedesc_typeset_tl:o \l_tmpa_tl
+                  \__codedesc_typeset_tl:V \l_tmpa_tl
                 }
                 \bool_set_true:N \l__codedesc_bool
               }
@@ -614,7 +647,7 @@
                 \l__codedesc_middle_tl                
                 {
                   \__codedesc_metafmt:
-                  \__codedesc_typeset_tl:o \l_tmpa_tl
+                  \__codedesc_typeset_tl:V \l_tmpa_tl
                 }
                 \tl_set:Nn \l__codedesc_middle_tl {#2}
                 \tl_set:Nn \l__codedesc_lastone_tl {#3}
@@ -622,9 +655,10 @@
           }
           {}
       }
+    \__codedesc_Rbrace_tl
   }
 
-\cs_generate_variant:Nn \__codedesc_list_typeset:nnn {noo}
+\cs_generate_variant:Nn \__codedesc_list_typeset:nnn {nVV}
 
 
 
@@ -722,11 +756,11 @@
                     {\scriptsize\color{black}new:~ ##1\\[-1ex]}
                 }
 %%%              \bool_if:nT {\l__codedesc_descdate_update_bool} 
-%%%                {\scriptsize\color{black}update:~ \l__codedesc_descdate_update_tl\\[-1ex]}
+%%%                {\scriptsize\color{black}updated:~ \l__codedesc_descdate_update_tl\\[-1ex]}
               \bool_if:nT {\l__codedesc_descdate_update_bool} 
                 {
                   \seq_map_inline:Nn \l__codedesc_descdate_update_seq
-                    {\scriptsize\color{black}update:~ ##1\\[-1ex]}
+                    {\scriptsize\color{black}updated:~ ##1\\[-1ex]}
                 }
 %%%              \bool_if:nT {\l__codedesc_sidenote_bool} 
 %%%                {\scriptsize\color{black}NB:~ \l__codedesc_sidenote_tl\\[-1ex]}
@@ -859,7 +893,7 @@
   {    
     \hcoffin_set:Nn \l_tmpb_coffin 
       { 
-        \__codedesc_metafmt:o { \__codedesc_listkind_tl }
+        \__codedesc_metafmt:V \__codedesc_listkind_tl 
         \__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
       }      
     \dim_compare:nNnTF {\coffin_wd:N \l_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
@@ -877,7 +911,7 @@
         \vcoffin_set:Nnn \l_tmpa_coffin 
           { \__codedesc_describelabel_wd_dim } 
           { 
-            \__codedesc_metafmt:o { \__codedesc_listkind_tl }
+            \__codedesc_metafmt:V \__codedesc_listkind_tl
             \noindent\__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
           }          
       }
@@ -945,7 +979,7 @@
 \NewDocumentCommand \typesetobj {O{code}m} 
   {
     \__codedesc_metafmt_set:n {#1}
-    \__codedesc_list_typeset:noo{#2}{\__codedesc_sep_tl}{\__codedesc_lastsep_tl}
+    \__codedesc_list_typeset:nVV{#2} \__codedesc_sep_tl \__codedesc_lastsep_tl
   }
 
 \cs_new_eq:NN \tsobj \typesetobj
@@ -959,7 +993,7 @@
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
     \mode_if_horizontal:TF 
-      {\skip_vertical:n{0.1667\baselineskip}}
+      {\skip_vertical:n{0.3167\baselineskip}}
       {\skip_vertical:n{0.4167\baselineskip}}
       
     \__codedesc_set_textcolwidth:
