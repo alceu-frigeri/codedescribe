@@ -87,8 +87,14 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
+* Version 1.10 (this)
+  - fixing [#10](https://github.com/alceu-frigeri/codedescribe/issues/10) (hopefully for good) by implementing [env-peekahead](https://tex.stackexchange.com/questions/745593/peek-ahead-in-expl3) and [skip-spacing](https://tex.stackexchange.com/questions/745692/inter-coffins-spacing)
+  - environments code cleanup.
+  - spacing fine tunning
+  - deprecating tsremark* (should't exist!)
+  - implementing [#11](https://github.com/alceu-frigeri/codedescribe/issues/11)
 
-* Version 1.9 (this)
+* Version 1.9
     - added two keys (letter and other) to Code Keys (see manual)
     - setting, by default, _:@ as letters (for expl3) [#9](https://github.com/alceu-frigeri/codedescribe/issues/9)
     - added a few option keys to further customize \tsobj (bnf style lists, see manual)

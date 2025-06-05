@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.9} {2025/05/29}
+%% This is version {1.10} {2025/06/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -81,7 +81,7 @@ It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environme
 Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX~ code snippets in a \tsobj[pkg]{expl3} sequence variable.
 
 
-\begin{codedescribe}[env,rulecolor=white]{codestore}
+\begin{codedescribe}[env]{codestore}
 	\begin{codesyntax}
 		\tsmacro{\begin{codestore}}[stcontents-keys]{}
     \tsmacro{\end{codestore}}{}
@@ -109,8 +109,8 @@ This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[
 \tsmacro{\tsdemo*}{} first typesets \tsobj[meta]{st-name}, as above, then \emph{executes} it. The non-start version place them side-by-side, whilst the star version places one following the other.
 
 (new 2024/01/06) \tsmacro{\tsresult*}{} only \emph{executes} it. The non-start version centers it and use just half of the base line, whilst the star version uses the full text width.
-
 \end{codedescribe}
+only \emph{executes} it. The non-start version centers it and use just half of the base line, whilst the star version uses the full text width.
 \begin{tsremark}
   (from \tsobj[pkg]{stcontents} package) \tsobj[oarg]{index} can be from $1$ up to the number of stored codes under the same \tsobj[marg]{st-name}. Defaults to $1$.
 \end{tsremark}
@@ -145,10 +145,7 @@ This will typeset (as \tsobj{\tscode}) the merged contents from \tsobj[marg]{st-
 \end{codedescribe}
 \begin{tsremark}
   The brackets aren't optional. For instance \tsmacro{\tsmergedcode*}[code-keys]{} {\color{red}\{} \tsargs[marg]{st-name A}\tsargs[oarg]{index} , \tsargs[marg]{st-name B}\tsargs[oarg]{indexA-indexB} , \tsargs[marg]{st-name C}\tsargs[oarg]{1-end} {\color{red}\}}
-
 \end{tsremark}
-
-
 \begin{codedescribe}[code,new=2025/04/29]{\tsexec}
 	\begin{codesyntax}%
 		\tsmacro{\tsexec}{st-name}\tsargs[oarg]{index}
@@ -166,7 +163,8 @@ Unlike the previous commands which are all executed in a local group (discarded 
 		\tsmacro{\setcodekeys}{code-keys}
 	\end{codesyntax}
 
-One has the option to set \tsmeta{code-keys}  per \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult} call (see \ref{codelist}), or \emph{globally}, better said, \emph{in the called context group} .\\
+One has the option to set \tsmeta{code-keys}  per \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult} call (see \ref{codelist}), or \emph{globally}, better said, \emph{in the called context group} .
+
 \begin{tsremark}[N.B.:]
 All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \tsmeta{code-keys} are defined, and discarded once said local group is closed. \tsmacro{\setcodekeys}{} defines those keys in the \emph{current} context/group.
 \end{tsremark}
@@ -178,7 +176,6 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 	\end{codesyntax}
 This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
 \end{codedescribe}
-
 
 \begin{codedescribe}[key,update=2025-05-01]{settexcs,texcs,texcsstyle}
 \begin{codesyntax}% Also
@@ -264,7 +261,7 @@ When typesetting the 'code demo' (\tsobj{\tsdemo}) a set of rules are drawn. The
 \begin{codesyntax} %
 	\tsobj[key]{basicstyle}
 \end{codesyntax}
-Sets the base font style used when typesetting the 'code demo', default being \tsobj{\footnotesize\ttfamily}
+Sets the base font style used when typesetting the 'code demo', default being \tsobj{\footnotesize} \tsobj{\ttfamily}
 \end{codedescribe}
 
 
@@ -273,37 +270,43 @@ Sets the base font style used when typesetting the 'code demo', default being \t
 This package aims at minimizing the number of commands, with object kind (if a macro, or a function, or environment, or variable, or key ...) as a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
 
 \subsection{Package Options}
-It has a single package option:
-
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
+\describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled from this. It defaults to font size at load time.}
 \end{describelist}
 
 \subsection{Object Type keys}\label{obj-type-def}
 
-The applied format is defined in terms of \tsobj[arg]{obj-types}, which are defined in terms of \tsobj[arg]{format-groups} and each one defines a 'formatting function', 'font shape', bracketing, etc. to be applied.
+\tsobj[arg]{obj-types} defines the applied format, which is defined in terms of \tsobj[arg]{format-groups} wich defines a formatting function, font shape, bracketing, etc. to be applied.
 
 \subsubsection{Format Keys}\label{format-keys}
-Those are the primitive \tsobj[arg]{format-keys} used when defining  \tsobj[arg]{format-groups,obj-types} (see \ref{format-custom}):
-
+Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[arg]{format-groups,obj-types} (see \ref{format-custom}):
 \begin{describelist*}{keys}
-  \describe {meta} { to typeset between angles,}
-  \describe {xmeta} { to typeset *verbatim* between angles,}
-  \describe {verb} { to typeset *verbatim*,}
-  \describe {xverb} { to typeset *verbatim*, suppressing all spaces,}
-  \describe {code} { to typeset *verbatim*, suppressing all spaces and replacing a TF by \underline{TF},}
-  \describe {nofmt} { in case of a redefinition, to remove the 'base' formatting,}
-  \describe {slshape} { to use a slanted font shape,}
-  \describe {itshape} { to use an italic font shape,}
-  \describe {noshape} { in case of a redefinition, to remove the 'base' shape,}
-  \describe {lbracket}  { defines the left bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
-  \describe {rbracket}  { defines the right bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
-  \describe {color}   { defines the text color. \textbf{Note:} this key must have an associated value (a color, as understood by \tsobj[pkg]{xcolor} package).}
+  \describe {meta} {to typeset between angles,}
+  \describe {xmeta} {to typeset *verbatim* between angles,}
+  \describe {verb} {to typeset *verbatim*,}
+  \describe {xverb} {to typeset *verbatim*, suppressing all spaces,}
+  \describe {code} {to typeset *verbatim*, suppressing all spaces and replacing a TF by \underline{TF},}
+  \describe {nofmt} {in case of a redefinition, to remove the 'base' formatting,}
+  \describe {slshape} {to use a slanted font shape,}
+  \describe {itshape} {to use an italic font shape,}
+  \describe {noshape} {in case of a redefinition, to remove the 'base' shape,}
+  \describe {lbracket}  {defines the left bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
+  \describe {rbracket}  {defines the right bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
+  \describe {color}   {defines the text color. \textbf{Note:} this key must have an associated value (a color, as understood by \tsobj[pkg]{xcolor} package).}
 \end{describelist*}
 
-\subsubsection{Format Groups}\label{format-group}
-Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom \tsobj[arg]{format-groups}. The following ones are pre-defined:
+%\ExplSyntaxOn
+%\makeatletter
+%\cs_show:N \color_select:n
+%\cs_show:N \f@size
+%\skip_show:n {\lineskip}
+%\skip_show:n {\baselineskip}
+%\makeatother
+%\ExplSyntaxOff
 
+\subsubsection{Format Groups}\label{format-group}
+Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re)define custom \tsobj[arg]{format-groups}. The following ones are pre-defined:
 \begin{describelist*}{keys}
   \describe {meta} {which sets \tsobj[keys]{meta,color}}
   \describe {verb} {which sets \tsobj[keys]{color}}
@@ -339,6 +342,8 @@ The predefined ones are:
   \describe {pkg, pack}  {based on (group) \tsobj[key]{pkg}}
 \end{describelist*}
 
+  
+
 \subsubsection{Customization}\label{format-custom}
 
 To create  user defined groups/objects or change the pre-defined ones:
@@ -354,7 +359,11 @@ To create  user defined groups/objects or change the pre-defined ones:
 For example, one can redefine the \tsobj[key]{code group} standard color with \tsobj{\defgroupfmt{code}{color=red}} and all \tsobj[key]{obj-types} based on it will be typeset in red (in the standard case: \tsobj[key]{code, macro, function} objects).
 
 
+
 \begin{codedescribe}[code,new=2023/05/16]{\defobjectfmt}
+\begin{codesyntax} %
+	\tsmacro{\defobjectfmt}{obj-type,format-group,format-keys}
+\end{codesyntax}
 \begin{codesyntax} %
 	\tsmacro{\defobjectfmt}{obj-type,format-group,format-keys}
 \end{codesyntax}
@@ -373,9 +382,9 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 \end{codestore}
 \tscode*[codeprefix=~,keywd={oarg,arg,parg,xarg},keywd2={meta,color},emph={lbracket,rbracket}]{demo.fmtdef}
 
-\subsection{Environments}
+\subsection{Environments}\label{desc-env}
 
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={this is an example},update=2024/02/16]{codedescribe}
+\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a note example},update=2024/02/16]{codedescribe}
 \begin{codesyntax}
 \tsmacro{\begin{codedescribe}}[obj-keys]{csv-list}
 \ldots
@@ -394,7 +403,6 @@ This is the main environment to describe \tsobj[env,comma]{Commands, Variables, 
 \begin{tsremark}
 The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
 \end{tsremark}
-
 \begin{codedescribe}[env]{codesyntax}
 \begin{codesyntax}
 \tsmacro{\begin{codesyntax}}{}
@@ -404,14 +412,14 @@ The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
 The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line.
 \end{codedescribe}
 
-\begin{tsremark*}
-\tsobj[env]{codesyntax} environment shall appear only once, inside of a \tsobj[env]{codedescribe} environment. Take note, as well, this is not a verbatim environment!
-\end{tsremark*}
+\begin{tsremark}
+\tsobj[env]{codesyntax} environment shall appear only once, inside of a \tsobj[env]{codedescribe} environment. An error will be raised if called outside. Take note, as well, this is not a verbatim environment!
+\end{tsremark}
 
 For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 
 \begin{codestore}[demoD]
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={this is an example},update=2024/02/16]{codedescribe}
+\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a note example},update=2024/02/16]{codedescribe}
   \begin{codesyntax}
     \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
     \ldots
@@ -423,14 +431,12 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 
 \tscode*{demoD}
 
-
-
 \begin{codedescribe}[env]{describelist,describelist*}
   \begin{codesyntax}
 \tsmacro{\begin{describelist}}[item-indent]{obj-type}
-..\tsmacro{\describe}{item-name,item-description}
-..\tsmacro{\describe}{item-name,item-description}
-\ldots
+  ~~\tsmacro{\describe}{item-name,item-description}
+  ~~\tsmacro{\describe}{item-name,item-description}
+  ~~\ldots
 \tsmacro{\end{describelist}}{}
   \end{codesyntax}
 This sets a \tsobj[env]{description} like 'list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the marginpar. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
@@ -444,9 +450,17 @@ This sets a \tsobj[env]{description} like 'list'. In the non-star version the \t
 This is the \tsobj[env]{describelist} companion macro. In case of the \tsobj[env]{describe*}, \tsobj[marg]{item-name} will be typeset in a box \tsobj[oarg]{item-ident} wide, so that \tsobj[marg]{item-description} will be fully indented, otherwise \tsobj[marg]{item-name} will be typed in the marginpar.
 \end{codedescribe}
 
+\begin{tsremark}
+An error will be raised if called outside of a \tsobj[env,sep=or]{describelist,describelist*} environment.
+\end{tsremark}
+
 
 \subsection{Typeset Commands}\label{ts-commands}
-
+\emph{Note} that, in the following commands, \tsobj[oarg]{obj-type} refers to any object type defined in  \ref{obj-types} and \ref{format-custom}.
+% plus the following key:
+%\begin{describelist*}{key}
+%  \describe{strut}{This is a work around a bug when using \tsobj{\color} at the begin of an \tsobj[marg]{item-description} (from \tsobj{\describe}).}
+%\end{describelist*}
 
 \begin{codedescribe}[code,update=2025/05/29]{\typesetobj,\tsobj}
 \begin{codesyntax}
@@ -458,8 +472,9 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
   \describe{mid sep}{To change the item separator. Defaults to a comma, can be anything.}
   \describe{sep}{To change the separator between the last two items. Defaults to ``and''.}
   \describe{comma}{To set the separator between the last two items to a comma.}
-  \describe{bnf or}{To produce a bnf style or list, like \tsobj[option,bnf or,note={X and Z}]{abc,xdh,htf,hrf}.}
-  \describe{meta or}{To produce a bnf style or list between angles, like \tsobj[option,meta or,note={X and Z}]{abc,xdh,htf,hrf}.}
+  \describe{bnf or}{To produce a bnf style or list, like \tsobj[option,bnf or]{abc,xdh,htf,hrf}.}
+  \describe{meta or}{To produce a bnf style or list between angles, like \tsobj[option,meta or]{abc,xdh,htf,hrf}.}
+  \describe{par or}{To produce a bnf style or list between parentheses, like \tsobj[option,par or]{abc,xdh,htf,hrf}.}
 \end{describelist*}
 \end{codedescribe}
 
@@ -472,16 +487,15 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
 \tsmacro{\typesetargs}[obj-type]{csv-list}
 \tsmacro{\tsargs}[obj-type]{csv-list}
 \end{codesyntax}
- Those will typeset \tsobj[marg]{csv-list} as a list of parameters, like \tsargs[oarg]{arg1,arg2,arg3}, or \tsargs[marg]{arg1,arg2,arg3}, etc. \tsobj[oarg]{obj-type} defines the formating AND kind of brackets used (see \ref{obj-type-def}): \tsverb{[]} for optional arguments (oarg), \tsverb{{}} for mandatory arguments (marg), and so on.
+ These will typeset \tsobj[marg]{csv-list} as a list of parameters, like \tsargs[oarg]{arg1,arg2,arg3}, or \tsargs[marg]{arg1,arg2,arg3}, etc. \tsobj[oarg]{obj-type} defines the formating AND kind of brackets used (see \ref{obj-type-def}): \tsverb{[]} for optional arguments (oarg), \tsverb{{}} for mandatory arguments (marg), and so on.
 \end{codedescribe}
-
 
 \begin{codedescribe}[code]{\typesetmacro,\tsmacro}
 \begin{codesyntax}
 \tsmacro{\typesetmacro}{macro-list}\tsargs[oarg]{oargs-list}\tsargs[marg]{margs-list}
 \tsmacro{\tsmacro}{macro-list}\tsargs[oarg]{oargs-list}\tsargs[marg]{margs-list}
 \end{codesyntax}
-This is just a short-cut for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj[code]{\tsargs [oarg] {oargs-list}} \tsobj[code]{\tsargs [marg] {margs-list}}.
+These are just a short-cut for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj[code]{\tsargs [oarg] {oargs-list}} \tsobj[code]{\tsargs [marg] {margs-list}}.
 \end{codedescribe}
 
 \begin{codedescribe}[code]{\typesetmeta,\tsmeta}
@@ -489,7 +503,7 @@ This is just a short-cut for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj
 \tsmacro{\typesetmeta}{name}
 \tsmacro{\tsmeta}{name}
 \end{codesyntax}
- Those will just typeset \tsobj[meta]{name} between left/right 'angles' (no other formatting).
+ These will just typeset \tsobj[meta]{name} between left/right 'angles' (no other formatting).
 \end{codedescribe}
 
 \begin{codedescribe}[code]{\typesetverb,\tsverb}
@@ -514,12 +528,12 @@ This is meant for short expressions, and not multi-line, complex code (one is be
 Typesets a small note at the margin.
 \end{codedescribe}
 
-\begin{codedescribe}[env,update=2025-04-21]{tsremark,tsremark*}
+\begin{codedescribe}[env]{tsremark}
 \begin{codesyntax}
 \tsmacro{\begin{tsremark}}[NB]{}
 \tsmacro{\end{tsremark}}{}
 \end{codesyntax}
- The environment body will be typeset as a text note. \tsobj[oarg]{NB} (defaults to Note:) is the note begin (in boldface). The non-star version doesn't finishes a paragraph (\TeX\ stays in horizontal mode), whilst the (new) star version does and introduces a vertical space at the end. For instance:
+ The environment body will be typeset as a text note. \tsobj[oarg]{NB} (defaults to Note:) is the note begin (in boldface). For instance:
  \begin{codestore}[demo.remark]
  Sample text. Sample test.
   \begin{tsremark}[N.B.]

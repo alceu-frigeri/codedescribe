@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.9} {2025/05/29}
+%% This is version {1.10} {2025/06/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/05/29}
-    {1.9}
+    {2025/06/05}
+    {1.10}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/05/29} ,
-     version     .code:n = {1.9} ,
+     date        .code:n = {2025/06/05} ,
+     version     .code:n = {1.10} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -55,18 +55,87 @@
 \bool_new:N \l__codedesc_loadlisting_bool
 \bool_set_true:N \l__codedesc_loadlisting_bool
 
+
+%
+% Those skips are meant to be small adjustments
+%
+\cs_generate_variant:Nn \skip_set:Nn {Ne}
+\cs_generate_variant:Nn \dim_set:Nn  {Ne}  
+
+\tl_new:N \l__codedesc_ref_tl
+\skip_new:N \l__codedesc_null_skip
+\skip_new:N \l__codedesc_tiny_skip
+\skip_new:N \l__codedesc_small_skip
+\skip_new:N \l__codedesc_mid_skip
+\skip_new:N \l__codedesc_large_skip
+\skip_new:N \l__codedesc_neg_skip
+\skip_new:N \l__codedesc_bigneg_skip
+\skip_new:N \l__codedesc_min_skip
+
+\dim_new:N \l__codedesc_tinyskip_dim
+\dim_new:N \l__codedesc_nullskip_dim
+\dim_new:N \l__codedesc_smallskip_dim
+\dim_new:N \l__codedesc_midskip_dim
+\dim_new:N \l__codedesc_largeskip_dim
+\dim_new:N \l__codedesc_baselineskip_dim
+\dim_new:N \l__codedesc_largelineskip_dim
+\dim_new:N \l__codedesc_coffinskip_dim
+
+%\dim_new:N \l__codedesc_baselineskip_dim
+\dim_new:N \l__codedesc_midlineskip_dim
+%\dim_new:N \l__codedesc_largelineskip_dim
+
+\cs_new_protected:Npn \__codedesc_set_skips:n #1 
+  {
+    \tl_set:Ne \l__codedesc_ref_tl       { \fp_eval:n {#1} pt }
+    
+    \tl_set:Ne \l__codedesc_minusA_tl    { minus~ \fp_eval:n { #1 * 3 / 50 } pt }
+    \tl_set:Ne \l__codedesc_minusB_tl    { minus~ \fp_eval:n { #1     / 8  } pt }
+    \tl_set:Ne \l__codedesc_plusA_tl     { plus~  \fp_eval:n { #1     / 5  } pt }
+    \tl_set:Ne \l__codedesc_plusB_tl     { plus~  \fp_eval:n { #1 * 8 / 25 } pt }
+
+    \dim_set:Ne \l__codedesc_tinyskip_dim       { \fp_eval:n { #1     / 10 } pt }
+    \dim_set:Ne \l__codedesc_smallskip_dim      { \fp_eval:n { #1     / 5  } pt }
+    \dim_set:Ne \l__codedesc_midskip_dim        { \fp_eval:n { #1 * 2 / 5  } pt }
+    \dim_set:Ne \l__codedesc_coffinskip_dim     { \fp_eval:n { #1 * 2 / 5  } pt } % minimum skip to avoid random spacing
+    \dim_set:Ne \l__codedesc_largeskip_dim      { \fp_eval:n { #1     / 2  } pt }
+    \dim_set:Ne \l__codedesc_baselineskip_dim   { \fp_eval:n { #1          } pt }
+    \dim_set:Ne  \l__codedesc_midlineskip_dim   { \fp_eval:n { #1     / 2  } pt }
+    \dim_set:Ne  \l__codedesc_largelineskip_dim { \fp_eval:n { #1 * 3 / 2  } pt }
+      
+    \skip_set:Nn \l__codedesc_min_skip   { 0 pt plus 1pt minus 1pt }
+     
+    \skip_set:Ne \l__codedesc_null_skip   { 0 pt                            \l__codedesc_plusA_tl \l__codedesc_minusA_tl }
+    \skip_set:Ne \l__codedesc_tiny_skip   { \l__codedesc_tinyskip_dim       \l__codedesc_plusA_tl \l__codedesc_minusA_tl }
+    \skip_set:Ne \l__codedesc_small_skip  { \l__codedesc_smallskip_dim      \l__codedesc_plusA_tl \l__codedesc_minusA_tl }
+    \skip_set:Ne \l__codedesc_mid_skip    { \l__codedesc_midskip_dim        \l__codedesc_plusB_tl \l__codedesc_minusB_tl }
+    \skip_set:Ne \l__codedesc_large_skip  { \l__codedesc_largeskip_dim      \l__codedesc_plusB_tl \l__codedesc_minusB_tl }
+    \skip_set:Ne \l__codedesc_neg_skip    { - \l__codedesc_largeskip_dim    \l__codedesc_plusA_tl \l__codedesc_minusB_tl }
+    \skip_set:Ne \l__codedesc_bigneg_skip { - \l__codedesc_baselineskip_dim \l__codedesc_plusA_tl \l__codedesc_minusB_tl }
+  }
+
+\__codedesc_set_skips:n {\f@size}
+
+
 \keys_define:nn { codedescribe }
 {
-  nolisting.usage:n = load,
-	nolisting.bool_set_inverse:N = \l__codedesc_loadlisting_bool,
-  nolisting.default:n = {true},
+  nolisting .usage:n    = load ,
+	nolisting  .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
+  nolisting .default:n  = {true} ,
+  
+  base~ skip .usage:n   = load ,
+  base~ skip .code:n  =
+    {
+      \__codedesc_set_skips:n {#1}
+    } ,
+  base~ skip .value_required:n = true ,
 }
 \ProcessKeyOptions [codedescribe ]
 
 %% bbding is need for those hollow stars...
 \RequirePackage{xcolor}
 \RequirePackage{pifont}
-\bool_if:nT {\l__codedesc_loadlisting_bool}
+\bool_if:NT \l__codedesc_loadlisting_bool
   {
     \RequirePackage{codelisting}
   }
@@ -105,6 +174,46 @@
     You~tried~to~use~a~non~defined~object~type:#2.
     ~Error~Code~ ID:<#1>.
   }
+
+\msg_new:nnnn {codedesc} {nested-env}
+  {
+    (ID:#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\} 
+  }
+  {
+    You~tried~to~begin~\{#2\}~inside~of~\{#3\}.~ Don't~ mix~ them!
+    ~Error~Code~ ID:<#1>.
+  }
+
+\msg_new:nnnn {codedesc} {out of scope}
+  {
+    (ID:#1)~You~tried~to~use~\{#2\}~outside~of~\{#3\} 
+  }
+  {
+    You~tried~to~use~\{#2\}~outside~of~\{#3\}.
+    ~Error~Code~ ID:<#1>.
+  }
+
+
+\msg_new:nnnn {codedesc} {syntax dup}
+  {
+    (ID:#1)~You~declared~the~codesyntax~env~ multiple~times
+  }
+  {
+    (ID:#1)~You~declared~the~codesyntax~env~multiple~times.
+    Only~ the~ last~ one~ will~ prevail.
+    ~Error~Code~ ID:<#1>.
+  }
+
+\msg_new:nnnn {codedesc} {deprecated env}
+  {
+    (ID:#1)~The~ environment~#2~is~ deprecated~ use~ #3 ~ instead
+  }
+  {
+    You~tried~to~use~a~deprecated~ environment:#2.
+    Use~ #3~ instead.
+    ~Error~Code~ ID:<#1>.
+  }
+
 
 
 %%%%%%%
@@ -236,34 +345,34 @@
     \tl_clear:N \l_tmpb_tl
     \tl_if_empty:NF \l__codedesc_tmpfmt_tl
       { 
-        \tl_put_right:No \l_tmpa_tl{\l__codedesc_tmpfmt_tl} 
+        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpfmt_tl
         \tl_set:Nn \l_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmpshape_tl
       { 
-        \tl_put_right:No \l_tmpa_tl{ \l_tmpb_tl } 
-        \tl_put_right:No \l_tmpa_tl{\l__codedesc_tmpshape_tl} 
+        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl 
+        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpshape_tl
         \tl_set:Nn \l_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmpcolor_tl
       { 
-        \tl_put_right:No \l_tmpa_tl{ \l_tmpb_tl } 
+        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
         \tl_put_right:Nn \l_tmpa_tl{ color =  } 
-        \tl_put_right:No \l_tmpa_tl{ \l__codedesc_tmpcolor_tl} 
+        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpcolor_tl
         \tl_set:Nn \l_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmplbracket_tl
       { 
-        \tl_put_right:No \l_tmpa_tl{ \l_tmpb_tl } 
-        \tl_put_right:Nn \l_tmpa_tl{ lbracket = } 
-        \tl_put_right:No \l_tmpa_tl{ \l__codedesc_tmplbracket_tl} 
+        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
+        \tl_put_right:Nn \l_tmpa_tl { lbracket = } 
+        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmplbracket_tl
         \tl_set:Nn \l_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmprbracket_tl
       { 
-        \tl_put_right:No \l_tmpa_tl{ \l_tmpb_tl } 
-        \tl_put_right:Nn \l_tmpa_tl{ rbracket = } 
-        \tl_put_right:No \l_tmpa_tl{ \l__codedesc_tmprbracket_tl} 
+        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
+        \tl_put_right:Nn \l_tmpa_tl { rbracket = } 
+        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmprbracket_tl
 %        \tl_set:Nn \l_tmpb_tl { , }
       }
       
@@ -312,25 +421,30 @@
 
 
   \colorlet{c__codedesc_none_color}{red!70!black}
+  %\color_set:nn {c__codedesc_none_color}{red!70!black}
 
 	\colorlet{c__codedesc_verb_color}{ black }
+	%\color_set:nn{c__codedesc_verb_color}{ black }
 \__codedesc_group_define:nn {verb} {color=c__codedesc_verb_color}
 \__codedesc_object_define:nnn {verb}{verb}{verb}
 \__codedesc_object_define:nnn {xverb}{verb}{xverb}
 
 	\colorlet{c__codedesc_marg_color}{ gray!60!black }
+	%\color_set:nn{c__codedesc_marg_color}{ gray!60!black }
 \__codedesc_group_define:nn {meta} {meta,color=c__codedesc_marg_color}
 \__codedesc_object_define:nnn {meta}{meta}{}
 \__codedesc_object_define:nnn {arg}{meta}{}
 \__codedesc_object_define:nnn {marg}{meta}{lbracket={\{},rbracket={\}}}
 
 	\colorlet{c__codedesc_oarg_color}{ gray!90!black }
+	%\color_set:nn{c__codedesc_oarg_color}{ gray!90!black }
 \__codedesc_group_define:nn {oarg} {meta,color=c__codedesc_oarg_color}
 \__codedesc_object_define:nnn {oarg}{oarg}{lbracket={[},rbracket={]}}
 \__codedesc_object_define:nnn {parg}{oarg}{lbracket={(},rbracket={)}}
 \__codedesc_object_define:nnn {xarg}{oarg}{lbracket={<},rbracket={>}}
 
 	\colorlet{c__codedesc_code_color}{ blue!40!black }
+	%\color_set:nn{c__codedesc_code_color}{ blue!40!black }
 \__codedesc_group_define:nn {code} {code,color=c__codedesc_code_color}
 \__codedesc_object_define:nnn {code}{code}{}
 \__codedesc_object_define:nnn {macro}{code}{}
@@ -338,10 +452,12 @@
 %\__codedesc_group_define:nn {code} {xverb,color=red}
 
 	\colorlet{c__codedesc_syntax_color}{ blue!60!black }
+	%\color_set:nn{c__codedesc_syntax_color}{ blue!60!black }
 \__codedesc_group_define:nn {syntax} {color=c__codedesc_syntax_color}
 \__codedesc_object_define:nnn {syntax}{syntax}{}
 
 	\colorlet{c__codedesc_keyval_color}{ teal!40!black }
+	%\color_set:nn{c__codedesc_keyval_color}{ teal!40!black }
 \__codedesc_group_define:nn {keyval} {slshape,color=c__codedesc_keyval_color}
 \__codedesc_object_define:nnn {keyval}{keyval}{}
 \__codedesc_object_define:nnn {key}{keyval}{}
@@ -349,18 +465,22 @@
 \__codedesc_object_define:nnn {value}{keyval}{}
 
 	\colorlet{c__codedesc_options_color}{ green!30!black }
+	%\color_set:nn{c__codedesc_options_color}{ green!30!black }
 \__codedesc_group_define:nn {option} {color=c__codedesc_options_color}
 \__codedesc_object_define:nnn {option}{option}{}
 
 	\colorlet{c__codedesc_defaultval_color}{ blue!60!black }
+	%\color_set:nn{c__codedesc_defaultval_color}{ blue!60!black }
 \__codedesc_group_define:nn {defaultval} {color=c__codedesc_defaultval_color}
 \__codedesc_object_define:nnn {defaultval}{defaultval}{}
 
 	\colorlet{c__codedesc_env_color}{ green!30!black }
+	%\color_set:nn{c__codedesc_env_color}{ green!30!black }
 \__codedesc_group_define:nn {env} {slshape,color=c__codedesc_env_color}
 \__codedesc_object_define:nnn {env}{env}{}
 
 	\colorlet{c__codedesc_pkg_color}{ green!30!black }
+	%\color_set:nn{c__codedesc_pkg_color}{ green!30!black }
 \__codedesc_group_define:nn {pkg} {slshape,color=c__codedesc_pkg_color}
 \__codedesc_object_define:nnn {pkg}{pkg}{}
 \__codedesc_object_define:nnn {pack}{pkg}{}
@@ -429,93 +549,18 @@
   color .value_required:n = true ,
   color .code:n = {
     \tl_set:Nn \__codedesc_metacolor_tl: { \color{#1} }
+%    \tl_set:Nn \__codedesc_metacolor_tl: { \color_select:n{#1} }
   } ,
 }
 
 \keys_define:nn { codedesc / format }
 {
-  EXP.usage:n = general,
-  EXP.code:n = 
+  strut .usage:n = general,
+  strut .code:n = 
     {
-      \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{72}} }
-    },
-	%
-  rEXP.usage:n = general,
-  rEXP.code:n = 
-    {
-      \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{73}} }
-    },
-	%
-  mid~ sep.usage:n = general,
-  mid~ sep.code:n = 
-    {
-      \tl_set:Nn \__codedesc_sep_tl { ~#1~ }
-    },
-	%
-	%
-  sep.usage:n = general,
-  sep.code:n = 
-    {
-      \tl_set:Nn \__codedesc_lastsep_tl { ~#1~ }
-    },
-	%
-  comma.usage:n = general,
-  comma.code:n = 
-    {
-      \tl_set:Nn \__codedesc_lastsep_tl { ,~ }
-    },
-  %
-  meta~ or .usage:n = general,
-  meta~ or .code:n =
-    {
-      \tl_set:Nn \__codedesc_sep_tl { $|$ }
-      \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
-      \tl_set:Nn \__codedesc_Lbrace_tl {\ensuremath\langle}
-      \tl_set:Nn \__codedesc_Rbrace_tl {\ensuremath\rangle}
-    },
-    
-  bnf~ or .usage:n = general,
-  bnf~ or .code:n =
-    {
-      \tl_set:Nn \__codedesc_sep_tl { $|$ }
-      \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
-      \tl_set:Nn \__codedesc_Lbrace_tl {[}
-      \tl_set:Nn \__codedesc_Rbrace_tl {]}
-    },
-
-  rulecolor.usage:n = general,
-  rulecolor.code:n = 
-    {
-      \tl_set:Nn \__codedesc_rulecolor_tl: { \color{#1} }
-    },
-  %
-  new.usage:n = general,
-  new.code:n =
-    {
-      \bool_set_true:N \l__codedesc_descnotes_bool
-      \bool_set_true:N \l__codedesc_descdate_new_bool 
-%      \tl_set:Nn       \l__codedesc_descdate_new_tl {#1}
-      \seq_put_right:Nn \l__codedesc_descdate_new_seq {#1}
-    },
-    
-  update.usage:n = general,
-  update.code:n =
-    {
-      \bool_set_true:N \l__codedesc_descnotes_bool
-      \bool_set_true:N \l__codedesc_descdate_update_bool 
-      %\tl_set:Nn       \l__codedesc_descdate_update_tl {#1}
-      \seq_put_right:Nn \l__codedesc_descdate_update_seq {#1}
-    },
-    
-  note.usage:n = general,
-  note.code:n =
-    {
-      \bool_set_true:N \l__codedesc_descnotes_bool
-      \bool_set_true:N \l__codedesc_sidenote_bool 
-%      \tl_set:Nn       \l__codedesc_sidenote_tl {#1}
-      \seq_put_right:Nn \l__codedesc_sidenote_seq {#1}
-    },
-    
+      \tl_set:Nn \__codedesc_strut_tl { \strut }
+    },  
+   
   unknown.usage:n = general,
 	unknown.code:n = 
     {
@@ -524,7 +569,123 @@
     },    
 }
 
-\cs_new_protected:Npn \__codedesc_metafmt_set:n #1
+\keys_define:nn {}
+  { codedesc / desc format .inherit:n = codedesc / format }
+\keys_define:nn { codedesc / desc format }  
+  {
+    new.usage:n = general,
+    new.code:n =
+      {
+        \bool_set_true:N \l__codedesc_descnotes_bool
+        \bool_set_true:N \l__codedesc_descdate_new_bool 
+  %      \tl_set:Nn       \l__codedesc_descdate_new_tl {#1}
+        \seq_put_right:Nn \l__codedesc_descdate_new_seq {#1}
+      },
+      
+    update.usage:n = general,
+    update.code:n =
+      {
+        \bool_set_true:N \l__codedesc_descnotes_bool
+        \bool_set_true:N \l__codedesc_descdate_update_bool 
+        %\tl_set:Nn       \l__codedesc_descdate_update_tl {#1}
+        \seq_put_right:Nn \l__codedesc_descdate_update_seq {#1}
+      },
+      
+    note.usage:n = general,
+    note.code:n =
+      {
+        \bool_set_true:N \l__codedesc_descnotes_bool
+        \bool_set_true:N \l__codedesc_sidenote_bool 
+  %      \tl_set:Nn       \l__codedesc_sidenote_tl {#1}
+        \seq_put_right:Nn \l__codedesc_sidenote_seq {#1}
+      },
+  
+    rulecolor.usage:n = general,
+    rulecolor.code:n = 
+      {
+        \tl_set:Nn \__codedesc_rulecolor_tl: { \color{#1} }
+      },
+    %
+    EXP.usage:n = general,
+    EXP.code:n = 
+      {
+        \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{72}} }
+      },
+  	%
+    rEXP.usage:n = general,
+    rEXP.code:n = 
+      {
+        \tl_set:Nn \__codedesc_exp_tl { ~\hfill{\scriptsize\ding{73}} }
+      },
+	%
+    unknown.usage:n = general,
+  	unknown.code:n = 
+      {
+       \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_none_color} }
+       \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
+      },    
+  }
+
+\keys_define:nn {}
+  { codedesc / list format .inherit:n = codedesc / format }
+\keys_define:nn { codedesc / list format }  
+  {
+    
+    mid~ sep.usage:n = general,
+    mid~ sep.code:n = 
+      {
+        \tl_set:Nn \__codedesc_sep_tl { ~#1~ }
+      },
+  	%
+  	%
+    sep.usage:n = general,
+    sep.code:n = 
+      {
+        \tl_set:Nn \__codedesc_lastsep_tl { ~#1~ }
+      },
+  	%
+    comma.usage:n = general,
+    comma.code:n = 
+      {
+        \tl_set:Nn \__codedesc_lastsep_tl { ,~ }
+      },
+    %
+    meta~ or .usage:n = general,
+    meta~ or .code:n =
+      {
+        \tl_set:Nn \__codedesc_sep_tl { $|$ }
+        \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
+        \tl_set:Nn \__codedesc_Lbrace_tl {\ensuremath\langle}
+        \tl_set:Nn \__codedesc_Rbrace_tl {\ensuremath\rangle}
+      },
+      
+    bnf~ or .usage:n = general,
+    bnf~ or .code:n =
+      {
+        \tl_set:Nn \__codedesc_sep_tl { $|$ }
+        \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
+        \tl_set:Nn \__codedesc_Lbrace_tl {[}
+        \tl_set:Nn \__codedesc_Rbrace_tl {]}
+      },
+  
+    par~ or .usage:n = general,
+    par~ or .code:n =
+      {
+        \tl_set:Nn \__codedesc_sep_tl { $|$ }
+        \tl_set:Nn \__codedesc_lastsep_tl { $|$ }
+        \tl_set:Nn \__codedesc_Lbrace_tl {(}
+        \tl_set:Nn \__codedesc_Rbrace_tl {)}
+      },
+  
+    unknown.usage:n = general,
+  	unknown.code:n = 
+      {
+       \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_none_color} }
+       \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
+      },    
+  }
+
+\cs_new_protected:Npn \__codedesc_metafmt_clear:
   {
     \tl_set:Nn \__codedesc_rulecolor_tl: { \__codedesc_metacolor_tl: }
     \tl_set:Nn \__codedesc_metashape_tl: { }
@@ -537,6 +698,7 @@
     \tl_set:Nn \__codedesc_exp_tl { }
     \tl_set:Nn \__codedesc_Lbrace_tl { }
     \tl_set:Nn \__codedesc_Rbrace_tl { }
+    \tl_set:Nn \__codedesc_strut_tl { }
     
     
 
@@ -544,7 +706,17 @@
     \bool_set_false:N \l__codedesc_descdate_new_bool 
     \bool_set_false:N \l__codedesc_descdate_update_bool 
     \bool_set_false:N \l__codedesc_sidenote_bool 
+  }
 
+\cs_new_protected:Npn \__codedesc_metafmt_set:nn #1#2
+  {
+    \__codedesc_metafmt_clear:
+    \keys_set:nn {codedesc / #1}{#2}
+  }
+
+\cs_new_protected:Npn \__codedesc_metafmt_set:n #1
+  {
+    \__codedesc_metafmt_clear:
     \keys_set:nn {codedesc / format}{#1}
   }
   
@@ -563,10 +735,10 @@
   
 \cs_new_protected:Npn \__codedesc_metafmt: 
   {
-    \__codedesc_metacolor_tl:
     \__codedesc_metasize_tl:
     \__codedesc_metafont_tl:
     \__codedesc_metashape_tl:
+    \__codedesc_metacolor_tl:
   }
 
 
@@ -627,7 +799,8 @@
     \bool_set:Nn \l__codedesc_bool {\seq_if_empty_p:N \l_tmpa_seq}
     \tl_set:Nn \l__codedesc_middle_tl {}
     \tl_set:Nn \l__codedesc_lastone_tl {}
-
+    
+    \__codedesc_strut_tl
     \__codedesc_Lbrace_tl
 
     \bool_until_do:Nn \l__codedesc_bool 
@@ -656,6 +829,7 @@
           {}
       }
     \__codedesc_Rbrace_tl
+    %\strut
   }
 
 \cs_generate_variant:Nn \__codedesc_list_typeset:nnn {nVV}
@@ -667,7 +841,9 @@
   {
     \seq_set_from_clist:Nn \l_tmpa_seq {#3}
     \group_begin:
-      \__codedesc_metafmt:n {#1}
+      \__codedesc_metafmt_set:n {#1} 
+      \__codedesc_strut_tl
+      \__codedesc_metafmt:
       \seq_map_inline:Nn \l_tmpa_seq {~\!\!#2 \__codedesc_meta:n {##1} #4 }                                  
     \group_end:    
   }
@@ -724,47 +900,47 @@
   {
     \__codedesc_object_define:nn {#1} {#2} {#3}
   }
-  
+%\dim_show:N \l__codedesc_base_vskip_dim
+%\dim_set:Ne  \l__codedesc_base_vskip_dim { \l__codedesc_base_vskip_dim * 5 / 4}
+%\dim_show:N \l__codedesc_base_vskip_dim
+
 \NewDocumentEnvironment {codedescribe}{O{code}m}
   {
-    \mode_if_horizontal:TF
-      {
-        \dim_set:Nn \__codedesc_paradvance_dim {\baselineskip}
-      }
-      {
-        \dim_set:Nn \__codedesc_paradvance_dim {0pt}
-      }
+%    \mode_if_horizontal:TF 
+%      {\skip_vertical:n{\l__codedesc_neg_skip}}
+%      {\skip_vertical:n{\l__codedesc_null_skip}}
+    \mode_if_horizontal:TF 
+      {\unskip\skip_vertical:n{\l__codedesc_mid_skip}}
+      {\skip_vertical:n{\l__codedesc_mid_skip}}
+      
+    \bool_set_true:N \l__codedesc_codedescribe_activ_bool
+    
     \seq_set_from_clist:Nn \l_tmpa_seq {#2}
     \__codedesc_set_textcolwidth: 
     \hcoffin_set:Nn \l__codedesc_margin_coffin 
       {
-        \__codedesc_metafmt:n {#1}
+        \__codedesc_metafmt_set:nn {desc format}{#1}
+        \__codedesc_metafmt:
         
         \begin{tabular}{@{} l @{} }
           \__codedesc_hline:nnnn {\__codedesc_rulecolor_tl:}{0.5ex}{2}{0.25ex}
           \seq_map_inline:Nn \l_tmpa_seq { \__codedesc_typeset_tl:n {##1} \__codedesc_exp_tl \\ } 
-          \bool_if:nTF {\l__codedesc_descnotes_bool}
+          \bool_if:NTF \l__codedesc_descnotes_bool
             {
               \\[-2.5ex]
               \__codedesc_hline:nnnn {\color{black}}{0.5ex}{0.25}{0.25ex} 
               
-%%%              \bool_if:nT {\l__codedesc_descdate_new_bool} 
-%%%                {\scriptsize\color{black}new:~ \l__codedesc_descdate_new_tl\\[-1ex]}
-              \bool_if:nT {\l__codedesc_descdate_new_bool} 
+              \bool_if:NT \l__codedesc_descdate_new_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_descdate_new_seq
                     {\scriptsize\color{black}new:~ ##1\\[-1ex]}
                 }
-%%%              \bool_if:nT {\l__codedesc_descdate_update_bool} 
-%%%                {\scriptsize\color{black}updated:~ \l__codedesc_descdate_update_tl\\[-1ex]}
-              \bool_if:nT {\l__codedesc_descdate_update_bool} 
+              \bool_if:NT \l__codedesc_descdate_update_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_descdate_update_seq
                     {\scriptsize\color{black}updated:~ ##1\\[-1ex]}
                 }
-%%%              \bool_if:nT {\l__codedesc_sidenote_bool} 
-%%%                {\scriptsize\color{black}NB:~ \l__codedesc_sidenote_tl\\[-1ex]}
-              \bool_if:nT {\l__codedesc_sidenote_bool} 
+              \bool_if:NT \l__codedesc_sidenote_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_sidenote_seq
                     {\scriptsize\color{black}NB:~ ##1\\[-1ex]}
@@ -778,7 +954,8 @@
         \end{tabular}
       }
     \dim_set:Nn \l__codedesc_margin_wd_dim {\coffin_wd:N \l__codedesc_margin_coffin}
-    \bool_if:nTF { \dim_compare_p:nNn \l__codedesc_margin_wd_dim > \marginparwidth}
+
+    \dim_compare:nNnTF \l__codedesc_margin_wd_dim > \marginparwidth
       {
         \bool_set_true:N \l__codedesc_longblock_bool
         \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }        
@@ -791,48 +968,84 @@
     \bool_gset_false:N \g__codedesc_syntax_bool
     \vcoffin_set:Nnw \l__codedesc_text_coffin {\l__codedesc_textcolwidth_dim}
     \setlength\parindent{0pt}
-    \begin{minipage}[t]{\l__codedesc_textcolwidth_dim} 
   }
   {
-    \end{minipage}
     \vcoffin_set_end:
     \bool_if:NF \g__codedesc_syntax_bool
       {
         \vcoffin_gset:Nnn \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
           {
-            \__codedesc_metafmt:n {syntax}
-            \hspace*{2em}     %% !!! together with \parindent{-2em}
             \begin{tabular} { @{} l @{} }
               \__codedesc_hline:nnnn {\color{white}}{0.5ex}{2}{-1.5ex}
               \__codedesc_metacolor_tl:
               \begin{minipage}[t]{\l__codedesc_syntax_wd_dim}
-                \obeylines\obeyspaces\setlength\parindent{-2em} 
+                \obeylines\obeyspaces\setlength\parindent{-2em}
               \end{minipage}\\[-2.5ex]
                   \\                                
                   \__codedesc_hline:nnnn {\color{white}}{0ex}{2}{1ex}      
             \end{tabular}
           }
       }
+
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
-        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
-        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {\marginparwidth+\marginparsep}{\baselineskip}
-        \par\noindent
-        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{\__codedesc_paradvance_dim}              
+        \coffin_join:NnnNnnnn 
+          \l__codedesc_syntax_coffin {l}{t} 
+          \l__codedesc_margin_coffin {r}{t} 
+          {-\marginparsep}{0pt}
+        \coffin_join:NnnNnnnn 
+          \l__codedesc_syntax_coffin {l}{b} 
+          \l__codedesc_text_coffin   {l}{t} 
+          {\marginparwidth+\marginparsep}{\l__codedesc_baselineskip_dim}
+        \par\noindent        
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{0pt}              
       }
       { % __describeblock at marginpar
-        \coffin_attach:NnnNnnnn \l__codedesc_syntax_coffin {l}{t} \l__codedesc_margin_coffin {r}{t} {-\marginparsep}{0pt}
-        \coffin_join:NnnNnnnn \l__codedesc_syntax_coffin {l}{b} \l__codedesc_text_coffin {l}{t} {0pt}{\baselineskip}
+        \bool_if:NTF \g__codedesc_syntax_bool
+          {
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{b} 
+              \l__codedesc_text_coffin   {l}{t} 
+              {0pt}{\l__codedesc_baselineskip_dim}
+          }
+          {
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{B} 
+              \l__codedesc_text_coffin   {l}{T} 
+              {0pt}{0pt}
+          }
+        \coffin_attach:NnnNnnnn 
+          \l__codedesc_syntax_coffin {l}{t} 
+          \l__codedesc_margin_coffin {r}{t} 
+          {-\marginparsep}{0pt}
         \par\noindent
-        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{\__codedesc_paradvance_dim}      
+        \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{0pt}      
       }
-    \skip_vertical:n{0.375\baselineskip}
+      
+    \bool_set_false:N \l__codedesc_codedescribe_activ_bool
+      
+    \skip_vertical:n{\l__codedesc_large_skip}\par
   }
   
  
   
 \NewDocumentEnvironment{codesyntax}{}
   {
+    \bool_if:NTF \l__codedesc_codedescribe_activ_bool
+      {
+        \bool_if:NT \g__codedesc_syntax_bool
+          {
+            \msg_warning:nnn {codedesc} {syntax dup}
+                  {syntax:01}
+          }
+      }
+      {
+        \msg_error:nnnxx {codedesc} {out of scope}
+              {syntax:01}{codesyntax~ env}{codedescribe~ env}
+      }
+      
+    \bool_set_true:N \l__codedesc_codesyntax_activ_bool
+    
     \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
     \__codedesc_metafmt:n {syntax}
     \hspace*{2em}     %% !!! together with \parindent{-2em}
@@ -847,19 +1060,23 @@
           \\                                
           \__codedesc_hline:nnnn {\color{white}}{0ex}{2}{1ex}      
     \end{tabular}
-    %\color{black}
     \vcoffin_gset_end:
     \bool_gset_true:N \g__codedesc_syntax_bool
+
+    \bool_set_false:N \l__codedesc_codesyntax_activ_bool    
   }
 
-  
+
+\skip_new:N \l__codedesc_A_skip  
+\skip_new:N \l__codedesc_B_skip  
   
   \NewDocumentEnvironment{describelist}{O{20mm}m}
   {
-    \mode_if_horizontal:TF 
-      {\skip_vertical:n{-0.25\baselineskip}}
-      {\skip_vertical:n{0.125\baselineskip}}
-
+     \skip_vertical:n{\l__codedesc_neg_skip}
+  
+    \skip_set_eq:NN \l__codedesc_A_skip \l__codedesc_null_skip
+    \skip_set_eq:NN \l__codedesc_B_skip \l__codedesc_small_skip
+    
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
     \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
@@ -867,15 +1084,21 @@
     \tl_set:Nn \__codedesc_join_tl: {\coffin_attach:NnnNnnnn}
     \tl_set:Nn \__codedesc_ragged_tl: {\raggedleft}
     \tl_set:Nn \__codedesc_listkind_tl {#2}
+    
+    \bool_set_true:N \l__codedesc_describelist_activ_bool
   }
   {
+    \bool_set_false:N \l__codedesc_describelist_activ_bool
   }
   
 \NewDocumentEnvironment{describelist*}{O{20mm}m}
   {
     \mode_if_horizontal:TF 
-      {\skip_vertical:n{-0.25\baselineskip}}
-      {\skip_vertical:n{0.125\baselineskip}}
+      {\skip_vertical:n{\l__codedesc_neg_skip}}
+      {\skip_vertical:n{\l__codedesc_null_skip}}
+          
+    \skip_set_eq:NN \l__codedesc_A_skip \l__codedesc_null_skip
+    \skip_set_eq:NN \l__codedesc_B_skip \l__codedesc_small_skip
 
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
@@ -884,13 +1107,21 @@
     \tl_set:Nn \__codedesc_join_tl: {\coffin_join:NnnNnnnn}
     \tl_set:Nn \__codedesc_ragged_tl: {}
     \tl_set:Nn \__codedesc_listkind_tl {#2}
+    
+    \bool_set_true:N \l__codedesc_describelist_activ_bool
   }
   {
+    \bool_set_false:N \l__codedesc_describelist_activ_bool
   }
 
-\cs_generate_variant:Nn \skip_set:Nn {Ne}
 \NewDocumentCommand \describe {mm}
   {    
+    \bool_if:NF \l__codedesc_describelist_activ_bool
+      {
+        \msg_error:nnnxx {codedesc} {out of scope}
+              {desc:01}{\cs_to_str:N \describe}{describelist~ env}
+      }
+      
     \hcoffin_set:Nn \l_tmpb_coffin 
       { 
         \__codedesc_metafmt:V \__codedesc_listkind_tl 
@@ -903,7 +1134,7 @@
           {  ~\ ~ }
         \coffin_attach:NnnNnnnn
           \l_tmpa_coffin {r}{t}
-          \l_tmpb_coffin    {r}{t}
+          \l_tmpb_coffin {r}{t}
           {0pt}{0pt}
       
       }
@@ -917,25 +1148,63 @@
       }
     \vcoffin_set:Nnn \l_tmpb_coffin 
       { \__codedesc_describelist_wd_dim } 
-      { 
-        \noindent
-        \begin{minipage}[t]{ \__codedesc_describelist_wd_dim }
-          #2
-        \end{minipage}
-      }   
+      { \noindent  #2 \skip_vertical:N \l__codedesc_coffinskip_dim }   
+      
     \__codedesc_join_tl: 
-      \l_tmpb_coffin {l}{t} 
-      \l_tmpa_coffin {r}{t} 
-      {-\marginparsep}{-.12\baselineskip}
+      \l_tmpb_coffin {l}{T} 
+      \l_tmpa_coffin {r}{B} 
+      {-\marginparsep}{0pt}
 
-    \mode_if_horizontal:TF 
-      {\skip_vertical:n{0.1667\baselineskip}}
-      {\skip_vertical:n{0.3667\baselineskip}}
+    \bool_if:NTF \l__codedesc_describe_peek_bool
+      { \par }
+      {
+        \mode_if_horizontal:T { \unskip\par}
+        \skip_vertical:N \l__codedesc_B_skip
+      }
+     
     \noindent
     \coffin_typeset:Nnnnn 
-      \l_tmpb_coffin {l}{t} {0pt}{0pt}
+      \l_tmpb_coffin {l}{t} {0pt}{-1.5pt}
+    \cs_gset_eq:NN \__codedesc_cmd_peek_aux: \__codedesc_cmd_peek_describe:
+    \__codedesc_cmd_peek:
   }
   
+
+
+
+\cs_new_protected:Nn \__codedesc_cmd_peek_describe:
+  {
+    \peek_regex:nTF { \c{describe} }
+      { 
+        \bool_set_true:N  \l__codedesc_describe_peek_bool 
+      }
+      { 
+        \bool_set_false:N \l__codedesc_describe_peek_bool 
+        \par
+        \skip_vertical:N \l__codedesc_mid_skip
+      }
+  }
+
+
+\cs_new_protected:Nn \__codedesc_cmd_peek:
+  {
+    \peek_remove_spaces:n
+      {
+        \peek_analysis_map_inline:n
+          {
+            \exp_args:No \token_if_eq_meaning:NNF { ##1 } \para_end:
+              {
+                \peek_analysis_map_break:n
+                  {
+                    \exp_after:wN
+                      \__codedesc_cmd_peek_aux:
+                    ##1
+                  }
+              }
+            ##1
+          }
+     }
+  }
 
   
 \NewDocumentCommand \typesetmeta {m} {\__codedesc_meta:n {#1}}
@@ -945,11 +1214,7 @@
 
 \NewDocumentCommand \typesetargs {O{meta}m}
   { 
-%    \keys_set:nn {codedesc / delimiters}{#1}
-  \group_begin:
-    \__codedesc_metafmt:n {#1}
     \__codedesc_args_typeset:nnnn {#1} {\__codedesc_Lbracket_tl} {#2} {\__codedesc_Rbracket_tl}
-  \group_end:
   }
   
 \cs_new_eq:NN \tsargs \typesetargs  
@@ -970,7 +1235,10 @@
 \NewDocumentCommand \typesetverb {O{code}m} 
   {
     \group_begin:
-      \__codedesc_metafmt:n {#1}
+%      \__codedesc_metafmt:n {#1}
+      \__codedesc_metafmt_set:n {#1} 
+      \__codedesc_strut_tl
+      \__codedesc_metafmt:      
       \tl_to_str:n {#2}
     \group_end:
   }
@@ -978,7 +1246,7 @@
 
 \NewDocumentCommand \typesetobj {O{code}m} 
   {
-    \__codedesc_metafmt_set:n {#1}
+    \__codedesc_metafmt_set:nn {list format}{#1}
     \__codedesc_list_typeset:nVV{#2} \__codedesc_sep_tl \__codedesc_lastsep_tl
   }
 
@@ -990,32 +1258,200 @@
 
 
 
+\bool_new:N \l__codedesc_tsremark_activ_bool
+\bool_set_false:N \l__codedesc_tsremark_activ_bool
+\bool_new:N \l__codedesc_codedescribe_activ_bool
+\bool_set_false:N \l__codedesc_codedescribe_activ_bool
+\bool_new:N \l__codedesc_codesyntax_activ_bool
+\bool_set_false:N \l__codedesc_codesyntax_activ_bool
+\bool_new:N \l__codedesc_describelist_activ_bool
+\bool_set_false:N \l__codedesc_describelist_activ_bool
+
+
+\prg_new_protected_conditional:Npnn \__codedesc_nested_env_test:nn #1#2 {T , F , TF}
+  {
+    \bool_lazy_any:nTF 
+      {\l__codedesc_tsremark_activ_bool \l__codedesc_codedescribe_activ_bool}
+%    \bool_if:NTF \l__codedesc_tsremark_activ_bool     
+      {
+        \bool_if:NT \l__codedesc_tsremark_activ_bool
+          {
+            \msg_error:nnnnn {codedesc} {nested-env}
+              {#1}{#2}{tsremark}
+          }
+%        \bool_if:NT \l__codedesc_codedescribe_activ_bool
+%          {
+%            \msg_error:nnnnn {codedesc} {nested-env}
+%              {#1}{#2}{codedescribe}
+%          }
+        \prg_return_true:
+      }
+      {\prg_return_false:}
+  }
+
+%    \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
+
+\coffin_new:N \l__codedesc_tsremark_coffin
+
+\cs_set_eq:Nc \__codedesc_org_end:n { end~ }
+\bool_new:N \l__codedesc_tsremark_peek_bool
+\bool_set_false:N \l__codedesc_tsremark_peek_bool
+\bool_new:N \l__codedesc_describe_peek_bool
+\bool_set_false:N \l__codedesc_describe_peek_bool
+\tl_new:N \l__codedesc_peekenv_tl
+
+        \cs_set_eq:Nc \__codedesc_org_end:n { end~ }
+
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
-    \mode_if_horizontal:TF 
-      {\skip_vertical:n{0.3167\baselineskip}}
-      {\skip_vertical:n{0.4167\baselineskip}}
-      
+    \__codedesc_nested_env_test:nnF {remark:01} {tsremark}
+      { 
+        \cs_set_eq:Nc \__codedesc_org_end:n { end~ }
+        \cs_set_eq:cN { end~ } \__codedesc_env_end:n
+        \bool_set_true:N \l__codedesc_tsremark_activ_bool
+        \tl_gset:Nn \l__codedesc_peekenv_tl {tsremark}
+        \cs_gset_eq:NN \__codedesc_env_peek_begin: \__codedesc_env_peek_begin_tsremark:
+      }   
     \__codedesc_set_textcolwidth:
     \group_begin:
-      \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
-      \begin{minipage}[b]{0.8\l__codedesc_textcolwidth_dim}
+      \vcoffin_gset:Nnw \l__codedesc_tsremark_coffin {0.8\l__codedesc_textcolwidth_dim}
         \setlength\parindent{0pt}\small
-        \textsl{\textbf{#1}} %\l_tmpa_tl %\dim_to_decimal:n {\linewidth} 
+        \textsl{\textbf{#1}} 
   }
   {
-      \end{minipage}
+      \skip_vertical:N \l__codedesc_coffinskip_dim
+      \vcoffin_gset_end:
+      \bool_if:NTF \l__codedesc_tsremark_peek_bool
+        {
+          \par
+        }
+        {
+          \mode_if_horizontal:T
+            { \par }
+          \skip_vertical:n{\l__codedesc_tiny_skip}
+        }
+
+      \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
+      \coffin_typeset:Nnnnn 
+        \l__codedesc_tsremark_coffin 
+        {l}{T}  {0pt}{0pt}
     \group_end:
+    \bool_set_false:N \l__codedesc_tsremark_activ_bool
   }
+  
+  
+% regex peek ahead for \begin{tsremark}
+\cs_new_protected:Nn \__codedesc_env_peek_begin_tsremark:
+  {
+    \peek_regex:nTF { \c{begin} \cB{tsremark} }
+      { 
+        \bool_set_true:N  \l__codedesc_tsremark_peek_bool 
+      }
+      { 
+        \bool_set_false:N \l__codedesc_tsremark_peek_bool 
+        \par
+        \skip_vertical:N \l__codedesc_mid_skip
+      }
+  }
+
+\cs_new:Npn \__codedesc_env_end:n #1
+  {
+    \__codedesc_org_end:n {#1}
+    \tl_if_eq:nVT { #1 } \l__codedesc_peekenv_tl
+      {
+        \cs_gset_eq:cN { end~ } \__codedesc_org_end:n
+        \__codedesc_env_peek:
+      }
+  }
+
+\cs_new_protected:Nn \__codedesc_env_peek:
+  {
+    \peek_remove_spaces:n
+      {
+        \peek_analysis_map_inline:n
+          {
+            \exp_args:No \token_if_eq_meaning:NNF { ##1 } \para_end:
+              {
+                \peek_analysis_map_break:n
+                  {
+                    \exp_after:wN
+                      \__codedesc_env_peek_begin:
+                    ##1
+                  }
+              }
+            ##1
+          }
+     }
+  }
+
 
 \NewDocumentEnvironment {tsremark*} {O{Note:}}
   {
+    \msg_warning:nnnnn {codedesc} {deprecated env} {remark*:01}{tsremark*}{tsremark}
     \begin{tsremark}[#1]
   }
-  {      
+  {
     \end{tsremark}
-    \skip_vertical:n{0.4167\baselineskip}
   }
+    
+
+
+
+% Peek ahead to check if the next command is \begin{myenv}
+%\cs_new_protected:Npn \myenv_check_next:
+%  {
+%    \peek_remove_spaces:n
+%    {
+%    \peek_charcode:NTF \c_backslash_str
+%      {
+%        \peek_remove_spaces:n
+%          {
+%            \peek_meaning:NTF \begin
+%              {
+%                \peek_catcode:NTF \c_group_begin_token
+%                  {
+%                    \peek_meaning:NTF myenv
+%                      { \bool_set_true:N \l_myenv_next_is_myenv_bool }
+%                      { \bool_set_false:N \l_myenv_next_is_myenv_bool }
+%                  }
+%                  { \bool_set_false:N \l_myenv_next_is_myenv_bool }
+%              }
+%              { \bool_set_false:N \l_myenv_next_is_myenv_bool }
+%          }
+%      }
+%      { \bool_set_false:N \l_myenv_next_is_myenv_bool }
+%    }
+%  }
+
+% Define the environment
+
+
+%\NewDocumentEnvironment {tsremarkY} {O{Note:}}
+%  {
+%    \mode_if_horizontal:TF 
+%      {\skip_vertical:n{\l__codedesc_small_skip}}
+%      {\skip_vertical:n{\l__codedesc_large_skip}}
+%      
+%    \__codedesc_set_textcolwidth:
+%    \group_begin:
+%      \noindent\hspace{0.2\l__codedesc_textcolwidth_dim}
+%      \begin{minipage}[b]{0.8\l__codedesc_textcolwidth_dim}
+%        \setlength\parindent{0pt}\small
+%        \textsl{\textbf{#1}} %\l_tmpa_tl %\dim_to_decimal:n {\linewidth} 
+%  }
+%  {
+%      \end{minipage}
+%    \group_end:
+%  }
+
+%\NewDocumentEnvironment {tsremark*} {O{Note:}}
+%  {
+%    \begin{tsremark}[#1]
+%  }
+%  {      
+%    \end{tsremark}
+%    \par\skip_vertical:n{\l__codedesc_mid_skip}
+%  }
 
 
 %%%% ARGH !!!!
