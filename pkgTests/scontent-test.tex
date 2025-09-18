@@ -1,0 +1,83 @@
+%%%==============================================================================
+%% Copyright 2023-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.10} {2025/08/04} 
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/starray
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2023/11/01]
+\documentclass[10pt]{article}
+\RequirePackage[verbose,a4paper,marginparwidth=27.5mm,top=2.5cm,bottom=1.5cm,hmargin={40mm,20mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
+
+\usepackage{codedescribe}
+
+\usepackage{scontents}
+
+\begin{document}
+
+
+\begin{codestore}[activity:def]
+\starray_new:n {activity}
+\starray_def_from_keyval:nn {activity} {
+    name = Activity's~ name ,
+    acronym = ACRO ,
+    coord . struct =  {
+        name = Coordinator's~ name,
+        title = Coordinator's~ title ,
+      } ,
+    calendar . struct = {
+        date = {-day-} ,
+        week = {-week-} ,
+        event = {-event-} ,
+      } ,
+    chkID = ,        %%% 'unique ID' for checklists
+    chkmarked = ,    %%% This shall be a prop list of   marked itens
+    chkunmarked = ,  %%% This shall be a prop list of unmarked itens
+    chkref = ,       %%% This shall be a prop list of ref      itens
+  }
+\end{codestore}
+
+
+\tscode*{activity:def}
+
+
+
+\begin{scontents}[store-env = {act:def}]
+\starray_new:n {activity}
+\starray_def_from_keyval:nn {activity} {
+    name = Activity's~ name ,
+    acronym = ACRO ,
+    coord . struct =  {
+        name = Coordinator's~ name,
+        title = Coordinator's~ title ,
+      } ,
+    calendar . struct = {
+        date = {-day-} ,
+        week = {-week-} ,
+        event = {-event-} ,
+      } ,
+    chkID = ,        %%% 'unique ID' for checklists
+    chkmarked = ,    %%% This shall be a prop list of   marked itens
+    chkunmarked = ,  %%% This shall be a prop list of unmarked itens
+    chkref = ,       %%% This shall be a prop list of ref      itens
+  }
+\end{scontents}
+
+\tscode*{act:def}
+
+
+
+\end{document} 

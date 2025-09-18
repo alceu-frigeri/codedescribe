@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.10} {2025/06/05}
+%% This is version {1.11} {2025/09/18}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -29,6 +29,7 @@
 %\documentclass[dctools,english]{ufrgscca}
 \documentclass{article}
 \RequirePackage[verbose,a4paper,marginparwidth=28mm,top=3cm,bottom=1.5cm,hmargin={45mm,25mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
+%\usepackage[color scheme = darker]{codedescribe}
 \usepackage{codedescribe}
 \usepackage{enumitem}
 
@@ -81,16 +82,46 @@ It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environme
 Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX~ code snippets in a \tsobj[pkg]{expl3} sequence variable.
 
 
+\begin{codestore}[store-colon]
+  %The code will be stored as 'store:A'
+  \begin{codestore}[store-env = store:A]
+  ...
+  \end{codestore}
+  
+  %Same
+  \begin{codestore}[st = store:A]
+  ...
+  \end{codestore}
+
+  %The code will be stored as 'storeA'
+  \begin{codestore}[storeA]
+  ...
+  \end{codestore}
+  
+  %This might raises an error. 
+  %It will be stored as 'store' (not as 'store:A')
+  \begin{codestore}[store:A]
+  ...  
+  \end{codestore}
+\end{codestore}
+
 \begin{codedescribe}[env]{codestore}
 	\begin{codesyntax}
 		\tsmacro{\begin{codestore}}[stcontents-keys]{}
     \tsmacro{\end{codestore}}{}
 	\end{codesyntax}
 This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[pkg]{scontents} package, see \cite{SCONTENTS}), all \tsobj[pkg]{scontents} keys are valid, with two additional ones: \tsobj[key]{st,store-at} which are aliases to the \tsobj[key]{store-env} key. If an ``isolated'' \tsobj[key,meta]{st-name} is given (unknown \tsobj[key]{key}), it is assumed that the environment body shall be stored in it (for use with \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec}).
+%, in which case, obviously, a comma or equal signs are not allowed as well (new restriction since august 2025 \tsobj[pkg]{l3kernel} update) a colon ( : ) isn't allowed.
 \end{codedescribe}
 \begin{tsremark}
   From \tsobj[pkg]{scontents}, \tsobj[marg]{st-name} \tsobj[oarg]{index}ed (The code is stored in a sequence variable). It is possible to store as many code snippets as needed under the same name. The first one will be \tsobj[oarg]{index}$\rightarrow 1$, the second $2$, and so on.
 \end{tsremark}
+\begin{tsremark}[\color{red}Warning:]
+  If explicitly using one of the \tsobj[key,sep=or]{store-env,st,store-at} keys, the storage name can be anything. BUT, due to changes (August 2025) in the latex kernel keys processing, if an implicity key is used,  then colons ( : ) besides a comma and equal signs are not allowed.
+  \tscode*{store-colon}
+\end{tsremark}
+
+
 
 %\subsection{Setting Keys}
 
@@ -110,7 +141,7 @@ This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[
 
 (new 2024/01/06) \tsmacro{\tsresult*}{} only \emph{executes} it. The non-start version centers it and use just half of the base line, whilst the star version uses the full text width.
 \end{codedescribe}
-only \emph{executes} it. The non-start version centers it and use just half of the base line, whilst the star version uses the full text width.
+
 \begin{tsremark}
   (from \tsobj[pkg]{stcontents} package) \tsobj[oarg]{index} can be from $1$ up to the number of stored codes under the same \tsobj[marg]{st-name}. Defaults to $1$.
 \end{tsremark}
@@ -212,7 +243,7 @@ for some extra emphasis sets.\\
 These allow to redefine what a letter or other are (they correspond to the \tsobj[key]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other} default value is an empty list.\\
 \end{codedescribe}
 \begin{tsremark}
-  You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of a function.
+  You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of an \tsobj[pkg]{expl3} function.
 \end{tsremark}
 
 \begin{codedescribe}[key]{numbers,numberstyle}
@@ -272,8 +303,12 @@ This package aims at minimizing the number of commands, with object kind (if a m
 \subsection{Package Options}
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
-\describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled from this. It defaults to font size at load time.}
+\describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled from this. It defaults to the font size at load time.}
+\describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 \end{describelist}
+\begin{tsremark}
+  \tsobj[option]{color scheme} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
+\end{tsremark}
 
 \subsection{Object Type keys}\label{obj-type-def}
 
@@ -492,7 +527,7 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
 \tsmacro{\typesetmacro}{macro-list}\tsargs[oarg]{oargs-list}\tsargs[marg]{margs-list}
 \tsmacro{\tsmacro}{macro-list}\tsargs[oarg]{oargs-list}\tsargs[marg]{margs-list}
 \end{codesyntax}
-These are just a short-cut for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj[code]{\tsargs [oarg] {oargs-list}} \tsobj[code]{\tsargs [marg] {margs-list}}.
+These are just short-cuts for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsobj[code]{\tsargs [oarg] {oargs-list}} \tsobj[code]{\tsargs [marg] {margs-list}}.
 \end{codedescribe}
 
 \begin{codedescribe}[code]{\typesetmeta,\tsmeta}

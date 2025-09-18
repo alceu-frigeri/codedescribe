@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.10} {2025/06/05}
+%% This is version {1.11} {2025/09/18}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codelisting}
-    {2025/06/05}
-    {1.10}
+    {2025/09/18}
+    {1.11}
     {LaTeX Code Listing}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codelisting} ,
      prefix      .code:n = {codelist} ,
-     date        .code:n = {2025/06/05} ,
-     version     .code:n = {1.10} ,
+     date        .code:n = {2025/09/18} ,
+     version     .code:n = {1.11} ,
      description .code:n = {\LaTeX~Code~Listing}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -51,6 +51,7 @@
 %%%%%%%
 
 \RequirePackage{listings,scontents}
+\RequirePackage{xpeekahead}
 
 \msg_new:nnnn {codelist} {invalid key}
   {
@@ -541,12 +542,12 @@
 %%%
 \keys_define:nn { scontents / scontents}
   {
-  	st.meta:nn          = { scontents } { store-env = #1 },
+  	st.meta:nn          = { scontents } { store-env = {#1} },
     st.value_required:n = true,
-  	store-at.meta:nn          = { scontents } { store-env = #1 },
+  	store-at.meta:nn          = { scontents } { store-env = {#1} },
     store-at.value_required:n = true,
     unknown . undefine: ,
-    unknown . code:n = { \keys_set:nx {scontents}{ store-env = \l_keys_key_str} }
+    unknown . code:n = { \keys_set:nx {scontents}{ store-env = {\l_keys_key_str}} }
  }
 
 \newenvsc{codestore}
@@ -567,7 +568,7 @@
 \lstnewenvironment{verbatimsc}{\lstset{style=codestyle}}{}
 
 %%%%%%
-%%% This one can't be proteced
+%%% This one can't be protected
 %%%%%%
 \cs_new:Npn \__codelist_set_verbsc:n #1
   {
@@ -603,7 +604,7 @@
         {}
   }
 
-%%% !!! DEPRECTAED !!!
+%%% !!! DEPRECATED !!!
 \NewDocumentEnvironment {verbsc} {m}
   {
       \cs_undefine:c{verbatimsc}
@@ -711,11 +712,13 @@
     \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
       { 
         \l__codedesc_rule_in_tl
-        \group_begin:\vspace*{0.5\baselineskip}%\vspace*{-1ex}
-        \setlength\parindent{\l__codelist_demo_parindent_dim}
-        \tl_if_blank:nTF {#2}
-          { \getstored {#1} }
-          { \getstored [#2]{#1} }
+        \group_begin:
+          \skip_vertical:n {\l__codedesc_largerskip_dim}
+          \setlength\parindent{\l__codelist_demo_parindent_dim}
+          \tl_if_blank:nTF {#2}
+            { \getstored {#1} }
+            { \getstored [#2]{#1} }
+          \skip_vertical:n {\l__codedesc_tinyskip_dim}
         \group_end:
         \l__codedesc_rule_in_tl
       }
@@ -725,7 +728,6 @@
   {
     \__codedesc_set_textcolwidth:
     \group_begin:
-      \par\noindent
       \__codelist_ts_settings:nn {#1}{#2}
       \__codelist_codecoffin:nnnn {#3}{#4}{#5}{}
       
@@ -733,24 +735,49 @@
           \__codelist_code_label_coffin {l}{b}
           \__codelist_code_coffin {l}{t}
           {0pt}{-1ex}
-        \vspace*{-1ex}
+        \skip_vertical:n{-1ex}\noindent
         \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
-        \vspace*{1.5\baselineskip}
-        \par
+        \bool_if:NTF \l__codelist_tscode_peek_bool
+          { \skip_vertical:n {\l__codedesc_large_skip} }
+          { \skip_vertical:n {\l__codedesc_largeline_skip} }
     \group_end: 
   }
 
+
+\xpeekahead_set:Nnnn \__codelist_cmd_peek_tscode:
+  {
+    \c{typesetcode} | \c{tscode} | \c{typesetmergedcode} | \c{tsmergedcode} | 
+    \c{typesetdemo} | \c{tsdemo} | \c{typesetresult} | \c{tsresult} 
+  }
+  { 
+   \bool_set_true:N  \l__codelist_tscode_peek_bool
+    \l__codelist_tscode_tl:
+  }
+  { 
+    \bool_set_false:N \l__codelist_tscode_peek_bool
+    \l__codelist_tscode_tl:
+  }    
+  
+
+\bool_new:N \l__codelist_tscode_peek_bool
+
+\tl_new:N \l__codelist_tscode_tl:
+
+
 \NewDocumentCommand{\tscode}{sO{}mO{}}
   {
-    \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored}
+    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored} }
+    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
+
 
 \cs_new_eq:NN \typesetcode \tscode 
 
 
 \NewDocumentCommand{\tsmergedcode}{sO{}m}
   {
-    \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]}
+    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]} }
+    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
   
 \cs_new_eq:NN \typesetmergedcode \tsmergedcode
@@ -763,14 +790,14 @@
 \dim_new:N \l__codedesc_width_dim
 \dim_new:N \l__codedesc_offset_dim
 
-\NewDocumentCommand{\tsdemo}{sO{}mO{}}
+\cs_new_protected:Npn \__codelist_ts_democode:nnnn #1#2#3#4
   {
     \__codedesc_set_textcolwidth:
     \group_begin:
       \par\setlength\parindent{0pt}
       \__codelist_ts_settings:nn {#1}{#2}
       
-      \__codelist_codecoffin:nnnn {#3}{#4}{\typestored}{\vspace*{0.1ex}}
+      \__codelist_codecoffin:nnnn {#3}{#4}{\typestored}{ \skip_vertical:n {0.1ex} }
       \__codelist_democoffin:nn {#3}{#4}
 
       \bool_if:NTF #1
@@ -779,16 +806,17 @@
             \__codelist_code_label_coffin {l}{b}
             \__codelist_code_coffin {l}{t}
             {0pt}{-1ex}
-          \vspace*{-1ex}
-          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}
-          \par
+          \skip_vertical:n {-1ex}
+          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}
+          \skip_vertical:n {1ex}
           \coffin_join:NnnNnnnn
             \__codelist_demo_label_coffin {l}{b}
             \__codelist_demo_coffin {l}{t}
             {0pt}{-1ex}
           \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{0pt}{0pt}
-          \vspace*{1.5\baselineskip}
-          %\vspace*{1ex}
+          \bool_if:NTF \l__codelist_tscode_peek_bool
+            { \skip_vertical:n {\l__codedesc_large_skip} }
+            { \skip_vertical:n {\l__codedesc_largeline_skip} }
         }
         { % side-by-side
           \coffin_join:NnnNnnnn
@@ -800,15 +828,24 @@
             \__codelist_demo_coffin {l}{vc}
             {0pt}{0pt}    
         
-          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}\vspace*{1ex}\par
+          \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}
+          \skip_vertical:n {1ex}
           \l__codedesc_rule_out_tl
           \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
-          \vspace*{0.25ex}
+          \skip_vertical:n {0.25ex}
           \l__codedesc_rule_out_tl
-          \vspace*{1.5\baselineskip}
+        \bool_if:NTF \l__codelist_tscode_peek_bool
+          { \skip_vertical:n {\l__codedesc_large_skip} }
+          { \skip_vertical:n {\l__codedesc_largeline_skip} }
         }
-      \par
     \group_end:
+  }
+  
+\NewDocumentCommand{\tsdemo}{sO{}mO{}}
+  {
+    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_democode:nnnn {#1}{#2}{#3}{#4} }
+    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
+    
   }
 
 
@@ -837,14 +874,16 @@
         \__codelist_demo_coffin {l}{t}
         {0pt}{-1ex}
       \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
-      \vspace*{1.5\baselineskip}
-      \par
+        \bool_if:NTF \l__codelist_tscode_peek_bool
+          { \skip_vertical:n {\l__codedesc_large_skip} }
+          { \skip_vertical:n {\l__codedesc_largeline_skip} }
     \group_end:
   }
 
 \NewDocumentCommand{\tsresult}{sO{}mO{}}
   {
-    \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4}
+    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4} }
+    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
 
 \cs_new_eq:NN \typesetresult \tsresult 
@@ -863,6 +902,7 @@
   {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
 	{ã}{{\~{a}}}1 {õ}{{\~{o}}}1
 	{Ã}{{\~{A}}}1 {Õ}{{\~{O}}}1
+	{ñ}{{\~{n}}}1 {Ñ}{{\~{N}}}1
   {ý}{{\'{y}}}1 {Ý}{{\'{Y}}}1  {ÿ}{{\"{y}}}1 {Ÿ}{{\"{Y}}}1
   {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
   {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
