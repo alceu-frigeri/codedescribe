@@ -483,7 +483,7 @@ This is the \tsobj[env]{describelist} companion macro. In case of the \tsobj[env
 \end{codedescribe}
 
 \begin{tsremark}
-An error will be raised if called outside of a \tsobj[env,sep=or]{describelist,describelist*} environment.
+An error will be raised (undefined control sequence) if called outside of a \tsobj[env,sep=or]{describelist,describelist*} environment.
 \end{tsremark}
 
 
@@ -535,7 +535,7 @@ These are just short-cuts for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsob
 \tsmacro{\typesetmeta}{name}
 \tsmacro{\tsmeta}{name}
 \end{codesyntax}
- These will just typeset \tsobj[meta]{name} between left/right 'angles' (no other formatting).
+ These will just typeset \tsobj[meta]{name} between left/right 'angles' (no further formatting).
 \end{codedescribe}
 
 \begin{codedescribe}[code]{\typesetverb,\tsverb}
@@ -606,7 +606,7 @@ This is the \tsobj[env]{abstract} environment from the \tsobj[pkg]{article} clas
 \tsmacro{\typesetdate}{}
 \tsmacro{\tsdate}{}
 \end{codesyntax}
-This provides the current date (Month Year, format).
+This provides the current date (in Month Year, format).
 \end{codedescribe}
 
 \printbibliography

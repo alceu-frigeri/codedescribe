@@ -87,6 +87,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
+* Version 1.12 (next release)
+  - Documentation typos.
+  - \describe macro, now, only defined inside describelist environment.
+
 * Version 1.11 (this)
   - replacing \vspace with \skip_vertical:n
   - peeking ahead \ts* commands (for further spacing fine tune).

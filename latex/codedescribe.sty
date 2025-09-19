@@ -1187,6 +1187,7 @@
     \tl_set:Nn \__codedesc_listkind_tl {#2}
     
     \bool_set_true:N \l__codedesc_describelist_activ_bool
+    \cs_set_eq:NN \describe \__codedesc_describe:nn
   }
   {
     \bool_set_false:N \l__codedesc_describelist_activ_bool
@@ -1210,12 +1211,14 @@
     \tl_set:Nn \__codedesc_listkind_tl {#2}
     
     \bool_set_true:N \l__codedesc_describelist_activ_bool
+    \cs_set_eq:NN \describe \__codedesc_describe:nn
   }
   {
     \bool_set_false:N \l__codedesc_describelist_activ_bool
   }
 
-\NewDocumentCommand \describe {mm}
+%\NewDocumentCommand \describe {mm}
+\cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
     \bool_if:NF \l__codedesc_describelist_activ_bool
       {
