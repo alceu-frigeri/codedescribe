@@ -50,7 +50,7 @@
   
 \begin{typesetabstract}
 
-This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,pifont}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
+This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,pifont} (and \tsobj[pkg]{xpeekahead} since release 1.11). Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
 
 No assumption is made about page layout (besides ``having a marginpar''),  or underlying macros, so that it can be used with any document class.
 
@@ -76,7 +76,7 @@ This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{ver
 
 \section{codelisting Package}
 
-It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore}, commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
+It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore}, a few commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
 
 \subsection{In Memory Code Storage}
 Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl3} sequence variable.
@@ -114,10 +114,10 @@ This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[
 %, in which case, obviously, a comma or equal signs are not allowed as well (new restriction since august 2025 \tsobj[pkg]{l3kernel} update) a colon ( : ) isn't allowed.
 \end{codedescribe}
 \begin{tsremark}
-  From \tsobj[pkg]{scontents}, \tsobj[marg]{st-name} \tsobj[oarg]{index}ed (The code is stored in a sequence variable). It is possible to store as many code snippets as needed under the same name. The first one will be \tsobj[oarg]{index}$\rightarrow 1$, the second $2$, and so on.
+  From \tsobj[pkg]{scontents}, \tsobj[marg]{st-name} is \tsobj[oarg]{index}ed (The code is stored in a sequence variable). It is possible to store as many code snippets as needed under the same name. The first one will be \tsobj[oarg]{index}$\rightarrow 1$, the second $2$, and so on.
 \end{tsremark}
 \begin{tsremark}[\color{red}Warning:]
-  If explicitly using one of the \tsobj[key,sep=or]{store-env,st,store-at} keys, the storage name can be anything. BUT, due to changes (August 2025) in the latex kernel keys processing, if an implicity key is used,  then colons ( : ) besides a comma and equal signs are not allowed.
+  If explicitly using one of the \tsobj[key,sep=or]{store-env,st,store-at} keys, the storage name can be anything. BUT, due to changes (August 2025) in the latex kernel keys processing, if an implicity key is used,  than colons ( : ), besides a comma and equal signs, aren't allowed.
   \tscode*{store-colon}
 \end{tsremark}
 
