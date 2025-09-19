@@ -92,7 +92,7 @@ The Current Maintainer of this work is Alceu Frigeri
   - peeking ahead \ts* commands (for further spacing fine tune).
   - using xpeekahead for the peek ahead part.
   - added a package option: color scheme (see documentation).
-  - documentation (specially due to kernel change regarding key handlers).
+  - documentation (specially due to kernel changes regarding key handlers).
 
 * Version 1.10
   - fixing [#10](https://github.com/alceu-frigeri/codedescribe/issues/10) (hopefully for good) by implementing [env-peekahead](https://tex.stackexchange.com/questions/745593/peek-ahead-in-expl3) and [skip-spacing](https://tex.stackexchange.com/questions/745692/inter-coffins-spacing)
