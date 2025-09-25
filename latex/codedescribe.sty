@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.11} {2025/09/18}
+%% This is version {1.12} {2025/09/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/09/18}
-    {1.11}
+    {2025/09/25}
+    {1.12}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/09/18} ,
-     version     .code:n = {1.11} ,
+     date        .code:n = {2025/09/25} ,
+     version     .code:n = {1.12} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -210,26 +210,32 @@
 \__codedesc_set_color_scheme:n {default}
 
 \keys_define:nn { codedescribe }
-{
-  nolisting .usage:n    = load ,
-	nolisting  .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
-  nolisting .default:n  = {true} ,
+  {
+    nolisting .usage:n    = load ,
+  	nolisting  .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
+    nolisting .default:n  = {true} ,
+    
+    base~ skip .usage:n   = load ,
+    base~ skip .code:n  =
+      {
+        \__codedesc_set_skips:n {#1}
+      } ,
+    base~ skip .value_required:n = true ,
+    
+    color ~ scheme .usage:n = load ,
+    color ~ scheme .choices:nn =
+      { default , black , brighter , darker }
+      {
+        \exp_args:NV \__codedesc_set_color_scheme:n \l_keys_choice_tl
+      } ,
+    color ~ scheme .value_required:n = true ,
   
-  base~ skip .usage:n   = load ,
-  base~ skip .code:n  =
-    {
-      \__codedesc_set_skips:n {#1}
-    } ,
-  base~ skip .value_required:n = true ,
-  
-  color ~ scheme .usage:n = load ,
-  color ~ scheme .choices:nn =
-    { default , black , brighter , darker }
-    {
-      \exp_args:NV \__codedesc_set_color_scheme:n \l_keys_choice_tl
-    } ,
-  color ~ scheme .value_required:n = true ,
-}
+    strict .usage:n    = load ,
+    strict .code:n = 
+      {
+        \msg_redirect_module:nnn {codedesc}      { warning } { error }
+      } ,
+  }
 \ProcessKeyOptions [codedescribe ]
 
 \bool_if:NT \l__codedesc_loadlisting_bool
@@ -272,14 +278,14 @@
     ~Error~Code~ ID:<#1>.
   }
 
-%\msg_new:nnnn {codedesc} {nested-env}
-%  {
-%    (ID:#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\} 
-%  }
-%  {
-%    You~tried~to~begin~\{#2\}~inside~of~\{#3\}.~ Don't~ mix~ them!
-%    ~Error~Code~ ID:<#1>.
-%  }
+\msg_new:nnnn {codedesc} {nested-env}
+  {
+    (ID:#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\}. ~Better~ not.
+  }
+  {
+    You~tried~to~begin~\{#2\}~inside~of~\{#3\}.~ Better~ not.
+    ~Error~Code~ ID:<#1>.
+  }
 
 \msg_new:nnnn {codedesc} {out of scope}
   {
@@ -719,7 +725,7 @@
   	unknown.code:n = 
       {
        \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_none_color} }
-       \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
+       \msg_error:nnxx { codedesc } {object-err} {desc ~ format}{\l_keys_key_str}
       },    
   }
 
@@ -778,7 +784,7 @@
   	unknown.code:n = 
       {
        \tl_set:Nn \__codedesc_metacolor_tl: { \color{c__codedesc_none_color} }
-       \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
+       \msg_error:nnxx { codedesc } {object-err} {list ~ format}{\l_keys_key_str}
       },    
   }
 
@@ -1003,8 +1009,16 @@
     \mode_if_horizontal:TF 
       {\unskip\skip_vertical:n{\l__codedesc_mid_skip}}
       {\skip_vertical:n{\l__codedesc_mid_skip}}
+    
+    \bool_if:NTF \l__codedesc_codedescribe_activ_bool
+      {
+        \msg_warning:nnnxx {codedesc} {nested-env}
+          {syntax:01}{codedescribe~ env}{codedescribe~ env}      
+      }
+      {
+        \bool_set_true:N \l__codedesc_codedescribe_activ_bool
+      }
       
-    \bool_set_true:N \l__codedesc_codedescribe_activ_bool
     
     \seq_set_from_clist:Nn \l_tmpa_seq {#2}
     \__codedesc_set_textcolwidth: 
@@ -1123,7 +1137,7 @@
         \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{0pt}      
       }
       
-    \bool_set_false:N \l__codedesc_codedescribe_activ_bool
+%    \bool_set_false:N \l__codedesc_codedescribe_activ_bool
       
     \skip_vertical:n{\l__codedesc_large_skip}\par
   }
@@ -1137,12 +1151,12 @@
         \bool_if:NT \g__codedesc_syntax_bool
           {
             \msg_warning:nnn {codedesc} {syntax dup}
-                  {syntax:01}
+                  {syntax:02}
           }
       }
       {
-        \msg_error:nnnxx {codedesc} {out of scope}
-              {syntax:01}{codesyntax~ env}{codedescribe~ env}
+        \msg_warning:nnnxx {codedesc} {out of scope}
+              {syntax:03}{codesyntax~ env}{codedescribe~ env}
       }
       
     \bool_set_true:N \l__codedesc_codesyntax_activ_bool
@@ -1186,11 +1200,9 @@
     \tl_set:Nn \__codedesc_ragged_tl: {\raggedleft}
     \tl_set:Nn \__codedesc_listkind_tl {#2}
     
-    \bool_set_true:N \l__codedesc_describelist_activ_bool
     \cs_set_eq:NN \describe \__codedesc_describe:nn
   }
   {
-    \bool_set_false:N \l__codedesc_describelist_activ_bool
   }
   
 \NewDocumentEnvironment{describelist*}{O{20mm}m}
@@ -1210,22 +1222,14 @@
     \tl_set:Nn \__codedesc_ragged_tl: {}
     \tl_set:Nn \__codedesc_listkind_tl {#2}
     
-    \bool_set_true:N \l__codedesc_describelist_activ_bool
     \cs_set_eq:NN \describe \__codedesc_describe:nn
   }
   {
-    \bool_set_false:N \l__codedesc_describelist_activ_bool
   }
 
 %\NewDocumentCommand \describe {mm}
 \cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
-    \bool_if:NF \l__codedesc_describelist_activ_bool
-      {
-        \msg_error:nnnxx {codedesc} {out of scope}
-              {desc:01}{\cs_to_str:N \describe}{describelist~ env}
-      }
-      
     \hcoffin_set:Nn \l_tmpb_coffin 
       { 
         \__codedesc_metafmt:V \__codedesc_listkind_tl 
@@ -1334,14 +1338,10 @@
 
 
 
-\bool_new:N \l__codedesc_tsremark_activ_bool
-\bool_set_false:N \l__codedesc_tsremark_activ_bool
 \bool_new:N \l__codedesc_codedescribe_activ_bool
 \bool_set_false:N \l__codedesc_codedescribe_activ_bool
 \bool_new:N \l__codedesc_codesyntax_activ_bool
 \bool_set_false:N \l__codedesc_codesyntax_activ_bool
-\bool_new:N \l__codedesc_describelist_activ_bool
-\bool_set_false:N \l__codedesc_describelist_activ_bool
 
 
 %\prg_new_protected_conditional:Npnn \__codedesc_nested_env_test:nn #1#2 {T , F , TF}
@@ -1406,7 +1406,6 @@
         \l__codedesc_tsremark_coffin 
         {l}{T}  {0pt}{0pt}
     \group_end:
-    \bool_set_false:N \l__codedesc_tsremark_activ_bool
   }
   
 

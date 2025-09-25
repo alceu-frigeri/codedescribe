@@ -87,11 +87,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.12 (next release)
-  - Documentation typos.
-  - \describe macro, now, only defined inside describelist environment.
+* Version 1.12 (this)
+  - Documentation typos and some clarification regardings packages errors/warnings.
+  - \describe macro defined only inside a describelist environment.
+  - Package option added: strict (warnings will be redirect as package errors)
+  
 
-* Version 1.11 (this)
+* Version 1.11
   - replacing \vspace with \skip_vertical:n
   - peeking ahead \ts* commands (for further spacing fine tune).
   - using xpeekahead for the peek ahead part.
