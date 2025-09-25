@@ -88,7 +88,7 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 
 * Version 1.12 (this)
-  - Documentation typos and some clarification regardings packages errors/warnings.
+  - Documentation typos and some clarification regarding packages errors/warnings.
   - \describe macro defined only inside a describelist environment.
   - Package option added: strict (warnings will be redirect as package errors)
   
