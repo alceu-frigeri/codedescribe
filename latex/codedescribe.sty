@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.12} {2025/09/25}
+%% This is version {1.13} {2025/10/03}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/09/25}
-    {1.12}
+    {2025/10/03}
+    {1.13}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/09/25} ,
-     version     .code:n = {1.12} ,
+     date        .code:n = {2025/10/03} ,
+     version     .code:n = {1.13} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -345,16 +345,16 @@
 
 \cs_new_protected:Npn \__codedesc_set_textcolwidth: 
   {
-    \dim_compare:nNnTF {\linewidth} = {\l__codedesc_linewidth_dim}
-      {}
-      {
-%        \dim_set:Nn \l__codedesc_linewidth_dim {\linewidth}
-%        \fp_set:Nn \l_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
-%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth - \fp_use:N \l_tmpa_fp \columnsep}
-
-        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth}
-      }
-    
+    \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth}
+%    \dim_compare:nNnTF {\linewidth} = {\l__codedesc_linewidth_dim}
+%      {}
+%      {
+%%        \dim_set:Nn \l__codedesc_linewidth_dim {\linewidth}
+%%        \fp_set:Nn \l_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
+%%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth - \fp_use:N \l_tmpa_fp \columnsep}
+%
+%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth}
+%      }
   }
 
 
@@ -960,6 +960,7 @@
   
   
 \bool_new:N \l__codedesc_longblock_bool
+\bool_new:N \l__codedesc_llongblock_bool
 \coffin_new:N \l__codedesc_margin_coffin
 \coffin_new:N \l__codedesc_text_coffin
 \coffin_new:N \l__codedesc_syntax_coffin
@@ -1003,6 +1004,10 @@
   {
     \__codedesc_object_define:nn {#1} {#2} {#3}
   }
+
+
+\dim_new:N \l__codedesc_tmpa_dim
+\dim_new:N \l__codedesc_tmpb_dim
 
 \NewDocumentEnvironment {codedescribe}{O{code}m}
   {
@@ -1067,7 +1072,15 @@
     \dim_compare:nNnTF \l__codedesc_margin_wd_dim > \marginparwidth
       {
         \bool_set_true:N \l__codedesc_longblock_bool
-        \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }        
+        \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }
+
+        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.3 \marginparsep}
+          {
+            \bool_set_true:N \l__codedesc_llongblock_bool
+          }
+          {
+            \bool_set_false:N \l__codedesc_llongblock_bool
+          }
       }
       {
         \bool_set_false:N \l__codedesc_longblock_bool
@@ -1102,14 +1115,29 @@
 
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
-        \coffin_join:NnnNnnnn 
-          \l__codedesc_syntax_coffin {l}{t} 
-          \l__codedesc_margin_coffin {r}{t} 
-          {-\marginparsep}{0pt}
-        \coffin_join:NnnNnnnn 
-          \l__codedesc_syntax_coffin {l}{b} 
-          \l__codedesc_text_coffin   {l}{t} 
-          {\marginparwidth+\marginparsep}{\l__codedesc_baselineskip_dim}
+        \bool_if:NTF \l__codedesc_llongblock_bool
+          {
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{t} 
+              \l__codedesc_margin_coffin {r}{t} 
+              {-\marginparsep}{0pt}
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{b} 
+              \l__codedesc_text_coffin   {l}{t} 
+              {\marginparwidth+\marginparsep}{\l__codedesc_baselineskip_dim}
+          }
+          {
+            \dim_set:Nn \l__codedesc_tmpa_dim {\coffin_ht_plus_dp:N \l__codedesc_syntax_coffin}
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{t} 
+              \l__codedesc_margin_coffin {r}{t} 
+              {-\marginparsep + \l__codedesc_margin_wd_dim - \marginparwidth}{0pt}
+            \dim_set:Nn \l__codedesc_tmpb_dim {\coffin_ht_plus_dp:N \l__codedesc_syntax_coffin}
+            \coffin_join:NnnNnnnn 
+              \l__codedesc_syntax_coffin {l}{b} 
+              \l__codedesc_text_coffin   {l}{t} 
+              {\marginparwidth+\marginparsep}{\l__codedesc_baselineskip_dim  + \l__codedesc_tmpb_dim - \l__codedesc_tmpa_dim}
+          }
         \par\noindent        
 %\coffin_mark_handle:Nnnn  \l__codedesc_syntax_coffin {r}{T}{blue}
         \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {-\marginparwidth-\marginparsep}{0pt}              
@@ -1181,17 +1209,11 @@
     \bool_set_false:N \l__codedesc_codesyntax_activ_bool    
   }
 
-
-\skip_new:N \l__codedesc_A_skip  
-\skip_new:N \l__codedesc_B_skip  
   
   \NewDocumentEnvironment{describelist}{O{20mm}m}
   {
      \skip_vertical:n{\l__codedesc_neg_skip}
   
-    \skip_set_eq:NN \l__codedesc_A_skip \l__codedesc_null_skip
-    \skip_set_eq:NN \l__codedesc_B_skip \l__codedesc_small_skip
-    
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
     \dim_set:Nn \__codedesc_describelabel_wd_dim {#1}
@@ -1209,10 +1231,7 @@
   {
     \mode_if_horizontal:TF 
       {\skip_vertical:n{\l__codedesc_neg_skip}}
-      {\skip_vertical:n{\l__codedesc_null_skip}}
-          
-    \skip_set_eq:NN \l__codedesc_A_skip \l__codedesc_null_skip
-    \skip_set_eq:NN \l__codedesc_B_skip \l__codedesc_small_skip
+      {\skip_vertical:n{\l__codedesc_null_skip}}        
 
     \__codedesc_set_textcolwidth: 
     \coffin_clear:N \__codedesc_describe_coffin
@@ -1267,7 +1286,7 @@
       { \par }
       {
         \mode_if_horizontal:T { \unskip\par}
-        \skip_vertical:N \l__codedesc_B_skip
+        \skip_vertical:N \l__codedesc_small_skip
       }
      
     \noindent
@@ -1343,24 +1362,6 @@
 \bool_new:N \l__codedesc_codesyntax_activ_bool
 \bool_set_false:N \l__codedesc_codesyntax_activ_bool
 
-
-%\prg_new_protected_conditional:Npnn \__codedesc_nested_env_test:nn #1#2 {T , F , TF}
-%  {
-%    \bool_lazy_any:nTF 
-%      {\l__codedesc_tsremark_activ_bool \l__codedesc_codedescribe_activ_bool}
-%      {
-%        \bool_if:NT \l__codedesc_tsremark_activ_bool
-%          {
-%            \msg_error:nnnnn {codedesc} {nested-env}
-%              {#1}{#2}{tsremark}
-%          }
-%        \prg_return_true:
-%      }
-%      {\prg_return_false:}
-%  }
-
-%    \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
-
 \coffin_new:N \l__codedesc_tsremark_coffin
 
 \bool_new:N \l__codedesc_tsremark_peek_bool
@@ -1418,11 +1419,6 @@
     \end{tsremark}
   }
 
-%\cs_show:N \NewDocumentEnvironment 
-%\cs_show:N \__cmd_new_env:ennn
-%\cs_show:N \__cmd_new_env:nnnn
-%\cs_show:N \__cmd_declare_env:nnnn
-%\cs_show:N \__cmd_declare_env_internal:nnnn
 
 %%%% ARGH !!!!
 
