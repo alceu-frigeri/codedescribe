@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.13} {2025/10/03}
+%% This is version {1.14} {2025/10/06}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -307,7 +307,7 @@ This package aims at minimizing the number of commands, with object kind (if a m
 
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
-\describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled from this. It defaults to the font size at load time.}
+\describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
 \describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 \end{describelist}
@@ -606,6 +606,10 @@ This is based on the \tsobj[code]{\maketitle} from the \tsobj[pkg]{article} clas
 \describe{author}{Author's name. It's possible to use the \tsobj[code]{\footnote} command in it.}
 \describe{date}{Title's date.}
 \end{describelist*}
+\begin{tsremark}
+  The \tsobj{\footnote} (inside this) will use an uniquely assigned counter, starting at one each time this is used (to avoid \tsobj[pkg]{hyperref} warnings).
+\end{tsremark}
+
 
 \begin{codedescribe}[env]{tsabstract}
 \begin{codesyntax}

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.13} {2025/10/03}
+%% This is version {1.14} {2025/10/06}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/10/03}
-    {1.13}
+    {2025/10/06}
+    {1.14}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/10/03} ,
-     version     .code:n = {1.13} ,
+     date        .code:n = {2025/10/06} ,
+     version     .code:n = {1.14} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -340,7 +340,7 @@
 %%%
 %%%%%%%
 
-\dim_new:N \l__codedesc_linewidth_dim
+%\dim_new:N \l__codedesc_linewidth_dim
 \dim_new:N \l__codedesc_textcolwidth_dim
 
 \cs_new_protected:Npn \__codedesc_set_textcolwidth: 
@@ -553,6 +553,7 @@
 \__codedesc_object_define:nnn {macro}{code}{}
 \__codedesc_object_define:nnn {function}{code}{}
 %\__codedesc_group_define:nn {code} {xverb,color=red}
+%\__codedesc_object_define:nnn {xcode}{code}{xverb}
 
 	%\colorlet{c__codedesc_syntax_color}{ blue!60!black }
 	%\color_set:nn{c__codedesc_syntax_color}{ blue!60!black }
@@ -932,7 +933,6 @@
           {}
       }
     \__codedesc_Rbrace_tl
-    %\strut
   }
 
 \cs_generate_variant:Nn \__codedesc_list_typeset:nnn {nVV}
@@ -1074,7 +1074,7 @@
         \bool_set_true:N \l__codedesc_longblock_bool
         \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }
 
-        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.3 \marginparsep}
+        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.33 \marginparsep}
           {
             \bool_set_true:N \l__codedesc_llongblock_bool
           }
@@ -1165,8 +1165,6 @@
         \coffin_typeset:Nnnnn \l__codedesc_syntax_coffin {l}{t} {0pt}{0pt}      
       }
       
-%    \bool_set_false:N \l__codedesc_codedescribe_activ_bool
-      
     \skip_vertical:n{\l__codedesc_large_skip}\par
   }
   
@@ -1246,7 +1244,6 @@
   {
   }
 
-%\NewDocumentCommand \describe {mm}
 \cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
     \hcoffin_set:Nn \l_tmpb_coffin 
@@ -1443,7 +1440,6 @@
 	\null
 	\vskip 2em%
 	\begin{center}%
-		\let \footnote \thanks
 		{\LARGE \l__codedesc_title_tl \par}%
 		\vskip 1.5em%
 		{\large
@@ -1489,17 +1485,40 @@
 
 \makeatletter
 
+\tl_new:N \g__codedesc_footnote_tl
+\int_new:N \g__codedesc_footnote_int
 
+\cs_new_protected:Npn \__codedesc_footnote:nn #1#2
+  {
+    \footnotemark[#1]
+    \tl_gput_right:Nn \g__codedesc_footnote_tl {\footnotetext[#1]{#2}}
+  }
+
+\cs_new_protected:Npn \__codedesc_footnote:n #1
+  {
+    \int_gincr:N \g__codedesc_footnote_int
+    \exp_args:NV \__codedesc_footnote:nn \g__codedesc_footnote_int {#1}
+  }
+  
+\NewDocumentCommand{\__codedesc_footnote:w}{O{}m}
+  {
+    \tl_if_empty:nTF {#1}
+      { \__codedesc_footnote:n  {#2} }
+      { \__codedesc_footnote:nn {#1}{#2} }
+  }
+  
 \NewDocumentCommand \typesettitle {m}
   {
     \keys_set:nn {codedesc / title}{#1}
-  
   	\group_begin:
-    	\renewcommand\thefootnote{\@fnsymbol\c@footnote}%
-    	\def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
-    	\long\def\@makefntext##1{\parindent 1em\noindent
-    		\hb@xt@1.8em{%
-    			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+          \cs_set_eq:NN \footnote \__codedesc_footnote:w
+          \tl_gclear:N \g__codedesc_footnote_tl
+          \int_gzero:N \g__codedesc_footnote_int
+        	\def\thefootnote{\@fnsymbol\c@footnote}%
+        	\def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+        	\long\def\@makefntext##1{\parindent 1em\noindent
+        		\hb@xt@1.8em{%
+        			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
     	\if@twocolumn
       	\ifnum \col@number=\@ne
         	\__codedesc_make_title:
@@ -1511,7 +1530,8 @@
       	\global\@topnum\z@   % Prevents figures from going at top of page.
       	\__codedesc_make_title:
     	\fi
-    	\thispagestyle{plain}\@thanks
+    	\thispagestyle{plain}
+      \g__codedesc_footnote_tl
   	\group_end:
   }
 

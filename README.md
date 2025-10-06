@@ -86,8 +86,12 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
+* Version 1.14 (this)
+  - footnote work around for hyperref (addressing issue #13)
+  - documentation.
 
-* Version 1.13 (this)
+
+* Version 1.13
   - codedescribe/codesyntax/text interaction fine tuning (in longblock case)
   - removing "spurious code" (ancient leftover code).
 
