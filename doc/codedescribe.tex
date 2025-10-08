@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.14} {2025/10/06}
+%% This is version {1.15} {2025/10/08}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -53,7 +53,7 @@
   
 \begin{typesetabstract}
 
-This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,pifont} (and \tsobj[pkg]{xpeekahead} since release 1.11). Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
+This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,xpeekahead,pifont}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
 
 No assumption is made about page layout (besides ``having a marginpar''),  or underlying macros, so that it can be used with any document class.
 
@@ -301,7 +301,7 @@ Sets the base font style used when typesetting the 'code demo', default being \t
 
 \section{codedescribe Package}
 
-This package aims at minimizing the number of commands, with object kind (if a macro, or a function, or environment, or variable, or key ...) as a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
+This package aims at minimizing the number of commands, being the object kind (if a macro, or environment, or variable, or key ...) a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
 
 \subsection{Package Options}
 
@@ -346,7 +346,7 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
 %\ExplSyntaxOff
 
 \subsubsection{Format Groups}\label{format-group}
-Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re)define custom \tsobj[arg]{format-groups}. The following ones are pre-defined:
+Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom \tsobj[arg]{format-groups}. The following ones are predefined:
 \begin{describelist*}{keys}
   \describe {meta} {which sets \tsobj[keys]{meta,color}}
   \describe {verb} {which sets \tsobj[keys]{color}}
