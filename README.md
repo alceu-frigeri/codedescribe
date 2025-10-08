@@ -86,8 +86,13 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.14 (this)
-  - footnote work around for hyperref (addressing issue #13)
+*Version 1.15 (this)
+  - pre-compiling regex
+  - removing llongblock bool ...
+  - [#14](https://github.com/alceu-frigeri/codedescribe/issues/14) (typo... in code)
+
+* Version 1.14 
+  - footnote work around for hyperref (addressing issue [#13](https://github.com/alceu-frigeri/codedescribe/issues/13))
   - documentation.
 
 

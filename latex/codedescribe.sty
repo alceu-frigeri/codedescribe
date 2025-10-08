@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.14} {2025/10/06}
+%% This is version {1.15} {2025/10/08}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/10/06}
-    {1.14}
+    {2025/10/08}
+    {1.15}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -36,8 +36,8 @@
   {
      name        .code:n = {codedescribe} ,
      prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/10/06} ,
-     version     .code:n = {1.14} ,
+     date        .code:n = {2025/10/08} ,
+     version     .code:n = {1.15} ,
      description .code:n = {\LaTeX~Code~Description/Documentation}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -871,13 +871,14 @@
 
 \cs_generate_variant:cn {__codedesc_meta*:n} {V}  
 
-
+\regex_const:Nn \c__codedesc_spc_regex {\ }
+\regex_const:Nn \c__codedesc_tf_regex {TF$}
 
 \cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
     \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:nnN {\ }{}  \l_tmpb_tl
-    \regex_replace_once:nnNTF {TF}{}\l_tmpb_tl
+    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l_tmpb_tl
+    \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l_tmpb_tl
       {
         \l_tmpb_tl\textsl{\underline{TF}}
       }
@@ -889,7 +890,7 @@
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
     \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:nnN {\ }{}  \l_tmpb_tl
+    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l_tmpb_tl
     \l_tmpb_tl
   }
 
@@ -960,7 +961,7 @@
   
   
 \bool_new:N \l__codedesc_longblock_bool
-\bool_new:N \l__codedesc_llongblock_bool
+
 \coffin_new:N \l__codedesc_margin_coffin
 \coffin_new:N \l__codedesc_text_coffin
 \coffin_new:N \l__codedesc_syntax_coffin
@@ -970,13 +971,13 @@
   
 \bool_new:N  \l__codedesc_descnotes_bool 
 \bool_new:N  \l__codedesc_descdate_new_bool 
-%\tl_new:N    \l__codedesc_descdate_new_tl 
+
 \seq_new:N    \l__codedesc_descdate_new_seq 
 \bool_new:N  \l__codedesc_descdate_update_bool 
-%\tl_new:N    \l__codedesc_descdate_update_tl
+
 \seq_new:N    \l__codedesc_descdate_update_seq
 \bool_new:N  \l__codedesc_sidenote_bool 
-%\tl_new:N    \l__codedesc_sidenote_tl
+
 \seq_new:N    \l__codedesc_sidenote_seq
 
 \coffin_new:N \__codedesc_describe_coffin
@@ -993,7 +994,7 @@
 %%%%  User/Document level commands
 %%%%
 %%%%%%%%%%%%%%%%%%%
- 
+
 
 \NewDocumentCommand \defgroupfmt {mm}
   {
@@ -1002,7 +1003,7 @@
 
 \NewDocumentCommand \defobjectfmt {mmm}
   {
-    \__codedesc_object_define:nn {#1} {#2} {#3}
+    \__codedesc_object_define:nnn {#1} {#2} {#3}
   }
 
 
@@ -1073,14 +1074,6 @@
       {
         \bool_set_true:N \l__codedesc_longblock_bool
         \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }
-
-        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.33 \marginparsep}
-          {
-            \bool_set_true:N \l__codedesc_llongblock_bool
-          }
-          {
-            \bool_set_false:N \l__codedesc_llongblock_bool
-          }
       }
       {
         \bool_set_false:N \l__codedesc_longblock_bool
@@ -1115,7 +1108,7 @@
 
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
-        \bool_if:NTF \l__codedesc_llongblock_bool
+        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.33 \marginparsep}
           {
             \coffin_join:NnnNnnnn 
               \l__codedesc_syntax_coffin {l}{t} 
@@ -1244,6 +1237,8 @@
   {
   }
 
+\regex_const:Nn \c__codedesc_describe_regex { \c{describe} }
+
 \cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
     \hcoffin_set:Nn \l_tmpb_coffin 
@@ -1259,8 +1254,7 @@
         \coffin_attach:NnnNnnnn
           \l_tmpa_coffin {r}{t}
           \l_tmpb_coffin {r}{t}
-          {0pt}{0pt}
-      
+          {0pt}{0pt}   
       }
       {
         \vcoffin_set:Nnn \l_tmpa_coffin 
@@ -1290,8 +1284,8 @@
     \coffin_typeset:Nnnnn 
       \l_tmpb_coffin {l}{t} {0pt}{-1.5pt}
     
-    \xpeekahead_cmd_peek:nnn 
-      { \c{describe} }
+    \xpeekahead_cmd_peek:NTF
+      \c__codedesc_describe_regex
       { 
         \bool_set_true:N  \l__codedesc_describe_peek_bool 
       }
@@ -1367,10 +1361,12 @@
 \bool_new:N \l__codedesc_describe_peek_bool
 \bool_set_false:N \l__codedesc_describe_peek_bool
 
+\regex_const:Nn \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
+
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {
-    \xpeekahead_env_set:nnnn {tsremark}
-      { \c{begin} \cB{tsremark} }
+    \xpeekahead_env_set:nNTF {tsremark}
+      \c__codedesc_remark_regex
       { 
         \bool_set_true:N  \l__codedesc_tsremark_peek_bool
       }
