@@ -87,12 +87,12 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.16 (next)
+* Version 1.16git  (this)
   - removing references to expl scratch variables, like \l_tmpa_tl and \l_tmpa_int.
   - using <pkginfograb> package's info
 
 
-* Version 1.15 (this)
+* Version 1.15
   - pre-compiling regex
   - removing llongblock bool ...
   - [#14](https://github.com/alceu-frigeri/codedescribe/issues/14) (typo... in code)
