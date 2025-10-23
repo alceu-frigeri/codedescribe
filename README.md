@@ -89,7 +89,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 * Version 1.16  (this)
   - removing references to expl scratch variables, like `\l_tmpa_tl` and `\l_tmpa_int`.
-  - using `pkginfograb` package's info
+  - using `pkginfograb`
 
 
 * Version 1.15
