@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.15} {2025/10/08}
+%% This is version {{1.16}} {2025/10/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,30 +22,25 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/10/08}
-    {1.15}
+    {2025/10/23}
+    {{1.16}}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
 %%%
 %%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% \pkginfograb_set:nn {<pkg-name>} { props} for each and all.
 %%%
 %%%%%%%
-\keys_define:nn { codedescribe / pkg info}
+\RequirePackage{pkginfograb}
+\pkginfograb_set:nn { codedescribe}
   {
-     name        .code:n = {codedescribe} ,
-     prefix      .code:n = {codedesc} ,
-     date        .code:n = {2025/10/08} ,
-     version     .code:n = {1.15} ,
-     description .code:n = {\LaTeX~Code~Description/Documentation}
+     name        = {codedescribe} ,
+     prefix      = {codedesc} ,
+     date        = {2025/10/23} ,
+     version     = {{1.16}} ,
+     description = {\LaTeX~Code~Description/Documentation}
   }
-\cs_if_exist:NF \PkgInfo 
-  {
-    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
-    \NewDocumentCommand \PkgDescription {m} 
-      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
-  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -62,6 +57,16 @@
 
 \bool_new:N \l__codedesc_loadlisting_bool
 \bool_set_true:N \l__codedesc_loadlisting_bool
+
+%% instead of using expl scratch variables.
+\tl_new:N \l__codedesc_tmpa_tl
+\tl_new:N \l__codedesc_tmpb_tl
+\seq_new:N \l__codedesc_tmpa_seq
+\seq_new:N \l__codedesc_tmpb_seq
+\coffin_new:N \l__codedesc_tmpa_coffin
+\coffin_new:N \l__codedesc_tmpb_coffin
+\fp_new:N \l__codedesc_tmpa_fp
+\fp_new:N \l__codedesc_tmpb_fp
 
 
 %
@@ -212,7 +217,7 @@
 \keys_define:nn { codedescribe }
   {
     nolisting .usage:n    = load ,
-  	nolisting  .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
+  	nolisting .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
     nolisting .default:n  = {true} ,
     
     base~ skip .usage:n   = load ,
@@ -235,15 +240,18 @@
       {
         \msg_redirect_module:nnn {codedesc}      { warning } { error }
       } ,
+
+    info grab .usage:n    = load ,
+  	info grab .bool_set:N = \l__codedesc_infograb_aliases_bool ,
+    info grab .default:n  = {true} ,
   }
 \ProcessKeyOptions [codedescribe ]
 
 \bool_if:NT \l__codedesc_loadlisting_bool
-  {
-    \RequirePackage{codelisting}
-  }
+  { \RequirePackage{codelisting} }
 
-
+\bool_if:NT \l__codedesc_infograb_aliases_bool
+  { \pkginfograb_set_aliases: }
 
 \cs_generate_variant:Nn \tl_set:Nn {Ne}
 \cs_generate_variant:Nn \keys_set:nn {ne}
@@ -350,8 +358,8 @@
 %      {}
 %      {
 %%        \dim_set:Nn \l__codedesc_linewidth_dim {\linewidth}
-%%        \fp_set:Nn \l_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
-%%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth - \fp_use:N \l_tmpa_fp \columnsep}
+%%        \fp_set:Nn \l__codedesc_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
+%%        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth - \fp_use:N \l__codedesc_tmpa_fp \columnsep}
 %
 %        \dim_set:Nn \l__codedesc_textcolwidth_dim {\linewidth}
 %      }
@@ -444,43 +452,43 @@
     \keys_set:nn { codedesc / grp_scratch } {#1}
     \keys_set:nn { codedesc / scratch_def } {#2}
     
-    \tl_clear:N \l_tmpa_tl
-    \tl_clear:N \l_tmpb_tl
+    \tl_clear:N \l__codedesc_tmpa_tl
+    \tl_clear:N \l__codedesc_tmpb_tl
     \tl_if_empty:NF \l__codedesc_tmpfmt_tl
       { 
-        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpfmt_tl
-        \tl_set:Nn \l_tmpb_tl { , }
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfmt_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmpshape_tl
       { 
-        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl 
-        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpshape_tl
-        \tl_set:Nn \l_tmpb_tl { , }
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpshape_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmpcolor_tl
       { 
-        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
-        \tl_put_right:Nn \l_tmpa_tl{ color =  } 
-        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmpcolor_tl
-        \tl_set:Nn \l_tmpb_tl { , }
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
+        \tl_put_right:Nn \l__codedesc_tmpa_tl{ color =  } 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpcolor_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmplbracket_tl
       { 
-        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
-        \tl_put_right:Nn \l_tmpa_tl { lbracket = } 
-        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmplbracket_tl
-        \tl_set:Nn \l_tmpb_tl { , }
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
+        \tl_put_right:Nn \l__codedesc_tmpa_tl { lbracket = } 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmplbracket_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
     \tl_if_empty:NF \l__codedesc_tmprbracket_tl
       { 
-        \tl_put_right:NV \l_tmpa_tl \l_tmpb_tl
-        \tl_put_right:Nn \l_tmpa_tl { rbracket = } 
-        \tl_put_right:NV \l_tmpa_tl \l__codedesc_tmprbracket_tl
-%        \tl_set:Nn \l_tmpb_tl { , }
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
+        \tl_put_right:Nn \l__codedesc_tmpa_tl { rbracket = } 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmprbracket_tl
+%        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
       
-    \keys_define:ne { codedesc / grp_scratch } { #1 .meta:nn = { codedesc / scratch_def } { \l_tmpa_tl} }
-    \keys_define:ne { codedesc / grp_fmt } { #1 .meta:nn = { codedesc / base_fmt } { \l_tmpa_tl} }
+    \keys_define:ne { codedesc / grp_scratch } { #1 .meta:nn = { codedesc / scratch_def } { \l__codedesc_tmpa_tl} }
+    \keys_define:ne { codedesc / grp_fmt } { #1 .meta:nn = { codedesc / base_fmt } { \l__codedesc_tmpa_tl} }
   }
 
 
@@ -876,22 +884,22 @@
 
 \cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
-    \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l_tmpb_tl
-    \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l_tmpb_tl
+    \tl_set:Ne \l__codedesc_tmpb_tl {\tl_to_str:n{#1}}
+    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l__codedesc_tmpb_tl
+    \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l__codedesc_tmpb_tl
       {
-        \l_tmpb_tl\textsl{\underline{TF}}
+        \l__codedesc_tmpb_tl\textsl{\underline{TF}}
       }
-      { \l_tmpb_tl }  
+      { \l__codedesc_tmpb_tl }  
   }
 
 \cs_generate_variant:Nn \__codedesc_macro_typeset:n {V}
 
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
-    \tl_set:Ne \l_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l_tmpb_tl
-    \l_tmpb_tl
+    \tl_set:Ne \l__codedesc_tmpb_tl {\tl_to_str:n{#1}}
+    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l__codedesc_tmpb_tl
+    \l__codedesc_tmpb_tl
   }
 
 \cs_generate_variant:Nn \__codedesc_verb_nospc_typeset:n {V}
@@ -900,24 +908,28 @@
 
 \cs_new_protected:Npn \__codedesc_list_typeset:nnn #1#2#3
   {
-    \seq_set_from_clist:Nn \l_tmpa_seq {#1}
-    \bool_set:Nn \l__codedesc_bool {\seq_if_empty_p:N \l_tmpa_seq}
-    \tl_set:Nn \l__codedesc_middle_tl {}
-    \tl_set:Nn \l__codedesc_lastone_tl {}
+    \seq_set_from_clist:Nn \l__codedesc_tmpa_seq {#1}
+    
+    \seq_if_empty:NTF \l__codedesc_tmpa_seq
+      { \bool_set_true:N \l__codedesc_bool }
+      { \bool_set_false:N \l__codedesc_bool }
+
+    \tl_clear:N \l__codedesc_middle_tl
+    \tl_clear:N \l__codedesc_lastone_tl
     
     \__codedesc_strut_tl
     \__codedesc_Lbrace_tl
 
     \bool_until_do:Nn \l__codedesc_bool 
       {
-        \seq_pop_left:NNTF \l_tmpa_seq \l_tmpa_tl
+        \seq_pop_left:NNTF \l__codedesc_tmpa_seq \l__codedesc_tmpa_tl
           {
-            \seq_if_empty:NTF \l_tmpa_seq
+            \seq_if_empty:NTF \l__codedesc_tmpa_seq
               {
                 \l__codedesc_lastone_tl
                 {
                   \__codedesc_metafmt:
-                  \__codedesc_typeset_tl:V \l_tmpa_tl
+                  \__codedesc_typeset_tl:V \l__codedesc_tmpa_tl
                 }
                 \bool_set_true:N \l__codedesc_bool
               }
@@ -925,7 +937,7 @@
                 \l__codedesc_middle_tl                
                 {
                   \__codedesc_metafmt:
-                  \__codedesc_typeset_tl:V \l_tmpa_tl
+                  \__codedesc_typeset_tl:V \l__codedesc_tmpa_tl
                 }
                 \tl_set:Nn \l__codedesc_middle_tl {#2}
                 \tl_set:Nn \l__codedesc_lastone_tl {#3}
@@ -943,12 +955,12 @@
 
 \cs_new_protected:Npn \__codedesc_args_typeset:nnnn #1#2#3#4
   {
-    \seq_set_from_clist:Nn \l_tmpa_seq {#3}
+    \seq_set_from_clist:Nn \l__codedesc_tmpa_seq {#3}
     \group_begin:
       \__codedesc_metafmt_set:n {#1} 
       \__codedesc_strut_tl
       \__codedesc_metafmt:
-      \seq_map_inline:Nn \l_tmpa_seq {~\!\!#2 \__codedesc_meta:n {##1} #4 }                                  
+      \seq_map_inline:Nn \l__codedesc_tmpa_seq {~\!\!#2 \__codedesc_meta:n {##1} #4 }                                  
     \group_end:    
   }
 
@@ -1026,7 +1038,7 @@
       }
       
     
-    \seq_set_from_clist:Nn \l_tmpa_seq {#2}
+    \seq_set_from_clist:Nn \l__codedesc_tmpa_seq {#2}
     \__codedesc_set_textcolwidth: 
     \hcoffin_set:Nn \l__codedesc_margin_coffin 
       {
@@ -1035,7 +1047,7 @@
         
         \begin{tabular}{@{} l @{} }
           \__codedesc_hline:nnnn {\__codedesc_rulecolor_tl:}{0.5ex}{2}{0.25ex}
-          \seq_map_inline:Nn \l_tmpa_seq { \__codedesc_typeset_tl:n {##1} \__codedesc_exp_tl \\ } 
+          \seq_map_inline:Nn \l__codedesc_tmpa_seq { \__codedesc_typeset_tl:n {##1} \__codedesc_exp_tl \\ } 
           \bool_if:NTF \l__codedesc_descnotes_bool
             {
               \\[-2.5ex]
@@ -1201,7 +1213,7 @@
   }
 
   
-  \NewDocumentEnvironment{describelist}{O{20mm}m}
+\NewDocumentEnvironment{describelist}{O{20mm}m}
   {
      \skip_vertical:n{\l__codedesc_neg_skip}
   
@@ -1241,36 +1253,36 @@
 
 \cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
-    \hcoffin_set:Nn \l_tmpb_coffin 
+    \hcoffin_set:Nn \l__codedesc_tmpb_coffin 
       { 
         \__codedesc_metafmt:V \__codedesc_listkind_tl 
         \__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
       }      
-    \dim_compare:nNnTF {\coffin_wd:N \l_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
+    \dim_compare:nNnTF {\coffin_wd:N \l__codedesc_tmpb_coffin} > {\__codedesc_describelabel_wd_dim}
       {
-        \vcoffin_set:Nnn \l_tmpa_coffin 
+        \vcoffin_set:Nnn \l__codedesc_tmpa_coffin 
           { \__codedesc_describelabel_wd_dim } 
           {  ~\ ~ }
         \coffin_attach:NnnNnnnn
-          \l_tmpa_coffin {r}{t}
-          \l_tmpb_coffin {r}{t}
+          \l__codedesc_tmpa_coffin {r}{t}
+          \l__codedesc_tmpb_coffin {r}{t}
           {0pt}{0pt}   
       }
       {
-        \vcoffin_set:Nnn \l_tmpa_coffin 
+        \vcoffin_set:Nnn \l__codedesc_tmpa_coffin 
           { \__codedesc_describelabel_wd_dim } 
           { 
             \__codedesc_metafmt:V \__codedesc_listkind_tl
             \noindent\__codedesc_ragged_tl: \__codedesc_typeset_tl:n {#1}
           }          
       }
-    \vcoffin_set:Nnn \l_tmpb_coffin 
+    \vcoffin_set:Nnn \l__codedesc_tmpb_coffin 
       { \__codedesc_describelist_wd_dim } 
       { \noindent  #2 \skip_vertical:N \l__codedesc_coffinskip_dim }   
       
     \__codedesc_join_tl: 
-      \l_tmpb_coffin {l}{T} 
-      \l_tmpa_coffin {r}{B} 
+      \l__codedesc_tmpb_coffin {l}{T} 
+      \l__codedesc_tmpa_coffin {r}{B} 
       {-\marginparsep}{0pt}
 
     \bool_if:NTF \l__codedesc_describe_peek_bool
@@ -1282,7 +1294,7 @@
      
     \noindent
     \coffin_typeset:Nnnnn 
-      \l_tmpb_coffin {l}{t} {0pt}{-1.5pt}
+      \l__codedesc_tmpb_coffin {l}{t} {0pt}{-1.5pt}
     
     \xpeekahead_cmd_peek:NTF
       \c__codedesc_describe_regex

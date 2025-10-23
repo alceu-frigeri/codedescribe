@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.15} {2025/10/08}
+%% This is version {{1.16}} {2025/10/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -33,7 +33,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage[strict]{codedescribe}
+\usepackage[strict,infograb]{codedescribe}
 \usepackage{enumitem}
 
 \RequirePackage[backend=biber]{biblatex}
@@ -184,7 +184,7 @@ This will typeset (as \tsobj{\tscode}) the merged contents from \tsobj[marg]{st-
 	\begin{codesyntax}%
 		\tsmacro{\tsexec}{st-name}\tsargs[oarg]{index}
 	\end{codesyntax}
-Unlike the previous commands which are all executed in a local group (discarded at the end) this will execute the code stored at \tsobj[marg]{st-name}\tsargs[oarg]{index} in the current \LaTeX\  group.
+Unlike the previous commands which are all executed in a local group (discarded at the end) this will execute the code stored at \tsobj[marg]{st-name}\tsargs[oarg]{index} in the current \LaTeX{} group.
 
 \end{codedescribe}
 
@@ -281,21 +281,21 @@ those set the \tsobj[key]{codeprefix} (default: \LaTeX{} Code:) and \tsobj[key]{
 \begin{codesyntax} %
 	\tsobj[key]{parindent}
 \end{codesyntax}
-Sets the indentation to be used when 'demonstrating' \LaTeX\ code (\tsobj[code]{\tsdemo}). Defaults to whatever value \tsobj[code]{\parindent} was when the package was first loaded.
+Sets the indentation to be used when `demonstrating' \LaTeX{}code (\tsobj[code]{\tsdemo}). Defaults to whatever value \tsobj[code]{\parindent} was when the package was first loaded.
 \end{codedescribe}
 
 \begin{codedescribe}[key]{ruleht}%-very-long-long-long,xyz,xyh,kjh,ljd,kls}
 \begin{codesyntax} %
 	\tsobj[key]{ruleht}
 \end{codesyntax}
-When typesetting the 'code demo' (\tsobj{\tsdemo}) a set of rules are drawn. The Default, 1, equals to \tsobj{\arrayrulewidth} (usually 0.4pt).
+When typesetting the `code demo' (\tsobj{\tsdemo}) a set of rules are drawn. The Default, 1, equals to \tsobj{\arrayrulewidth} (usually 0.4pt).
 \end{codedescribe}
 
 \begin{codedescribe}[key,new=2023/11/18]{basicstyle}%-very-long-long-long,xyz,xyh,kjh,ljd,kls}
 \begin{codesyntax} %
 	\tsobj[key]{basicstyle}
 \end{codesyntax}
-Sets the base font style used when typesetting the 'code demo', default being \tsobj{\footnotesize} \tsobj{\ttfamily}
+Sets the base font style used when typesetting the `code demo', default being \tsobj{\footnotesize} \tsobj{\ttfamily}
 \end{codedescribe}
 
 
@@ -327,10 +327,10 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
   \describe {verb} {to typeset *verbatim*,}
   \describe {xverb} {to typeset *verbatim*, suppressing all spaces,}
   \describe {code} {to typeset *verbatim*, suppressing all spaces and replacing a TF by \underline{TF},}
-  \describe {nofmt} {in case of a redefinition, to remove the 'base' formatting,}
+  \describe {nofmt} {in case of a redefinition, to remove the `base' formatting,}
   \describe {slshape} {to use a slanted font shape,}
   \describe {itshape} {to use an italic font shape,}
-  \describe {noshape} {in case of a redefinition, to remove the 'base' shape,}
+  \describe {noshape} {in case of a redefinition, to remove the `base' shape,}
   \describe {lbracket}  {defines the left bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
   \describe {rbracket}  {defines the right bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
   \describe {color}   {defines the text color. \textbf{Note:} this key must have an associated value (a color, as understood by \tsobj[pkg]{xcolor} package).}
@@ -360,7 +360,7 @@ Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom 
   \describe {pkg}  {which sets \tsobj[keys]{slshape,color}}
 \end{describelist*}
 \begin{tsremark}
-\tsobj[keys]{color} was used in the list above just as a 'reminder' that a color is defined/associated with the given group, it can be changed with \tsobj{\defgroupfmt}.
+\tsobj[keys]{color} was used in the list above just as a `reminder' that a color is defined/associated with the given group, it can be changed with \tsobj{\defgroupfmt}.
 \end{tsremark}
 
 \subsubsection{Object Types}\label{obj-types}
@@ -486,7 +486,7 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
   ~~\ldots
 \tsmacro{\end{describelist}}{}
   \end{codesyntax}
-This sets a \tsobj[env]{description} like 'list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the marginpar. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
+This sets a \tsobj[env]{description} like `list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the marginpar. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
 \tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}. 
 \end{codedescribe}
 
@@ -548,7 +548,7 @@ These are just short-cuts for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsob
 \tsmacro{\typesetmeta}{name}
 \tsmacro{\tsmeta}{name}
 \end{codesyntax}
- These will just typeset \tsobj[meta]{name} between left/right 'angles' (no further formatting).
+ These will just typeset \tsobj[meta]{name} between left/right `angles' (no further formatting).
  
 \end{codedescribe}
 
