@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {{1.16}} {2025/10/23}
+%% This is version {1.16a} {2025/10/27}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -38,6 +38,7 @@
 
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
+
 
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
@@ -191,6 +192,7 @@ Unlike the previous commands which are all executed in a local group (discarded 
 
 
 \subsubsection{Code Keys}\label{code-keys}
+
 
 \begin{codedescribe}{\setcodekeys}
 	\begin{codesyntax}%
@@ -515,6 +517,8 @@ An error will be raised (undefined control sequence) if called outside of a \tso
 \tsmacro{\tsobj}[obj-type]{csv-list}
 \end{codesyntax}
 This is the main typesetting command, each term of \tsobj[marg]{csv-list} will be separated by a comma and formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[key]{code}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom}) and the following keys:
+
+
 \begin{describelist*}{key}
   \describe{mid sep}{To change the item separator. Defaults to a comma, can be anything.}
   \describe{sep}{To change the separator between the last two items. Defaults to ``and''.}
@@ -607,7 +611,7 @@ This is based on the \tsobj[code]{\maketitle} from the \tsobj[pkg]{article} clas
 \describe{date}{Title's date.}
 \end{describelist*}
 \begin{tsremark}
-  The \tsobj{\footnote} (inside this) will use an uniquely assigned counter, starting at one each time this is used (to avoid \tsobj[pkg]{hyperref} warnings).
+  The \tsobj{\footnote} (inside this) will use an uniquely assigned counter, starting at one, each time this is used (to avoid \tsobj[pkg]{hyperref} warnings).
 \end{tsremark}
 
 

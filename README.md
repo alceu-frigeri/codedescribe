@@ -86,8 +86,11 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
+* Version 1.16a (this)
+  - code cleanup (better following expl3 convention) and a bit of optimization.
 
-* Version 1.16  (this)
+
+* Version 1.16
   - removing references to expl scratch variables, like `\l_tmpa_tl` and `\l_tmpa_int`.
   - using `pkginfograb`
 
