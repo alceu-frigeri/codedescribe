@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.16a} {2025/10/27}
+%% This is version {1.16b} {2025/10/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -22,8 +22,8 @@
 
 \ProvidesExplPackage
     {codedescribe}
-    {2025/10/27}
-    {1.16a}
+    {2025/10/30}
+    {1.16b}
     {LaTeX Code Description/Documentation}
 
 %%%%%%%
@@ -37,8 +37,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/10/27} ,
-     version     = {1.16a} ,
+     date        = {2025/10/30} ,
+     version     = {1.16b} ,
      description = {\LaTeX~Code~Description/Documentation}
   }
 %%%%%%%
@@ -626,8 +626,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\cs_set_eq:NN    \__codedesc_metasize_tl: \small
-\cs_set_eq:NN    \__codedesc_metafont_tl: \ttfamily
 
 
   %\colorlet{c__codedesc_none_color}{red!70!black}
@@ -840,10 +838,16 @@
 
 \cs_new_protected:Npn \__codedesc_metafmt_clear:
   {
-    \cs_set:Npn \__codedesc_rulecolor: { \__codedesc_metacolor: }
+    \cs_set_eq:NN    \__codedesc_metasize_tl: \small
+    \cs_set_eq:NN    \__codedesc_metafont_tl: \ttfamily
+
     \cs_set:Npn \__codedesc_metashape: { }
+    \cs_set:Npn \__codedesc_metacolor: { }
+
+    \cs_set:Npn \__codedesc_rulecolor: { \__codedesc_metacolor: }
     \cs_set:Npn \__codedesc_typeset:n { }
     \cs_set:Npn \__codedesc_typeset:V { }
+    
     \tl_set:Nn \l__codedesc_Lbracket_tl { }
     \tl_set:Nn \l__codedesc_Rbracket_tl { }
     \tl_set:Nn \l__codedesc_sep_tl {,~}
@@ -861,19 +865,13 @@
   
 \__codedesc_metafmt_clear:
 
+
 \cs_new_protected:Npn \__codedesc_metafmt_set:nn #1#2
-  {
-%    \__codedesc_metafmt_clear:
-    \keys_set:nn {codedesc / #1}{#2}
-  }
+  { \keys_set:nn {codedesc / #1}{#2} }
 
 \cs_new_protected:Npn \__codedesc_metafmt_set:n #1
-  {
-%    \__codedesc_metafmt_clear:
-    \keys_set:nn {codedesc / format}{#1}
-  }
+  { \keys_set:nn {codedesc / format}{#1} }
   
-  %%% prob ok {o} => {V}
 \cs_generate_variant:Nn \__codedesc_metafmt_set:n {V}
 
 \cs_new_protected:Npn \__codedesc_metafmt:n #1
@@ -882,7 +880,6 @@
     \__codedesc_metafmt:
   }
 
-  %%% prob ok {o} => {V}
 \cs_generate_variant:Nn \__codedesc_metafmt:n {V}
 
   
@@ -917,13 +914,12 @@
   }  
 \cs_generate_variant:cn {__codedesc_meta*:n} {V}  
 
-\regex_const:Nn \c__codedesc_spc_regex {\ }
 \regex_const:Nn \c__codedesc_tf_regex {TF$}
 
 \cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
-    \tl_set:Ne \l__codedesc_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l__codedesc_tmpb_tl
+    \str_set:Nn \l__codedesc_tmpb_tl {#1}
+    \str_remove_all:Nn \l__codedesc_tmpb_tl {~}
     \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l__codedesc_tmpb_tl
       {
         \l__codedesc_tmpb_tl\textsl{\underline{TF}}
@@ -935,15 +931,12 @@
 
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
-    \tl_set:Ne \l__codedesc_tmpb_tl {\tl_to_str:n{#1}}
-    \regex_replace_all:NnN \c__codedesc_spc_regex {}  \l__codedesc_tmpb_tl
+    \str_set:Nn \l__codedesc_tmpb_tl {#1}
+    \str_remove_all:Nn \l__codedesc_tmpb_tl {~}
     \l__codedesc_tmpb_tl
   }
 
 \cs_generate_variant:Nn \__codedesc_verb_nospc_typeset:n {V}
-
-
-
 
 
 \cs_new_protected:Npn \__codedesc_list_typeset:nnn #1#2#3
@@ -1007,33 +1000,30 @@
 %%%%%%%%%%%%%%%%%%%
   
   
-\bool_new:N \l__codedesc_longblock_bool
+\bool_new:N   \l__codedesc_longblock_bool
 
 \coffin_new:N \l__codedesc_margin_coffin
 \coffin_new:N \l__codedesc_text_coffin
 \coffin_new:N \l__codedesc_syntax_coffin
 \bool_new:N   \g__codedesc_syntax_bool
-\dim_new:N \l__codedesc_syntax_wd_dim
-\dim_new:N \l__codedesc_margin_wd_dim
+\dim_new:N    \l__codedesc_syntax_wd_dim
+\dim_new:N    \l__codedesc_margin_wd_dim
   
-%\bool_new:N  \l__codedesc_descnotes_bool 
-%\bool_new:N  \l__codedesc_descdate_new_bool 
-
 \seq_new:N    \l__codedesc_descdate_new_seq 
-%\bool_new:N  \l__codedesc_descdate_update_bool 
 
 \seq_new:N    \l__codedesc_descdate_update_seq
-%\bool_new:N  \l__codedesc_sidenote_bool 
 
 \seq_new:N    \l__codedesc_sidenote_seq
 
 \coffin_new:N \l__codedesc_describe_coffin
-\dim_new:N \l__codedesc_describelabel_wd_dim
-\dim_new:N \l__codedesc_describelist_wd_dim
-%\tl_new:N \__codedesc_join:NnnNnnnn
-\tl_new:N \l__codedesc_ragged_tl
+\dim_new:N    \l__codedesc_describelabel_wd_dim
+\dim_new:N    \l__codedesc_describelist_wd_dim
+\tl_new:N     \l__codedesc_ragged_tl
 
-\dim_new:N \__codedesc_paradvance_dim  
+\dim_new:N    \__codedesc_paradvance_dim  
+
+\dim_new:N    \l__codedesc_tmpa_dim
+\dim_new:N    \l__codedesc_tmpb_dim
   
   
 %%%%%%%%%%%%%%%%%%%
@@ -1053,9 +1043,6 @@
     \__codedesc_object_define:nnn {#1} {#2} {#3}
   }
 
-
-\dim_new:N \l__codedesc_tmpa_dim
-\dim_new:N \l__codedesc_tmpb_dim
 
 \NewDocumentEnvironment {codedescribe}{O{code}m}
   {
@@ -1365,7 +1352,6 @@
     \group_begin:
     \__codedesc_metafmt_set:n {code} %.... argh!
     \__codedesc_list_typeset:nnn{#1}{,~}{,~}
-%    \__codedesc_macro_typeset:n{#1}
     \,\__codedesc_args_typeset:nnnn {oarg} [ {#2} ]
     \__codedesc_args_typeset:nnnn {marg} \{ {#3} \}
     \group_end:
@@ -1400,20 +1386,20 @@
 
 
 
-\bool_new:N \l__codedesc_codedescribe_activ_bool
+\bool_new:N       \l__codedesc_codedescribe_activ_bool
 \bool_set_false:N \l__codedesc_codedescribe_activ_bool
-\bool_new:N \l__codedesc_codesyntax_activ_bool
+\bool_new:N       \l__codedesc_codesyntax_activ_bool
 \bool_set_false:N \l__codedesc_codesyntax_activ_bool
 
-\coffin_new:N \l__codedesc_tsremark_coffin
+\coffin_new:N     \l__codedesc_tsremark_coffin
 
-\bool_new:N \l__codedesc_tsremark_peek_bool
+\bool_new:N       \l__codedesc_tsremark_peek_bool
 \bool_set_false:N \l__codedesc_tsremark_peek_bool
 
-\bool_new:N \l__codedesc_describe_peek_bool
+\bool_new:N       \l__codedesc_describe_peek_bool
 \bool_set_false:N \l__codedesc_describe_peek_bool
 
-\regex_const:Nn \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
+\regex_const:Nn   \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
 
 \NewDocumentEnvironment {tsremark} {O{Note:}}
   {

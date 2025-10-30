@@ -86,7 +86,10 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.16a (this)
+* Version 1.16b (this)
+  - fixing [#15](https://github.com/alceu-frigeri/codedescribe/issues/15) (codesyntax snafu, introduced by last update)
+
+* Version 1.16a
   - code cleanup (better following expl3 convention) and a bit of optimization.
 
 
