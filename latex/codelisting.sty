@@ -741,7 +741,7 @@
 \regex_const:Nn \c__codelist_peek_regex 
   {
     \c{typesetcode} | \c{tscode} | \c{typesetmergedcode} | \c{tsmergedcode} | 
-    \c{typesetdemo} | \c{tsdemo} | \c{typesetresult} | \c{tsresult} 
+    \c{typesetdemo} | \c{tsdemo} | \c{typesetresult} | \c{tsresult}
   }
 
 \xpeekahead_set:NNTF
@@ -749,22 +749,22 @@
   \c__codelist_peek_regex
   { 
    \bool_set_true:N  \l__codelist_tscode_peek_bool
-    \l__codelist_tscode_tl:
+    \l__codelist_tscode_tl
   }
   { 
     \bool_set_false:N \l__codelist_tscode_peek_bool
-    \l__codelist_tscode_tl:
+    \l__codelist_tscode_tl
   }    
   
 
 \bool_new:N \l__codelist_tscode_peek_bool
 
-\tl_new:N \l__codelist_tscode_tl:
+\tl_new:N \l__codelist_tscode_tl
 
 
 \NewDocumentCommand{\tscode}{sO{}mO{}}
   {
-    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored} }
+    \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
 
@@ -774,7 +774,7 @@
 
 \NewDocumentCommand{\tsmergedcode}{sO{}m}
   {
-    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]} }
+    \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
   
@@ -841,9 +841,8 @@
   
 \NewDocumentCommand{\tsdemo}{sO{}mO{}}
   {
-    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_democode:nnnn {#1}{#2}{#3}{#4} }
-    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
-    
+    \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_democode:nnnn {#1}{#2}{#3}{#4} }
+    \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode: 
   }
 
 
@@ -880,7 +879,7 @@
 
 \NewDocumentCommand{\tsresult}{sO{}mO{}}
   {
-    \tl_set:Nn \l__codelist_tscode_tl: { \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4} }
+    \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
 
