@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.16b} {2025/10/30}
+%% This is version {1.17} {2025/11/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -20,26 +20,23 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 
-\ProvidesExplPackage
-    {codedescribe}
-    {2025/10/30}
-    {1.16b}
-    {LaTeX Code Description/Documentation}
-
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% \pkginfograb_set:nn {<pkg-name>} { props} for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { codedescribe}
+\pkginfograbProvidesExplPackage {codedescribe}
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/10/30} ,
-     version     = {1.16b} ,
-     description = {\LaTeX~Code~Description/Documentation}
+     date        = {2025/11/20} ,
+     version     = {1.17} ,
+     description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
 %%% End of cut-n-paste
@@ -220,6 +217,18 @@
   	nolisting .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
     nolisting .default:n  = {true} ,
     
+    no~ listing .usage:n    = load ,
+  	no~ listing .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
+    no~ listing .default:n  = {true} ,
+    
+    load~ xtra~ dialects .usage:n    = load ,
+  	load~ xtra~ dialects .code:n    =  { \PassOptionsToPackage{\CurrentOption}{codelisting} } ,
+    load~ xtra~ dialects .value_forbidden:n  = true ,
+    
+    TeX~ dialects  .usage:n   =  general ,
+    TeX~ dialects  .code:n    =  { \PassOptionsToPackage{\CurrentOption}{codelisting} } ,
+    TeX~ dialects  .value_required:n = true ,
+    
     base~ skip .usage:n   = load ,
     base~ skip .code:n  =
       {
@@ -250,8 +259,10 @@
 \bool_if:NT \l__codedesc_loadlisting_bool
   { \RequirePackage{codelisting} }
 
+
 \bool_if:NT \l__codedesc_infograb_aliases_bool
   { \pkginfograb_set_aliases: }
+
 
 \cs_generate_variant:Nn \tl_set:Nn {Ne}
 \cs_generate_variant:Nn \keys_set:nn {ne}
@@ -793,6 +804,12 @@
     sep.code:n = 
       {
         \tl_set:Nn \l__codedesc_lastsep_tl { ~ #1~ }
+      },
+  	%
+    or.usage:n = general,
+    or.code:n = 
+      {
+        \tl_set:Nn \l__codedesc_lastsep_tl { ~ or~ }
       },
   	%
     comma.usage:n = general,

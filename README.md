@@ -73,6 +73,9 @@ The Current Maintainer of this work is Alceu Frigeri
 * codedescribe.sty
     - set of macros to document LaTeX packages
 
+* codelstlang.sty
+    - set of listings dialect/language definitions
+
 * README.md (this file)
     - quick introduction
 
@@ -84,9 +87,14 @@ The Current Maintainer of this work is Alceu Frigeri
     - documentation in PDF format
 
 -------------
+## Change log
+* Version 1.17 (this)
+    - using ```\pkginfograbProvidesExplPackage```
+    - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
+    - New package options to set which TeX dialect(s) to be used. 
+    - New code key: `lststyle` to use a listings' user defined style, instead of the provided one.
 
-## Changelog
-* Version 1.16b (this)
+* Version 1.16b 
   - fixing [#15](https://github.com/alceu-frigeri/codedescribe/issues/15) (codesyntax snafu, introduced by last update)
 
 * Version 1.16a

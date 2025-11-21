@@ -12,41 +12,131 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.16b} {2025/10/30}
+%% This is version {1.17} {2025/11/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
 %%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-
-\ProvidesExplPackage
-    {codelisting}
-    {2025/10/30}
-    {1.16b}
-    {LaTeX Code Listing}
-
+   
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% \pkginfograb_set:nn {<pkg-name>} { props} for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { codelisting}
+\pkginfograbProvidesExplPackage {codelisting}
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/10/30} ,
-     version     = {1.16b} ,
-     description = {\LaTeX~Code~Listing}
+     date        = {2025/11/20} ,
+     version     = {1.17} ,
+     description = {LaTeX Code Listing}
   }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
 
+
+
 \RequirePackage{listings,scontents}
 \RequirePackage{xpeekahead}
+
+\bool_new:N \l__codelist_xtradialects_bool
+\tl_set:Nn \l__codelist_dialect_tl {alsolanguage = [doctools]TeX ,}
+
+\keys_define:nn { codelisting }
+  {    
+    load~ xtra~ dialects .usage:n    = load ,
+  	load~ xtra~ dialects .bool_set:N = \l__codelist_xtradialects_bool ,
+    load~ xtra~ dialects .value_forbidden:n  = true ,
+    
+    TeX~ dialects  .usage:n   =  general,
+    TeX~ dialects  .code:n    =  
+      { 
+        \tl_clear:N \l__codelist_dialect_tl
+        \clist_map_inline:nn {#1}
+          {
+            \tl_put_right:Nn 
+              \l__codelist_dialect_tl 
+              { 
+                alsolanguage = [##1]TeX ,
+              } 
+          } 
+      },
+    TeX~ dialects  .value_required:n = true,
+    
+  }
+\ProcessKeyOptions [codelisting ]
+
+
+\lstdefinelanguage[doctools]{TeX}[LaTeX]{TeX}
+  {
+   moretexcs       =     {setlength,
+      usepackage,newcommand,renewcommand,providecommand,RequirePackage,
+      SelectInputMappings,ifpdftex,ifpdfoutput,AtBeginEnvironment,ProvidesPackage,
+      maketitle,text,includegraphics,chapter,section,subsection,subsubsection,paragraph,
+      textmu,enquote,blockquote,ding,mathds,ifcsdef,Bra,Ket,Braket,subcaption,lettrine,
+      mdfsetup,captionof,listoffigures,listoftables,tableofcontents,appendix,
+      newcolumntype,rowfont,taburowcolors,rowcolor,rowcolors,bottomrule,
+      toprule,midrule,hypersetup,gls,printglossary,glsadd,newglossaryentry,newacronym,
+      mainmatter,frontmatter,geometry,KOMAoptions,setkomafont,addtokomafont,
+      si,SI,sisetup,unit,unitfrac,micro,newblock,ExecuteBibliographyOptions,addbibresource,
+      operatorname,frac,sfrac,dfrac,DeclareMathOperator,mathcal,underset,
+      democodefile,package,cs,command,env,DemoError,PrintDemo,theadstart,tbody,tsubheadstart,
+      tsubhead,tend,DefineCodeSection,SetCodeSection,BeginCodeSection,EndCodeSection,
+      IfDefined,IfUndefined,IfElseDefined,IfElseUndefined,IfMultDefined,IfNotDraft,
+      IfNotDraftElse,IfDraft,IfPackageLoaded,IfElsePackageLoaded,IfPackageNotLoaded,
+      IfPackagesLoaded,IfPackagesNotLoaded,ExecuteAfterPackage,ExecuteBeforePackage,
+      IfTikzLibraryLoaded,IfColumntypeDefined,IfColumntypesDefined,IfColorDefined,
+      IfColorsDefined,IfMathVersionDefined,SetTemplateDefinition,UseDefinition,IfFileExists,
+      iflanguage,setuptablefontsize,tablefontsize,setuptablestyle,tablestyle,
+      setuptablecolor,tablecolor,disablealternatecolors,tablealtcolored,tbegin,
+      tbody,tend,thead,theadstart,tsubheadstart,tsubhead,theadrow,tsubheadrow,
+      resettablestyle,theadend,tsubheadend,tableitemize,PreserveBackslash,
+      todo,missingfigure,lstloadlanguages,lstdefinestyle,lstset,
+      indexsetup,newglossarystyle,glossarystyle,deftranslation,newglossary,
+      usetikzlibrary,definecolor,colorlet,captionsetup,DeclareCaptionStyle,
+      floatsetup,EnableCrossrefs,DisableCrossrefs,PageIndex,CodelineIndex,CodelineNumbered,
+      cref,Cref,vref,eqnref,figref,tabref,secref,chapref}
+  }
+
+
+\bool_if:NTF \l__codelist_xtradialects_bool
+  { 
+    \RequirePackage{codelstlang} %% pre-loading those definined in this
+    \lstloadlanguages{
+      [LaTeX]TeX,
+      [doctools]TeX,
+      [l3kernelsign]TeX,
+      [l3expsign]TeX,
+      [l3amssign]TeX,
+      [l3pgfsign]TeX,
+      [l3bibtexsign]TeX,
+      [l3kernel]TeX,
+      [l3exp]TeX,
+      [l3ams]TeX,
+      [l3pgf]TeX,
+      [l3bibtex]TeX,
+      [kernel]TeX,
+      [xpacks]TeX,
+      [ams]TeX,
+      [pgf]TeX,
+      [pgfplots]TeX,
+      [bibtex]TeX,
+      [babel]TeX,
+      [hyperref]TeX
+    }
+  }
+  { 
+    \lstloadlanguages{[LaTeX]TeX,[doctools]TeX}
+  }
+
 
 \msg_new:nnnn {codelist} {invalid key}
   {
@@ -145,7 +235,11 @@
 \tl_set:Nn \l__codelist_rule_color_default_tl{c__codelist_gray_color}
 \tl_set:Nn \l__codelist_number_color_default_tl{c__codelist_gray_color}
 
-\keys_define:nn {codelist / options} {
+\keys_define:nn {codelist / options} {  
+  lststyle      .usage:n   =  general,
+  lststyle      .code:n    =  { \tl_set:Nn \l__codelist_basestyle_tl {#1} },
+  lststyle      .default:n =  {codestyle} ,
+
   settexcs      .usage:n   =  general,
   settexcs      .code:n    =  { \tl_set:Nn \l__codelist_texcsA_tl {#1} },
   settexcs      .default:n =   ,
@@ -366,6 +460,7 @@
       letter       ,
       other        ,
       basicstyle   ,
+      lststyle
   },
 }
 
@@ -388,146 +483,102 @@
 
 %%% listings
 %
-\lstdefinestyle{lstStyleDefault}{
-                              %%% appearance
-   ,basicstyle=\small\ttfamily % Standardschrift
-                              %%%  Space and placement
-   ,floatplacement=tbp        % is used as float place specifier
-   ,aboveskip=\medskipamount  % define the space above and
-   ,belowskip=\medskipamount  % below displayed listings.
-   ,lineskip=0pt              % specifies additional space between lines in listings.
-   ,boxpos=c                  % c,b,t
-   ,showlines=false           % prints empty lines at the end of listings
-                              %%% characters
-   ,extendedchars=true        % allows or prohibits extended characters
-                              % in listings, that means (national)
-                              % characters of codes 128-255.
-   ,upquote=true              % determines printing of quotes
-   ,tabsize=2,                % chars of tab
-   ,showtabs=false            % do not show tabs
-   ,showspaces=false          % do not show spaces
-   ,showstringspaces=false    % do not show blank spaces in string
-                              %%% Line numbers
-   ,numbers=none              % left, right, none
-                              %%% Captions
-   ,numberbychapter=true      %
-   ,captionpos=b              % t,b
-   ,abovecaptionskip=\smallskipamount % the vertical space respectively above
-   ,belowcaptionskip=\smallskipamount % or below each caption
-                              %%% Margins and line shape
-   ,linewidth=\linewidth      % defines the base line width for listings.
-   ,xleftmargin=0pt           % extra margins
-   ,xrightmargin=0pt          %
-   ,resetmargins=false        % indention from list environments like enumerate
-                              % or itemize is reset, i.e. not used.
-   ,breaklines=true           % line breaking of long lines.
-   ,breakatwhitespace=false   % allows line breaks only at white space.
-   ,breakindent=0pt           % is the indention of the second, third, ...
-                              % line of broken lines.
-   ,breakautoindent=true      % apply intendation
-   ,columns=flexible          %
-   ,keepspaces=true           %
-}
 
+\cs_new_protected:Npn \__codelist_set_style:n #1
+  {
+    \lstdefinestyle{codestyle}{
+      
+      extendedchars     =      true  , % allows or prohibits extended characters
+      keepspaces        =      true  ,   %
+      linewidth         =      \linewidth  ,   % defines the base line width for listings.
+      showlines         =      false  , % prints empty lines at the end of listings
+                                  %%%  Space and placement
+      floatplacement    =      tbp  ,      % is used as float place specifier
+      boxpos            =      c  , % c  ,b  ,t
+                                  %%% characters
+                                  % in listings  , that means (national)
+                                  % characters of codes 128-255.
+      upquote           =      true  ,   % determines printing of quotes
+      tabsize           =      2  ,   % chars of tab
+      showtabs          =      false  ,   % do not show tabs
+      showspaces        =      false  ,   % do not show spaces
+      showstringspaces  =      false  ,   % do not show blank spaces in string
+    
+      numberbychapter   =      true  ,   %
+      captionpos        =      b  ,   % t  ,b
+      abovecaptionskip  =      \smallskipamount  , % the vertical space respectively above
+      belowcaptionskip  =      \smallskipamount  , % or below each caption
+                                  %%% Margins and line shape
+      xleftmargin       =      0pt  ,   % extra margins
+      xrightmargin      =      0pt  ,   %
+      resetmargins      =      false  ,   % indention from list environments like enumerate
+                                  % or itemize is reset  , i.e. not used.
+      columns           =      flexible  ,   % 
+          %%%
+          %%%
+          %%% 
+      language          =     [LaTeX]TeX  ,
+    
+      #1                %% This should end in a comma
+    
+          %%%
+          %%%
+          %%% 
+    	basicstyle        =      {\l__codelist_basicstyle_tl}  , %%\footnotesize\ttfamily  ,  
+    
+      numberstyle       =      {\l__codelist_numberstyle_tl}  ,   % style of numbers
+      numbersep         =      5pt  ,            % distance to text
+      numberblanklines  =      true  ,    %
+      stepnumber        =      1  ,             % seperation between numbers
+      numberfirstline   =      false  ,    % number first line always
+    
+    
+      rulecolor         =      {\l__codelist_rulecolor_tl}  ,
+    	backgroundcolor   =      {\l__codelist_bckgndcolor_tl}  ,
+      stringstyle       =      {\l__codelist_stringstyle_tl}  ,
+      commentstyle      =      {\l__codelist_commentstyle_tl}  ,
+      framerule         =      0pt  ,                        %0.4pt  ,
+    	nolol             =      true  ,
+    	frame             =      none  ,
+    	aboveskip         =      0pt  ,%-2ex  ,
+      belowskip         =      0pt  ,%-2ex  ,
+      lineskip          =      0pt  , % specifies additional space between lines in listings.
+      
+    	rulesep           =      0pt  ,
+      breakatwhitespace =      false  ,   % allows line breaks only at white space.
+      breakautoindent   =      true  ,   % apply intendation	
+      breaklines        =      true  ,
+    	breakindent       =      3em  ,
+%    	moretexcs         =      {\l__codelist_texcsA_tl}  ,
+%      moretexcs         =  [2] {\l__codelist_texcsB_tl}  ,
+%      moretexcs         =  [3] {\l__codelist_texcsC_tl}  ,
+%      moretexcs         =  [4] {\l__codelist_texcsD_tl}  ,
+      texcsstyle        = *    {\l__codelist_texcsAstyle_tl}  ,
+    	texcsstyle        = *[2] {\l__codelist_texcsBstyle_tl}  ,
+    	texcsstyle        = *[3] {\l__codelist_texcsCstyle_tl}  ,
+    	texcsstyle        = *[4] {\l__codelist_texcsDstyle_tl}  ,
+%    	morekeywords      =      {\l__codelist_keywdA_tl}  ,
+%    	morekeywords      =  [2] {\l__codelist_keywdB_tl}  ,
+%    	morekeywords      =  [3] {\l__codelist_keywdC_tl}  ,
+%    	morekeywords      =  [4] {\l__codelist_keywdD_tl}  ,
+      keywordstyle      =      {\l__codelist_keywdstyle_tl}  ,
+    	keywordstyle      =  [2] {\l__codelist_keywdBstyle_tl}  ,
+    	keywordstyle      =  [3] {\l__codelist_keywdCstyle_tl}  ,
+    	keywordstyle      =  [4] {\l__codelist_keywdDstyle_tl}  ,
+%    	emph              =      {\l__codelist_emphA_tl}  ,
+%    	emph              =  [2] {\l__codelist_emphB_tl}  ,
+%    	emph              =  [3] {\l__codelist_emphC_tl}  ,
+%    	emph              =  [4] {\l__codelist_emphD_tl}  ,
+      emphstyle         =      {\l__codelist_emphAstyle_tl}  ,
+      emphstyle         =  [2] {\l__codelist_emphBstyle_tl}  ,
+      emphstyle         =  [3] {\l__codelist_emphCstyle_tl}  ,
+      emphstyle         =  [4] {\l__codelist_emphDstyle_tl}  ,
+    }
+  }
+\cs_generate_variant:Nn \__codelist_set_style:n {V}
 
-\lstdefinestyle{lstDocStyleBase}{
-                              %%% base style
-   ,style=lstStyleDefault
+\__codelist_set_style:V \l__codelist_dialect_tl
 
-   ,commentstyle=\slshape
-                              %%% Line numbers
-   ,numbers=left              % left, right, none
-   ,stepnumber=1              % seperation between numbers
-   ,numberfirstline=false     % number first line always
-                              %
-   ,numberstyle={\l__codelist_numberstyle_tl}    % style of numbers
-   ,numbersep=5pt             % distance to text
-   ,numberblanklines=true     %
-                              %%% language
-   ,language = [LaTeX]TeX
-                              %%% commands
-                              % LaTeX programming
-   ,moretexcs={setlength,usepackage,newcommand,renewcommand,providecommand,RequirePackage,SelectInputMappings,ifpdftex,ifpdfoutput,AtBeginEnvironment,ProvidesPackage},
-   ,moretexcs={maketitle,text,includegraphics,chapter,section,subsection,
-     subsubsection,paragraph,textmu,enquote,blockquote,ding,mathds,ifcsdef,Bra,Ket,Braket,subcaption,lettrine,mdfsetup,captionof,listoffigures,listoftables,tableofcontents,appendix}
-   ,moretexcs={newcolumntype,rowfont,taburowcolors,rowcolor,rowcolors,bottomrule,
-     toprule,midrule,}
-   ,moretexcs={hypersetup}
-   ,moretexcs={gls,printglossary,glsadd,newglossaryentry,newacronym}
-   ,moretexcs={mainmatter,frontmatter,geometry,KOMAoptions,setkomafont,addtokomafont}
-   ,moretexcs={si,SI,sisetup,unit,unitfrac,micro}
-   ,moretexcs={newblock,ExecuteBibliographyOptions,addbibresource}
-   ,moretexcs={operatorname,frac,sfrac,dfrac,DeclareMathOperator,mathcal,underset}
-   ,moretexcs={democodefile,package,cs,command,env,DemoError,PrintDemo}
-   ,moretexcs={theadstart,tbody,tsubheadstart,tsubhead,tend}
-   ,moretexcs={DefineCodeSection,SetCodeSection,BeginCodeSection,EndCodeSection}
-   ,moretexcs={IfDefined,IfUndefined,IfElseDefined,IfElseUndefined,IfMultDefined,IfNotDraft,IfNotDraftElse,IfDraft,IfPackageLoaded,IfElsePackageLoaded,IfPackageNotLoaded,IfPackagesLoaded,IfPackagesNotLoaded,ExecuteAfterPackage,ExecuteBeforePackage,IfTikzLibraryLoaded,IfColumntypeDefined,IfColumntypesDefined,IfColorDefined,IfColorsDefined,IfMathVersionDefined,SetTemplateDefinition,UseDefinition,IfFileExists,iflanguage}
-   ,moretexcs={setuptablefontsize,tablefontsize,setuptablestyle,tablestyle,  setuptablecolor,tablecolor,disablealternatecolors,   tablealtcolored,tbegin,tbody,tend,thead, theadstart,tsubheadstart,tsubhead,theadrow,tsubheadrow,resettablestyle,theadend,tsubheadend,tableitemize,PreserveBackslash}
-   ,moretexcs={todo,missingfigure}
-   ,moretexcs={lstloadlanguages,lstdefinestyle,lstset}
-   ,moretexcs={indexsetup}
-   ,moretexcs={newglossarystyle,glossarystyle,deftranslation,newglossary}
-   ,moretexcs={usetikzlibrary}
-   ,moretexcs={definecolor,colorlet}
-   ,moretexcs={captionsetup,DeclareCaptionStyle}
-   ,moretexcs={floatsetup}
-   ,moretexcs={EnableCrossrefs,DisableCrossrefs,PageIndex,CodelineIndex,CodelineNumbered}
-   ,moretexcs={cref,Cref,vref,eqnref,figref,tabref,secref,chapref}
-}
-
-%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%%  From doctools.dtx file
-%%% lstlistings 'definitions'
-%%%
-%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%
-
-\lstloadlanguages{[LaTeX]TeX}
-\lstdefinestyle{codestyle}{
-  style        =  lstDocStyleBase,
-  alsoletter   =  {\l__codelist_alsoletter_tl},
-  alsoother    =  {\l__codelist_alsoother_tl},
-  numbers      =   none, %\l__codelist_numbers_tl,
-  rulecolor    =      {\l__codelist_rulecolor_tl},
-	backgroundcolor  =  {\l__codelist_bckgndcolor_tl},
-  stringstyle  =      {\l__codelist_stringstyle_tl},
-  commentstyle =      {\l__codelist_commentstyle_tl},
-  framerule    =   0pt,                        %0.4pt,
-	nolol        =   true,
-	frame        =   none,
-	aboveskip    =   0pt,%-2ex,
-  belowskip    =   0pt,%-2ex,
-	basicstyle   =   {\l__codelist_basicstyle_tl}, %%\footnotesize\ttfamily ,  
-	rulesep      =   0pt,
-	breaklines   =   true,
-	breakindent  =   3em,
-	moretexcs    =      {\l__codelist_texcsA_tl},
-  moretexcs    =  [2] {\l__codelist_texcsB_tl},
-  moretexcs    =  [3] {\l__codelist_texcsC_tl},
-  moretexcs    =  [4] {\l__codelist_texcsD_tl},
-  texcsstyle   = *    {\l__codelist_texcsAstyle_tl},
-	texcsstyle   = *[2] {\l__codelist_texcsBstyle_tl},
-	texcsstyle   = *[3] {\l__codelist_texcsCstyle_tl},
-	texcsstyle   = *[4] {\l__codelist_texcsDstyle_tl},
-	morekeywords =      {\l__codelist_keywdA_tl},
-	morekeywords =  [2] {\l__codelist_keywdB_tl},
-	morekeywords =  [3] {\l__codelist_keywdC_tl},
-	morekeywords =  [4] {\l__codelist_keywdD_tl},
-  keywordstyle =      {\l__codelist_keywdstyle_tl},
-	keywordstyle =  [2] {\l__codelist_keywdBstyle_tl},
-	keywordstyle =  [3] {\l__codelist_keywdCstyle_tl},
-	keywordstyle =  [4] {\l__codelist_keywdDstyle_tl},
-	emph         =      {\l__codelist_emphA_tl},
-	emph         =  [2] {\l__codelist_emphB_tl},
-	emph         =  [3] {\l__codelist_emphC_tl},
-	emph         =  [4] {\l__codelist_emphD_tl},
-  emphstyle    =      {\l__codelist_emphAstyle_tl},
-  emphstyle    =  [2] {\l__codelist_emphBstyle_tl},
-  emphstyle    =  [3] {\l__codelist_emphCstyle_tl},
-  emphstyle    =  [4] {\l__codelist_emphDstyle_tl},
-}
 \lstset{style=codestyle}
 
 \cs_generate_variant:Nn \keys_set:nn {nx}
@@ -578,7 +629,7 @@
         {
           \exp_args:Ne \lstset
             {
-              style=codestyle,
+              style         =     \l__codelist_basestyle_tl,
               alsoletter    =     {\l__codelist_alsoletter_tl},
               alsoother     =     {\l__codelist_alsoother_tl},
               moretexcs     =     {\l__codelist_texcsA_tl},

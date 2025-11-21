@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.16b} {2025/10/30}
+%% This is version {1.17} {2025/11/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -33,15 +33,34 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage[strict,infograb]{codedescribe}
+%\usepackage[strict,infograb,load xtra dialects,TeX dialects={doctools,l3kernelsign, l3expsign, l3amssign, l3pgfsign, l3bibtexsign, 
+%    l3kernel, l3exp, l3ams, l3pgf, l3bibtex, kernel, xpacks, ams, pgf, pgfplots, 
+%    bibtex, babel, hyperref}]{codedescribe}
+\usepackage[strict,infograb,load xtra dialects]{codedescribe}
+%\usepackage[strict,infograb]{codedescribe}
 \usepackage{enumitem}
 
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
 
-
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
+
+\setnewcodekey{codedesc}{
+  texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj},
+  emph={lbracket,rbracket,stmeta},
+  emph2={tscode,tsdemo},
+  keywd2={oarg,arg,parg,xarg,meta,color},
+  keywd={codedescribe,codesyntax,codestore,tsremark}
+  }
+
+
+%\tscode*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
+%
+%\tsresult*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
+%\tscode*[codeprefix=~,keywd={oarg,arg,parg,xarg},keywd2={meta,color},emph={lbracket,rbracket}]{demo.fmtdef}
+
+
 
 %%% TO BE DETERMINED !! \parindent
 %%%\setlength\parindent{0pt}
@@ -49,7 +68,7 @@
 \tstitle{
   author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/codedescribe}}},
   date={\tsdate},
-  title={The codedescribe and codelisting Packages\break Version \PkgInfo{codedescribe}{version}}
+  title={The codedescribe, codelisting and codelstlang Packages\break Version \PkgInfo{codedescribe}{version}}
   }
   
 \begin{typesetabstract}
@@ -70,18 +89,47 @@ This package aims to document both \tsobj[code]{Document} level (i.e. final user
  
 No other package/class is needed, any class can be used as the base one, which allows to demonstrate the documented commands with any desired layout.
 
-\tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), whilst \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style).
+\tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
 
 \subsection{Single versus Multi-column Classes}
 This package ``can'' be used with multi-column classes, given that the \tsobj[code]{\linewidth,\columnsep} are defined appropriately. \tsobj{\linewidth} shall defaults to text/column real width, whilst \tsobj{\columnsep}, if needed (2 or more columns) shall be greater than \tsobj{\marginparwidth} plus \tsobj{\marginparsep}.
 
 \subsection{Current Version}
-This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{version}~ and \tsobj[pkg]{codelisting} version \PkgInfo{codelisting}{version}. Those two packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
+This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{version}, \tsobj[pkg]{codelisting} version \PkgInfo{codelisting}{version} and \tsobj[pkg]{codelstlang} version \PkgInfo{codelstlang}{version}. Those packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
+
 
 \section{codelisting Package}
 
 It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore}, a few commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
 
+\subsection{Package Options}\label{codelist.pack-options}
+The following options are also \tsobj[pkg]{codedescribe} options, see \ref{codedesc.pack-options}.
+\begin{describelist}{option}
+\describe{load xtra dialects}{(defaults to false) If set, it will load the auxiliary package \tsobj[pkg]{codelstlang} (see \ref{lstlang.pack}), which just defines a series of \tsobj[pkg]{listings} TeX dialects. }
+\describe{TeX dialects}{This will set which \tsobj[pkg]{listings} TeX dialects will be used when defining the listing style \tsobj[option]{codestyle}. It defaults to \tsobj[option]{doctools}, which is derived from the [LaTeX]TeX dialect (this contains the same set of commands used by the package \tsobj[pkg]{doctools}). One can use any valid (TeX derived) \tsobj[pkg]{listings} dialect, including user defined ones, see \cite{listings} for details.
+
+Besides those, one can use (if the \tsobj[option]{load xtra dialects} is set): 
+\tsobj[option]{l3kernelsign, l3expsign, l3amssign, l3pgfsign, l3bibtexsign, l3kernel, l3exp, l3ams, l3pgf, l3bibtex, kernel, xpacks, ams, pgf, pgfplots, bibtex, babel, hyperref }. See \ref{lstlang.pack} for details on those dialects.
+}
+\begin{tsremark}
+  \tsobj[option]{TeX dialects} is a comma separated list of the dialect's name, without the base language (internally it will be converted to \tsverb[key]{[dialect]TeX}).
+\end{tsremark}
+\end{describelist}
+For example:
+\begin{codestore}[demo.dialect]
+    %% could be \usepackage[...]{codelisting}
+\usepackage[load xtra dialects,
+  TeX dialects={doctools,l3kernel,l3ams}]{codedescribe} 
+    %% 
+    %% assuming the user has defined a dialect, named: [my-own-set]TeX 
+    %%
+\usepackage[TeX dialects={doctools,my-own-set}]{codedescribe} 
+    %%
+\end{codestore}
+%
+\tscode*[codeprefix=~,codedesc]{demo.dialect}
+
+\newpage
 \subsection{In Memory Code Storage}
 Thanks to \tsobj[pkg]{scontents} (\tsobj[pkg]{expl3} based) it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl3} sequence variable.
 
@@ -122,7 +170,7 @@ This environment is an alias to \tsobj[env]{scontents} environment (from \tsobj[
 \end{tsremark}
 \begin{tsremark}[\color{red}Warning:]
   If explicitly using one of the \tsobj[key,sep=or]{store-env,st,store-at} keys, the storage name can be anything. BUT, due to changes (August 2025) in the latex kernel keys processing, if an implicity key is used,  then colons ( : ), besides a comma and equal signs, aren't allowed.
-  \tscode*{store-colon}
+  \tscode*[codedesc]{store-colon}
 \end{tsremark}
 
 
@@ -166,9 +214,10 @@ and this will demonstrate it, side by side with source code:
     codeprefix={inner sample code},
     resultprefix={inner sample result}] {stmeta}
 \end{codestore}
-\tscode*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
 
-\tsresult*[emph2={tscode,tsdemo},emph={stmeta},keywd2={codestore}]{democodestore}[1]
+\tscode*[codedesc]{democodestore}[1]
+
+\tsresult*[codedesc]{democodestore}[1]
 
 
 
@@ -206,70 +255,87 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2025-05-01]{\setnewcodekey}
+\begin{codedescribe}[code,new=2025/05/01]{\setnewcodekey}
 	\begin{codesyntax}%
 		\tsmacro{\setnewcodekey}{new-key,code-keys}
 	\end{codesyntax}
 This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
 \end{codedescribe}
 
-\begin{codedescribe}[key,update=2025-05-01]{settexcs,texcs,texcsstyle}
+\begin{codedescribe}[key,new=2025/11/20]{lststyle}
+\begin{codesyntax}% Also
+	\tsobj[key]{lststyle}
+\end{codesyntax}
+This sets the base style to be used. It defaults to \tsobj[key]{codestyle}, and the user can use this (\tsobj[key]{codestyle}) as the base style for his own one (and avoid having to define every single aspect of it). For example:
+\end{codedescribe}
+\begin{codestore}[demo.lststyle]
+\lstdefinestyle{my-own}{   % see the listings manual for a complete list of keywords
+  style=codestyle,
+  texcsstyle        = *    {\bfseries\color{red}}
+}
+
+\tscode*[lststyle=my-own]{demo-X}
+\end{codestore}
+%
+\tscode*[codeprefix=~,codedesc]{demo.lststyle}
+
+\begin{codedescribe}[key,update=2025/05/01]{settexcs,texcs,texcsstyle}
 \begin{codesyntax}% Also
 	\tsobj[key]{settexcs,settexcs2,settexcs3,settexcs4}
 	\tsobj[key]{texcs,texcs2,texcs3,texcs4}
 	\tsobj[key]{texcsstyle,texcs2style,texcs3style,texcs4style}
 \end{codesyntax}
-Those define sets of \LaTeX{} commands (csnames), the \tsobj[key]{set} variants initialize/redefine those sets (an empty list, clears the set), while the others extend those sets. The \tsobj[key]{style} ones redefines the command display style (an empty \tsobj[meta]{value} resets the style to it's default).\\
+Those define sets of \LaTeX{} commands (csnames, sans the preceding slash bar), the \tsobj[key]{set} variants initialize/redefine those sets (an empty list, clears the set), while the others extend those sets. The \tsobj[key]{style} ones redefines the command display style (an empty \tsobj[meta]{value} resets the style to it's default).
 \end{codedescribe}
 
 
-\begin{codedescribe}[key,update=2025-05-01]{setkeywd,keywd,keywdstyle}
+\begin{codedescribe}[key,update=2025/05/01]{setkeywd,keywd,keywdstyle}
 \begin{codesyntax}	%
 	\tsobj[key]{setkeywd,setkeywd2,setkeywd3,setkeywd4}
 	\tsobj[key]{keywd,keywd2,keywd3,keywd4}
 	\tsobj[key]{keywdstyle,keywd2style,keywd3style,keywd4style}
 \end{codesyntax}
-Same for other \emph{keywords} sets.\\
+Same for other \emph{keywords} sets.
 \end{codedescribe}
 
-\begin{codedescribe}[key,update=2025-05-01]{setemph,emph,emphstyle}
+\begin{codedescribe}[key,update=2025/05/01]{setemph,emph,emphstyle}
 \begin{codesyntax}	%
 	\tsobj[key]{setemph,setemph2,setemph3,setemph4}
 	\tsobj[key]{emph,emph2,emph3,emph4}
 	\tsobj[key]{emphstyle,emph2style,emph3style,emph4style}
 \end{codesyntax}
-for some extra emphasis sets.\\
+for some extra emphasis sets.
 \end{codedescribe}
 
-\begin{codedescribe}[key,new=2025-05-13]{letter,other}
+\begin{codedescribe}[key,new=2025/05/13]{letter,other}
 \begin{codesyntax} %
 	\tsobj[key]{letter,other}
 \end{codesyntax}
-These allow to redefine what a letter or other are (they correspond to the \tsobj[key]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other} default value is an empty list.\\
-\end{codedescribe}
+These allow to redefine what a letter or other are (they correspond to the \tsobj[key]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other} default value is an empty list.
 \begin{tsremark}
   You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of an \tsobj[pkg]{expl3} function.
 \end{tsremark}
+\end{codedescribe}
 
 \begin{codedescribe}[key]{numbers,numberstyle}
 \begin{codesyntax} %
 	\tsobj[key]{numbers,numberstyle}
 \end{codesyntax}
-\tsobj[key]{numbers} possible values are \tsobj[value]{none} (default) and \tsobj[value]{left} (to add tinny numbers to the left of the listing). With \tsobj[key]{numberstyle} one can redefine the numbering style.\\
+\tsobj[key]{numbers} possible values are \tsobj[value]{none} (default) and \tsobj[value]{left} (to add tinny numbers to the left of the listing). With \tsobj[key]{numberstyle} one can redefine the numbering style.
 \end{codedescribe}
 
 \begin{codedescribe}[key]{stringstyle,codestyle}
 \begin{codesyntax} %
 	\tsobj[key]{stringstyle,commentstyle}
 \end{codesyntax}
-to redefine \tsobj[key]{strings} and \tsobj[key]{comments} formatting style.\\
+to redefine \tsobj[key]{strings} and \tsobj[key]{comments} formatting style.
 \end{codedescribe}
 
 \begin{codedescribe}[key]{bckgndcolor}
 \begin{codesyntax} %
 	\tsobj[key]{bckgndcolor}
 \end{codesyntax}
-to change the listing background's color.\\
+to change the listing background's color.
 \end{codedescribe}
 
 \begin{codedescribe}[key]{codeprefix,resultprefix}
@@ -305,17 +371,21 @@ Sets the base font style used when typesetting the `code demo', default being \t
 
 This package aims at minimizing the number of commands, being the object kind (if a macro, or environment, or variable, or key ...) a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
 
-\subsection{Package Options}
+\subsection{Package Options}\label{codedesc.pack-options}
 
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
 \describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
-\end{describelist}
 \begin{tsremark}
   \tsobj[option]{color scheme} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
 \end{tsremark}
+\describe{load xtra dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
+\describe{TeX dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
+
+\end{describelist}
+
 
 \subsection{Object Type keys}\label{obj-type-def}
 
@@ -419,7 +489,8 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 \defobjectfmt {parg} {oarg} { lbracket={(} , rbracket={)} }
 \defobjectfmt {xarg} {oarg} { lbracket={<} , rbracket={>} }
 \end{codestore}
-\tscode*[codeprefix=~,keywd={oarg,arg,parg,xarg},keywd2={meta,color},emph={lbracket,rbracket}]{demo.fmtdef}
+
+\tscode*[codeprefix=~,codedesc]{demo.fmtdef}
 
 \subsection{Environments}\label{desc-env}
 
@@ -462,7 +533,7 @@ The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro
 \end{tsremark}
 \begin{tsremark}
 With the \tsobj[option]{strict} package option
-an error will be raised if used outside a \tsobj[env]{codedescribe} environment, or more than once inside. Otherwise warnings will be raised.
+an error will be raised if used outside a \tsobj[env]{codedescribe} environment, or more than once inside. Otherwise a warning will be raised.
 \end{tsremark}
 
 For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
@@ -478,7 +549,7 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 \end{codedescribe}
 \end{codestore}  
 
-\tscode*{demoD}
+\tscode*[codedesc]{demoD}
 
 \begin{codedescribe}[env]{describelist,describelist*}
   \begin{codesyntax}
@@ -563,10 +634,10 @@ These are just short-cuts for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsob
 \tsmacro{\tsverb}[obj-type]{verbatim text}
 \end{codesyntax}
  Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator in \tsobj{\tsobj}.
-\end{codedescribe}
 \begin{tsremark}
 This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors may pop out.
 \end{tsremark}
+\end{codedescribe}
 
 \subsection{Note/Remark Commands}\label{note-commands}
 
@@ -588,10 +659,10 @@ Typesets a small note at the margin.
  \begin{codestore}[demo.remark]
  Sample text. Sample test.
   \begin{tsremark}[N.B.]
-    This is an example.
+    This is an example. 
   \end{tsremark}
  \end{codestore}
- \tsdemo{demo.remark}
+ \tsdemo[codedesc]{demo.remark}
 \end{codedescribe}
 
 \subsection{Auxiliary Commands and Environment}
@@ -632,8 +703,41 @@ This is the \tsobj[env]{abstract} environment from the \tsobj[pkg]{article} clas
 This provides the current date (in Month Year, format).
 \end{codedescribe}
 
+
+\newpage
+\section{codelstlang Package}\label{lstlang.pack}
+This is an auxiliary package (which can be used on its own). It assumes the package \tsobj[pkg]{listings} was already loaded, and just defines the following \TeX{} dialects, all of them derived from (listings) \tsverb[key]{[LaTeX]TeX}:
+\begin{describelist}{key}
+  \describe{[l3kernelsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel}\cite{l3kernel} packages, including signatures. }
+  \describe{[l3expsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} experimental packages, including signatures. }
+  \describe{[l3amssign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{ams,siunitx} and related packages, including signatures. }
+  \describe{[l3pgfsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{pgf} and related packages, including signatures. }
+  \describe{[l3bibtexsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{bibtex,biblatex} and related packages, including signatures.}
+\begin{tsremark}
+  The underscore `\_' and colon `:' have to be defined as letters (\tsverb[key]{letter = { _ , : }}, see \ref{code-keys}). Take note that those dialects are quite large, due the many signatures variants.
+\end{tsremark}  
+  \describe{[l3kernel]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} packages, without signatures. }
+  \describe{[l3exp]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} experimental packages, without signatures. }
+  \describe{[l3ams]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{ams,siunitx} and related packages, without signatures. }
+  \describe{[l3pgf]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{pgf} and related packages, without signatures. }
+  \describe{[l3bibtex]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{bibtex,biblatex} and related packages, without signatures.}
+\begin{tsremark}
+  The underscore `\_' has  to be defined as letter (\tsverb[key]{letter = { _ }}, but not the colon `:', see \ref{code-keys}). Those are more compact versions of the previous ones.
+\end{tsremark}  
+  \describe{[kernel]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{kernel} packages. }
+  \describe{[xpacks]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{x*} packages, like \tsobj[pkg,comma]{xkeyval,xpatch,xcolor} etc. }
+  \describe{[ams]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{ams,siunitx} and related packages. }
+  \describe{[pgf]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{pgf} and related packages.}
+  \describe{[pgfplots]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{pgfplots} and related packages.}
+  \describe{[bibtex]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{bibtex,biblatex} and related packages.}
+  \describe{[babel]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{babel} and related packages.}
+  \describe{[hyperref]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{hyperref} and related packages.}
+\begin{tsremark}
+  Those are usual document level, \LaTeXe, commands. In particular none of them includes any `@' symbol.
+\end{tsremark}  
+\end{describelist}
+
 \printbibliography
 
-
-
 \end{document}
+
