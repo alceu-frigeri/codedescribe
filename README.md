@@ -97,7 +97,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - partially addressing [#18](https://github.com/alceu-frigeri/codedescribe/issues/18) in the documentation
     - new package option to suppress some annoying bad boxes warnings.
 
-* Version {1.18}
+* Version 1.17
     - using ```\pkginfograbProvidesExplPackage```
     - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
     - New package options to set which TeX dialect(s) to be used. 
