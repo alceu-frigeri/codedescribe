@@ -73,8 +73,11 @@ The Current Maintainer of this work is Alceu Frigeri
 * codedescribe.sty
     - set of macros to document LaTeX packages
 
+* codedescsets.sty
+    - sets of locale definitions
+
 * codelstlang.sty
-    - set of listings dialect/language definitions
+    - sets of listings dialect/language definitions
 
 * README.md (this file)
     - quick introduction
@@ -88,11 +91,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
-* Version 1.18 (next)
-    - addressing #16 (label sets, translation to other idioms)
-    - environment redefining test: only (for now) tsremark 
+* Version 1.18 (this)
+    - new commands and package option for label sets ('locale') 
+      - addressing [#17](https://github.com/alceu-frigeri/codedescribe/issues/17) 
+    - partially addressing [#18](https://github.com/alceu-frigeri/codedescribe/issues/18) in the documentation
+    - new package option to suppress some annoying bad boxes warnings.
 
-* Version 1.17 (this)
+* Version {1.18}
     - using ```\pkginfograbProvidesExplPackage```
     - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
     - New package options to set which TeX dialect(s) to be used. 

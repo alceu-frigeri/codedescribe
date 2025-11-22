@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.17} {2025/11/20}
+%% This is version {1.18} {2025/11/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/11/20} ,
-     version     = {1.17} ,
+     date        = {2025/11/22} ,
+     version     = {1.18} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -322,7 +322,12 @@
         \exp_args:NV \__codedesc_set_color_scheme:n \l_keys_choice_tl
       } ,
     color ~ scheme .value_required:n = true ,
-  
+    
+    silence .usage:n = load ,
+    silence .code:n =  
+      { \hfuzz=#1 } ,
+    silence .default:n = 18.89999pt ,
+    
     strict .usage:n    = load ,
     strict .code:n = 
       {
@@ -896,7 +901,7 @@
     comma.usage:n = general,
     comma.code:n = 
       {
-        \tl_set:Nn \l__codedesc_lastsep_tl { ,~ }
+        \tl_set:Nn \l__codedesc_lastsep_tl { , ~ }
       },
     %
     meta~ or .usage:n = general,

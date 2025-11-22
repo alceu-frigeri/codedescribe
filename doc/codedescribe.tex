@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.17} {2025/11/20}
+%% This is version {1.18} {2025/11/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -36,14 +36,13 @@
 %\usepackage[strict,infograb,load xtra dialects,TeX dialects={doctools,l3kernelsign, l3expsign, l3amssign, l3pgfsign, l3bibtexsign, 
 %    l3kernel, l3exp, l3ams, l3pgf, l3bibtex, kernel, xpacks, ams, pgf, pgfplots, 
 %    bibtex, babel, hyperref}]{codedescribe}
-\usepackage[strict,infograb,load xtra dialects]{codedescribe}
+\usepackage[strict,infograb,load xtra dialects,silence]{codedescribe}
 %\usepackage[strict,infograb]{codedescribe}
 \usepackage{enumitem}
 
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
 
-\usepackage{soul}
 
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
@@ -51,7 +50,7 @@
 \setnewcodekey{codedesc}{
   texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
   emph={lbracket,rbracket,stmeta},
-  emph2={tscode,tsdemo},
+  emph2={tscode,tsdemo,new,update,note,env,and,or,months,remark},
   keywd2={oarg,arg,parg,xarg,meta,color},
   keywd={codedescribe,codesyntax,codestore,tsremark}
   }
@@ -70,7 +69,7 @@
 \tstitle{
   author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/codedescribe}}},
   date={\tsdate},
-  title={The codedescribe, codelisting and codelstlang Packages\break Version \PkgInfo{codedescribe}{version}}
+  title={The codedescribe and codelisting Packages\break Version \PkgInfo{codedescribe}{version}}
   }
   
 \begin{typesetabstract}
@@ -89,7 +88,7 @@ No assumption is made about page layout (besides ``having a marginpar''),  or un
 This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
-No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, you find a class with compatibility issues, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
+No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, a class with compatibility issues is found, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
 
 \tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
 
@@ -264,7 +263,7 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
 \end{codedescribe}
 
-\begin{codedescribe}[key,new=2025/11/20]{lststyle}
+\begin{codedescribe}[key,new={2025/11/22}]{lststyle}
 \begin{codesyntax}% Also
 	\tsobj[key]{lststyle}
 \end{codesyntax}
@@ -287,7 +286,7 @@ This sets the base style to be used. It defaults to \tsobj[key]{codestyle}, and 
 	\tsobj[key]{texcs,texcs2,texcs3,texcs4}
 	\tsobj[key]{texcsstyle,texcs2style,texcs3style,texcs4style}
 \end{codesyntax}
-Those define sets of \LaTeX{} commands (csnames, sans the preceding slash bar), the \tsobj[key]{set} variants initialize/redefine those sets (an empty list, clears the set), while the others extend those sets. The \tsobj[key]{style} ones redefines the command display style (an empty \tsobj[meta]{value} resets the style to it's default).
+These define sets of \LaTeX{} commands (csnames, sans the preceding slash bar), the \tsobj[key]{set} variants initialize/redefine those sets (an empty list, clears the set), while the others extend those sets. The \tsobj[key]{style} ones redefines the command display style (an empty \tsobj[meta]{value} resets the style to it's default).
 \end{codedescribe}
 
 
@@ -377,9 +376,10 @@ This package aims at minimizing the number of commands, being the object kind (i
 
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
-\describe{label set}{(new: 2025/11/22) This allows to pre-select a set of labels, see \ref{labelset}}
+\describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[key]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
+\describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, TeX thinks they are too wide, when they are not. }
 \describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 \begin{tsremark}
   \tsobj[option]{color scheme} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
@@ -495,37 +495,46 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 
 \tscode*[codeprefix=~,codedesc]{demo.fmtdef}
 
-\subsubsection{Locale}
-The following commands allows to customize the many `labels' in use, in particular the sub-package \tsobj[pkg]{codedescsets} holds a few locale sets, the user is invited, if needed, to submit translations for a specific case/language via a PR (Push Request) at \url{https://github.com/alceu-frigeri/codedescribe}
+\subsection{Locale}
+The following commands allows to customize the many `labels' in use, in particular the auxiliary package \tsobj[pkg]{codedescsets} holds a few locale sets, the user is invited to submit translations for a specific case/language via a PR (Push Request) at \url{https://github.com/alceu-frigeri/codedescribe}
 
 
 \begin{codedescribe}[code,new=2025/11/22]{\setcodelabels,\newlabelset,\selectlabelset}\label{labelset}
 \begin{codesyntax} %
-	\tsmacro{\setcodelabels}{label-keys}
-	\tsmacro{\newlabelset}{lang,label-keys}
+	\tsmacro{\setcodelabels}{labels-list}
+	\tsmacro{\newlabelset}{lang,labels-list}
 	\tsmacro{\selectlabelset}{lang}
 \end{codesyntax}
-kkkk
+\tsobj{\setcodelabels} allows to change the many `labels' used (like `updated' in the \tsobj[env]{codedescribe} environment). See below for a complete list of possible labels, it can be used at any time, allowing to change those labels mid text.
+
+\tsobj{\newlabelset} will create a label's set (named as \tsobj[marg]{lang}) for later use with \tsobj{\selectlabelset} (akin of a language locale), while \tsobj{\selectlabelset} will select (activate) the given set. They can also be used at any time.
 \end{codedescribe}
 
-The \tsobj[marg]{label-keys} can be:
-\begin{describelist}{key}
-  \describe{new}{(defaults to: `new'). It set's the `new' label used in the \tsobj[env]{codedescribe} environment.}
-  \describe{update}{(defaults to: `updated'). It set's the `update' label used in the \tsobj[env]{codedescribe} environment.}
-  \describe{note}{(defaults to: `NB'). It set's the `note' label used in the \tsobj[env]{codedescribe} environment.}
-  \describe{and}{(defaults to: `and'). It set's the `and' label used in the many \tsobj{\tsobj} commands (hint: last item separator).}
-  \describe{or}{(defaults to: `or'). It set's the `or' label used in the many \tsobj{\tsobj} commands (hint: last item separator).}
-  \describe{months}{(defaults to: {January, February, March, April, May, June, July, August, September, October, November, December}). It set's the month list used by the \tsobj{\tsdate} command, see \ref{aux-commands}.}
-\end{describelist}
+The \tsobj[marg]{labels-list} can be any combination of:
+\begin{describelist*}{key}
+  \describe{new}{It set's the `new' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{update}{It set's the `update' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{note}{It set's the `note' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{and}{It set's the `and' label used by \tsobj{\tsobj} (hint: last item separator).}
+  \describe{or}{It set's the `or' label used by \tsobj{\tsobj} (hint: last item separator).}
+  \describe{months}{It set's the month list used by \tsobj{\tsdate}, see \ref{aux-commands}. NB.: it expects a list of names starting at `January' and ending at `December'.}
+\end{describelist*}
+\begin{tsremark}
+  \tsobj{\newlabelset} is used in the  auxiliary package \tsobj[pkg]{codedescsets} to pre-define some sets, which can then be used as a package option, see \ref{codedesc.pack-options}.
+\end{tsremark}
+
+\begin{tsremark}
+  The given \tsobj[marg]{labels-list} doesn't need to be complete, though, only the given labels will be changed.
+\end{tsremark}
 
 \begin{tsremark}
   \tsobj{\newlabelset} can be used to redefine a given set, though, if doing so, one has to provide all labels. The old (if any) definitions will be erased. No warnings given.
 \end{tsremark}
 
 
-For example, this sets a new label set for German. In fact, since this is defined in the \tsobj[pkg]{codedescsets} this label set can be used when loading this package, see \ref{codedesc.pack-options}.
+For example, this sets a new label set for German. In fact, since this is defined in the package \tsobj[pkg]{codedescsets} this label set can be used when loading this package, see \ref{codedesc.pack-options}.
 \begin{codestore}[labelset]
-\newlabelset {deutsch}
+\newlabelset {german}
   {
     new     = neu           ,
     update  = aktualisiert  ,
@@ -596,7 +605,7 @@ an error will be raised if used outside a \tsobj[env]{codedescribe} environment,
 For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 
 \begin{codestore}[demoD]
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a note example},update=2024/02/16,update=2025/09/25]{codedescribe}
+\begin{codedescribe}[ env , new=2023/05/01, update=2023/05/01, note={a note example}, update=2024/02/16, update=2025/09/25]{codedescribe}
   \begin{codesyntax}
     \tsmacro{\begin{codedescribe}}[obj-type]{csv-list}
     \ldots
@@ -633,7 +642,7 @@ An error will be raised (undefined control sequence) if called outside of a \tso
 
 
 \subsection{Typeset Commands}\label{ts-commands}
-\emph{Note} that, in the following commands, \tsobj[oarg]{obj-type} refers to any object type defined in  \ref{obj-types} and \ref{format-custom}.
+Note that, in the following commands, \tsobj[oarg]{obj-type} refers to any object type defined in  \ref{obj-types} and \ref{format-custom}.
 % plus the following key:
 %\begin{describelist*}{key}
 %  \describe{strut}{This was a work around a bug when using \tsobj{\color} at the begin of an \tsobj[marg]{item-description} (from \tsobj{\describe}).}
@@ -691,9 +700,9 @@ These are just short-cuts for\par \tsobj[code]{\tsobj [code] {macro-list}} \tsob
 \tsmacro{\typesetverb}[obj-type]{verbatim text}
 \tsmacro{\tsverb}[obj-type]{verbatim text}
 \end{codesyntax}
- Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator in \tsobj{\tsobj}.
+ Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator by \tsobj{\tsobj}.
 \begin{tsremark}
-This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors may pop out.
+This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors might  pop out.
 \end{tsremark}
 \end{codedescribe}
 

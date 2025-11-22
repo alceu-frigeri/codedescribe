@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.17} {2025/11/20}
+%% This is version {1.18} {2025/11/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,25 +34,26 @@
   {
      name        = {codedescsets} ,
      prefix      = {codedesc} ,
-     date        = {2025/11/20} ,
-     version     = {1.17} ,
+     date        = {2025/11/22} ,
+     version     = {1.18} ,
      description = {codedescribe label sets}
   }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
 
-
+%%%%%%%
+%%% NOTE: expl code régime is being de-activated, 
+%%%       so that, users don't have to worry
+%%%       about spaces here, when submiting a PR
+%%% 
+\ExplSyntaxOff
 
 %%%%%%%
-%%% NOTE: expl code régime is in force here
-%%% 
-%%% \newlabelset is being used here, 
-%%%       to avoid using an internal command
-%%%       or making it public just for this part
+%%% \newlabelset is being used, 
+%%%       to avoid using an internal (expl) command 
 %%%    since this is though to be a place where 
 %%%    others might request a PR
-%%% 
 %%%%%%%
 
 \newlabelset
@@ -73,7 +74,7 @@
   }
 
 \newlabelset
-  {deutsch}
+  {german}
   {
     new     = neu           ,
     update  = aktualisiert  ,
@@ -89,20 +90,24 @@
       }
   }
 
-\__codedesc_new_labelset:nn
-   {french}
-   {
-      new    = nouveau      ,
-      update = mise à jour  ,
-      note   = NB           ,
-      remark = remarque     ,
-      and    = et           ,
-      or     = ou           ,
-      months = 
-         {
-            Janvier, Février, Mars, Avril,
-            Mai, Juin, Juillet, Août,
-            Septembre, Octobre, Novembre, Décembre
-         }
-   }
+%%%%%%%
+%%% submitted by
+%%%   Valentin Dao - https://github.com/ankaa3908
+%%%%%%%
+\newlabelset
+  {french}
+  {
+    new     = nouveau      ,
+    update  = mise à jour  ,
+    note    = NB           ,
+    remark  = remarque     ,
+    and     = et           ,
+    or      = ou           ,
+    months  = 
+      {
+        Janvier, Février, Mars, Avril,
+        Mai, Juin, Juillet, Août,
+        Septembre, Octobre, Novembre, Décembre
+      }
+  }
 
