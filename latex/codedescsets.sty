@@ -1,0 +1,80 @@
+%%%==============================================================================
+%% Copyright 2023-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.17} {2025/11/20}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codedescribe
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+   
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplPackage {codedescsets}
+  {
+     name        = {codedescsets} ,
+     prefix      = {codedesc} ,
+     date        = {2025/11/21} ,
+     version     = {1.17} ,
+     description = {codedescribe label sets}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\__codedesc_new_labelset:nn
+  {english}
+  {
+    new     = new     ,
+    update  = updated ,
+    note    = NB      ,
+    remark  = Note    ,
+    and     = and     ,
+    or      = or      ,
+    months  = 
+      {
+        January, February, March, April,
+        May, June, July, August,
+        September, October, November, December
+      }
+  }
+
+\__codedesc_new_labelset:nn
+  {deutsch}
+  {
+    new     = neu           ,
+    update  = aktualisiert  ,
+    note    = NB            ,
+    remark  = Hinweis       ,
+    and     = und           ,
+    or      = oder          ,
+    months  = 
+      {
+        Januar, Februar, März, April, 
+        Mai, Juni, Juli, August, 
+        September, Oktober, November, Dezember
+      }
+  }
+
+
+

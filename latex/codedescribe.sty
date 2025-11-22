@@ -133,6 +133,10 @@
 \__codedesc_set_skips:n {\f@size}
 
 
+%%%%%%%
+%%% Color schemes (package option)
+%%%%%%%
+
 \cs_new_protected:Npn \__codedesc_set_color_scheme:n #1
   {
     \str_case:nnF {#1}
@@ -211,6 +215,73 @@
 
 \__codedesc_set_color_scheme:n {default}
 
+
+%%%%%%%
+%%% label sets (package option)
+%%%%%%%
+
+\keys_define:nn {codedescribe / labels}
+  {
+    new .usage:n = general , 
+    new .tl_set:N = \l__codedesc_new_label_tl ,
+    new .value_required:n = true ,
+    
+    update .usage:n = general , 
+    update .tl_set:N = \l__codedesc_update_label_tl ,
+    update .value_required:n = true ,
+    
+    note .usage:n = general , 
+    note .tl_set:N = \l__codedesc_note_label_tl ,
+    note .value_required:n = true ,
+
+    remark .usage:n = general , 
+    remark .tl_set:N = \l__codedesc_remark_label_tl ,
+    remark .value_required:n = true ,
+
+    or .usage:n = general , 
+    or .tl_set:N = \l__codedesc_or_label_tl ,
+    or .value_required:n = true ,
+
+    and .usage:n = general , 
+    and .tl_set:N = \l__codedesc_and_label_tl ,
+    and .value_required:n = true ,
+
+    months .usage:n = general , 
+    months .code:n = 
+      { \seq_set_from_clist:Nn \l__codedesc_months_label_seq {#1} } ,
+    months .value_required:n = true ,
+  }
+  
+\cs_new_protected:Npn \__codedesc_setlabels:n #1
+  {
+    \keys_set:Nn {codedescribe / labels}{#1}
+  }
+
+\prop_new:N \l__codedesc_labelsets_prop
+
+\cs_new_protected:Npn \__codedesc_new_labelset:nn #1#2
+  {
+    \keys_precompile:nnN {codedescribe / labels} {#2} \l__codedesc_tmpa_tl
+    \prop_put:NnV \l__codedesc_labelsets_prop {#1} \l__codedesc_tmpa_tl
+  }
+
+\cs_new_protected:Npn \__codedesc_select_labelset:n #1
+  {
+    \prop_item:Nn \l__codedesc_labelsets_prop {#1}
+  }
+
+
+
+    %%%
+    % language set are to be defined at codedescsets
+    %%%  
+\RequirePackage{codedescsets}
+
+    %%%
+    % Default label set
+    %%%  
+\__codedesc_select_labelset:n {english}
+
 \keys_define:nn { codedescribe }
   {
     nolisting .usage:n    = load ,
@@ -235,6 +306,11 @@
         \__codedesc_set_skips:n {#1}
       } ,
     base~ skip .value_required:n = true ,
+    
+    label~ set .usage:n = load ,
+    label~ set .code:n = 
+      { \__codedesc_select_labelset:n {#1} } ,
+    label~ set .value_required:n = true ,
     
     color ~ scheme .usage:n = load ,
     color ~ scheme .choices:nn =
@@ -262,6 +338,11 @@
 
 \bool_if:NT \l__codedesc_infograb_aliases_bool
   { \pkginfograb_set_aliases: }
+
+
+\cs_set_eq:NN \newlabelset    \__codedesc_new_labelset:nn
+\cs_set_eq:NN \selectlabelset \__codedesc_select_labelset:n
+\cs_set_eq:NN \setcodelabels  \__codedesc_setlabels:n
 
 
 \cs_generate_variant:Nn \tl_set:Nn {Ne}
@@ -796,20 +877,20 @@
     mid~ sep.usage:n = general,
     mid~ sep.code:n = 
       {
-        \tl_set:Nn \l__codedesc_sep_tl { ~ #1~ }
+        \tl_set:Nn \l__codedesc_sep_tl { ~ #1 ~ }
       },
   	%
   	%
     sep.usage:n = general,
     sep.code:n = 
       {
-        \tl_set:Nn \l__codedesc_lastsep_tl { ~ #1~ }
+        \tl_set:Nn \l__codedesc_lastsep_tl { ~ #1 ~ }
       },
   	%
     or.usage:n = general,
     or.code:n = 
       {
-        \tl_set:Nn \l__codedesc_lastsep_tl { ~ or~ }
+        \tl_set:Nn \l__codedesc_lastsep_tl { ~ \l__codedesc_or_label_tl ~ }
       },
   	%
     comma.usage:n = general,
@@ -868,7 +949,7 @@
     \tl_set:Nn \l__codedesc_Lbracket_tl { }
     \tl_set:Nn \l__codedesc_Rbracket_tl { }
     \tl_set:Nn \l__codedesc_sep_tl {,~}
-    \tl_set:Nn \l__codedesc_lastsep_tl {~ and~}
+    \tl_set:Nn \l__codedesc_lastsep_tl {~ \l__codedesc_and_label_tl ~}
     \tl_set:Nn \l__codedesc_exp_tl { }
     \tl_set:Nn \l__codedesc_Lbrace_tl { }
     \tl_set:Nn \l__codedesc_Rbrace_tl { }
@@ -1095,17 +1176,17 @@
               \bool_if:NT \l__codedesc_descdate_new_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_descdate_new_seq
-                    {\scriptsize\color{black}new:~ ##1\\[-1ex]}
+                    {\scriptsize\color{black} \l__codedesc_new_label_tl :~ ##1\\[-1ex]}
                 }
               \bool_if:NT \l__codedesc_descdate_update_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_descdate_update_seq
-                    {\scriptsize\color{black}updated:~ ##1\\[-1ex]}
+                    {\scriptsize\color{black} \l__codedesc_update_label_tl :~ ##1\\[-1ex]}
                 }
               \bool_if:NT \l__codedesc_sidenote_bool
                 {
                   \seq_map_inline:Nn \l__codedesc_sidenote_seq
-                    {\scriptsize\color{black}NB:~ ##1\\[-1ex]}
+                    {\scriptsize\color{black} \l__codedesc_note_label_tl :~ ##1\\[-1ex]}
                 }
               \\[-1.5ex]
             }
@@ -1418,7 +1499,12 @@
 
 \regex_const:Nn   \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
 
-\NewDocumentEnvironment {tsremark} {O{Note:}}
+
+% TODO:
+% Test if already defined...
+%
+
+\NewDocumentEnvironment {tsremark} {O{ \l__codedesc_remark_label_tl :}}
   {
     \xpeekahead_env_set:nNTF {tsremark}
       \c__codedesc_remark_regex
@@ -1509,21 +1595,22 @@
 
 \NewDocumentCommand \typesetdate {}
   {
-    \int_case:nn {\month}
-      {
-        {1}{January}
-        {2}{February}
-        {3}{March}
-        {4}{April}
-        {5}{May}
-        {6}{June}
-        {7}{July}
-        {8}{August}
-        {9}{September}
-        {10}{October}
-        {11}{November}
-        {12}{December}
-      }
+%    \int_case:nn {\month}
+%      {
+%        {1}{January}
+%        {2}{February}
+%        {3}{March}
+%        {4}{April}
+%        {5}{May}
+%        {6}{June}
+%        {7}{July}
+%        {8}{August}
+%        {9}{September}
+%        {10}{October}
+%        {11}{November}
+%        {12}{December}
+%      }
+      \seq_item:NV \l__codedesc_months_label_seq \month
       \use:n {~} \int_to_arabic:n {\year}
   }
   

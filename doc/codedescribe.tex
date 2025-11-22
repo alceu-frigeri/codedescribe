@@ -43,6 +43,8 @@
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
 
+\usepackage{soul}
+
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
 \begin{document}
 
@@ -87,7 +89,7 @@ No assumption is made about page layout (besides ``having a marginpar''),  or un
 This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
-No other package/class is needed, any class can be used as the base one, which allows to demonstrate the documented commands with any desired layout.
+No other package/class is needed, \st{any}, err, most classes can be used as the base one, which allows to demonstrate the documented commands with any desired layout. One glaring counter-example being \tsobj[pkg]{l3doc.cls} which defines an environment also named \tsobj[env]{tsremark}. It still can be used, BUT, the \tsobj[env]{tsremark} will get redefined (a warning will be issued in this case).
 
 \tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
 

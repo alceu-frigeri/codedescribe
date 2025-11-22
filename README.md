@@ -88,6 +88,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
+* Version 1.18 (next)
+    - addressing #16 (label sets, translation to other idioms)
+    - environment redefining test: only (for now) tsremark 
+
 * Version 1.17 (this)
     - using ```\pkginfograbProvidesExplPackage```
     - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
