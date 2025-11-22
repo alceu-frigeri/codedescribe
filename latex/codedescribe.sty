@@ -270,6 +270,9 @@
     \prop_item:Nn \l__codedesc_labelsets_prop {#1}
   }
 
+\cs_new_eq:NN \newlabelset    \__codedesc_new_labelset:nn
+\cs_new_eq:NN \selectlabelset \__codedesc_select_labelset:n
+\cs_new_eq:NN \setcodelabels  \__codedesc_setlabels:n
 
 
     %%%
@@ -340,9 +343,6 @@
   { \pkginfograb_set_aliases: }
 
 
-\cs_set_eq:NN \newlabelset    \__codedesc_new_labelset:nn
-\cs_set_eq:NN \selectlabelset \__codedesc_select_labelset:n
-\cs_set_eq:NN \setcodelabels  \__codedesc_setlabels:n
 
 
 \cs_generate_variant:Nn \tl_set:Nn {Ne}
@@ -890,7 +890,7 @@
     or.usage:n = general,
     or.code:n = 
       {
-        \tl_set:Nn \l__codedesc_lastsep_tl { ~ \l__codedesc_or_label_tl ~ }
+        \tl_set:Nn \l__codedesc_lastsep_tl { ~ \l__codedesc_or_label_tl{} ~ }
       },
   	%
     comma.usage:n = general,
@@ -949,7 +949,7 @@
     \tl_set:Nn \l__codedesc_Lbracket_tl { }
     \tl_set:Nn \l__codedesc_Rbracket_tl { }
     \tl_set:Nn \l__codedesc_sep_tl {,~}
-    \tl_set:Nn \l__codedesc_lastsep_tl {~ \l__codedesc_and_label_tl ~}
+    \tl_set:Nn \l__codedesc_lastsep_tl {~ \l__codedesc_and_label_tl{} ~}
     \tl_set:Nn \l__codedesc_exp_tl { }
     \tl_set:Nn \l__codedesc_Lbrace_tl { }
     \tl_set:Nn \l__codedesc_Rbrace_tl { }
@@ -1595,23 +1595,8 @@
 
 \NewDocumentCommand \typesetdate {}
   {
-%    \int_case:nn {\month}
-%      {
-%        {1}{January}
-%        {2}{February}
-%        {3}{March}
-%        {4}{April}
-%        {5}{May}
-%        {6}{June}
-%        {7}{July}
-%        {8}{August}
-%        {9}{September}
-%        {10}{October}
-%        {11}{November}
-%        {12}{December}
-%      }
-      \seq_item:NV \l__codedesc_months_label_seq \month
-      \use:n {~} \int_to_arabic:n {\year}
+      \seq_item:NV \l__codedesc_months_label_seq \c_sys_month_int
+      \use:n {~} \int_to_arabic:n {\c_sys_year_int}
   }
   
 \cs_new_eq:NN \tsdate \typesetdate

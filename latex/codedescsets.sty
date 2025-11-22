@@ -34,7 +34,7 @@
   {
      name        = {codedescsets} ,
      prefix      = {codedesc} ,
-     date        = {2025/11/21} ,
+     date        = {2025/11/20} ,
      version     = {1.17} ,
      description = {codedescribe label sets}
   }
@@ -42,7 +42,20 @@
 %%% End of cut-n-paste
 %%%%%%%
 
-\__codedesc_new_labelset:nn
+
+
+%%%%%%%
+%%% NOTE: expl code régime is in force here
+%%% 
+%%% \newlabelset is being used here, 
+%%%       to avoid using an internal command
+%%%       or making it public just for this part
+%%%    since this is though to be a place where 
+%%%    others might request a PR
+%%% 
+%%%%%%%
+
+\newlabelset
   {english}
   {
     new     = new     ,
@@ -59,7 +72,7 @@
       }
   }
 
-\__codedesc_new_labelset:nn
+\newlabelset
   {deutsch}
   {
     new     = neu           ,

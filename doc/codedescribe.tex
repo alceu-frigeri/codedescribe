@@ -49,7 +49,7 @@
 \begin{document}
 
 \setnewcodekey{codedesc}{
-  texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj},
+  texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
   emph={lbracket,rbracket,stmeta},
   emph2={tscode,tsdemo},
   keywd2={oarg,arg,parg,xarg,meta,color},
@@ -77,7 +77,7 @@
 
 This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,xpeekahead,pifont}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
 
-No assumption is made about page layout (besides ``having a marginpar''),  or underlying macros, so that it can be used with any document class.
+No assumption is made about page layout (besides ``having a marginpar''),  or underlying macros, so it should be possible to use these with any/most document classes.
 
 \end{typesetabstract}
 
@@ -89,7 +89,7 @@ No assumption is made about page layout (besides ``having a marginpar''),  or un
 This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
-No other package/class is needed, \st{any}, err, most classes can be used as the base one, which allows to demonstrate the documented commands with any desired layout. One glaring counter-example being \tsobj[pkg]{l3doc.cls} which defines an environment also named \tsobj[env]{tsremark}. It still can be used, BUT, the \tsobj[env]{tsremark} will get redefined (a warning will be issued in this case).
+No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, you find a class with compatibility issues, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
 
 \tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
 
@@ -97,7 +97,7 @@ No other package/class is needed, \st{any}, err, most classes can be used as the
 This package ``can'' be used with multi-column classes, given that the \tsobj[code]{\linewidth,\columnsep} are defined appropriately. \tsobj{\linewidth} shall defaults to text/column real width, whilst \tsobj{\columnsep}, if needed (2 or more columns) shall be greater than \tsobj{\marginparwidth} plus \tsobj{\marginparsep}.
 
 \subsection{Current Version}
-This doc regards to \tsobj[pkg]{codedescribe} version \PkgInfo{codedescribe}{version}, \tsobj[pkg]{codelisting} version \PkgInfo{codelisting}{version} and \tsobj[pkg]{codelstlang} version \PkgInfo{codelstlang}{version}. Those packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
+All packages (\tsobj[pkg]{codedescribe,codelisting,codelstlang,codedescsets}) share the same version, currently: \PkgInfo{codelstlang}{version}. Those packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
 
 
 \section{codelisting Package}
@@ -377,6 +377,7 @@ This package aims at minimizing the number of commands, being the object kind (i
 
 \begin{describelist}{option}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
+\describe{label set}{(new: 2025/11/22) This allows to pre-select a set of labels, see \ref{labelset}}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
 \describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
@@ -494,6 +495,57 @@ For instance, the many optional \tsobj[arg]{*arg} are defined as follow:
 
 \tscode*[codeprefix=~,codedesc]{demo.fmtdef}
 
+\subsubsection{Locale}
+The following commands allows to customize the many `labels' in use, in particular the sub-package \tsobj[pkg]{codedescsets} holds a few locale sets, the user is invited, if needed, to submit translations for a specific case/language via a PR (Push Request) at \url{https://github.com/alceu-frigeri/codedescribe}
+
+
+\begin{codedescribe}[code,new=2025/11/22]{\setcodelabels,\newlabelset,\selectlabelset}\label{labelset}
+\begin{codesyntax} %
+	\tsmacro{\setcodelabels}{label-keys}
+	\tsmacro{\newlabelset}{lang,label-keys}
+	\tsmacro{\selectlabelset}{lang}
+\end{codesyntax}
+kkkk
+\end{codedescribe}
+
+The \tsobj[marg]{label-keys} can be:
+\begin{describelist}{key}
+  \describe{new}{(defaults to: `new'). It set's the `new' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{update}{(defaults to: `updated'). It set's the `update' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{note}{(defaults to: `NB'). It set's the `note' label used in the \tsobj[env]{codedescribe} environment.}
+  \describe{and}{(defaults to: `and'). It set's the `and' label used in the many \tsobj{\tsobj} commands (hint: last item separator).}
+  \describe{or}{(defaults to: `or'). It set's the `or' label used in the many \tsobj{\tsobj} commands (hint: last item separator).}
+  \describe{months}{(defaults to: {January, February, March, April, May, June, July, August, September, October, November, December}). It set's the month list used by the \tsobj{\tsdate} command, see \ref{aux-commands}.}
+\end{describelist}
+
+\begin{tsremark}
+  \tsobj{\newlabelset} can be used to redefine a given set, though, if doing so, one has to provide all labels. The old (if any) definitions will be erased. No warnings given.
+\end{tsremark}
+
+
+For example, this sets a new label set for German. In fact, since this is defined in the \tsobj[pkg]{codedescsets} this label set can be used when loading this package, see \ref{codedesc.pack-options}.
+\begin{codestore}[labelset]
+\newlabelset {deutsch}
+  {
+    new     = neu           ,
+    update  = aktualisiert  ,
+    note    = NB            ,
+    remark  = Hinweis       ,
+    and     = und           ,
+    or      = oder          ,
+    months  = 
+      {
+        Januar, Februar, März, April, 
+        Mai, Juni, Juli, August, 
+        September, Oktober, November, Dezember
+      }
+  }
+\end{codestore}
+
+
+
+\tscode*[codedesc,codeprefix={}]{labelset}
+
 \subsection{Environments}\label{desc-env}
 
 \begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a note example},update=2024/02/16,update=2025/09/25]{codedescribe}
@@ -514,6 +566,9 @@ This is the main environment to describe \tsobj[env,comma]{Commands, Variables, 
 \end{codedescribe}
 \begin{tsremark}
 The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
+\end{tsremark}
+\begin{tsremark}
+  If using one of the keys \tsobj[key,or]{new,update,note,rulecolor,EXP,rEXP} the user must also provide an object type. \tsobj[key]{code} is the solely default IF nothing else is provided.
 \end{tsremark}
 \begin{tsremark}
 With the \tsobj[option]{strict} package option
@@ -595,6 +650,7 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
 \begin{describelist*}{key}
   \describe{mid sep}{To change the item separator. Defaults to a comma, can be anything.}
   \describe{sep}{To change the separator between the last two items. Defaults to ``and''.}
+  \describe{or}{To set the separator between the last two items to ``or''.}
   \describe{comma}{To set the separator between the last two items to a comma.}
   \describe{bnf or}{To produce a bnf style or list, like \tsobj[option,bnf or]{abc,xdh,htf,hrf}.}
   \describe{meta or}{To produce a bnf style or list between angles, like \tsobj[option,meta or]{abc,xdh,htf,hrf}.}
@@ -667,7 +723,7 @@ Typesets a small note at the margin.
  \tsdemo[codedesc]{demo.remark}
 \end{codedescribe}
 
-\subsection{Auxiliary Commands and Environment}
+\subsection{Auxiliary Commands and Environment}\label{aux-commands}
 In case the Document Class being used redefines the \tsobj[code]{\maketitle} command and/or \tsobj[env]{abstract} environment, alternatives are provided (based on the article class).
 
 \begin{codedescribe}[code]{\typesettitle,\tstitle}
