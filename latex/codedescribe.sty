@@ -220,6 +220,21 @@
 %%% label sets (package option)
 %%%%%%%
 
+
+
+%%%%%%%
+%%% This one comes first because can be called while loading.
+%%%%%%%
+\msg_new:nnnn {codedesc} {locale-err}
+  {
+    (ID:#1)~label~set~(#2)~not~defined! ~valid~ones:~#3
+  }
+  {
+    You~tried~to~use~a~non~defined~label~set:#2.
+    ~Error~Code~ ID:<#1>.
+    ~Valid~ sets: ~ #3
+  }
+
 \keys_define:nn {codedescribe / labels}
   {
     new .usage:n = general , 
@@ -258,16 +273,25 @@
   }
 
 \prop_new:N \l__codedesc_labelsets_prop
+\seq_new:N \l__codedesc_labelsets_seq
 
 \cs_new_protected:Npn \__codedesc_new_labelset:nn #1#2
   {
     \keys_precompile:nnN {codedescribe / labels} {#2} \l__codedesc_tmpa_tl
     \prop_put:NnV \l__codedesc_labelsets_prop {#1} \l__codedesc_tmpa_tl
+    \seq_put_right:Nn \l__codedesc_labelsets_seq {#1}
   }
 
+\cs_generate_variant:Nn \msg_error:nnnnn {nnnne}
 \cs_new_protected:Npn \__codedesc_select_labelset:n #1
   {
-    \prop_item:Nn \l__codedesc_labelsets_prop {#1}
+    %\prop_item:Nn \l__codedesc_labelsets_prop {#1}
+    \prop_get:NnNTF \l__codedesc_labelsets_prop {#1} \l__codedesc_tmpa_tl
+      { \l__codedesc_tmpa_tl }
+      {
+        \msg_error:nnnne {codedesc} {locale-err}
+          {locale01} {#1} { \seq_use:Nn \l__codedesc_labelsets_seq {,~} } 
+      }
   }
 
 \cs_new_eq:NN \newlabelset    \__codedesc_new_labelset:nn
@@ -474,9 +498,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
+\tl_new:N \l__codedesc_tmpfont_tl
+\tl_new:N \l__codedesc_tmpfsize_tl
 \keys_define:nn { codedesc / scratch_def }
 {
+  font.usage:n = general ,
+  font .value_required:n = true ,
+  font .code:n ={ \tl_set:Nn \l__codedesc_tmpfont_tl {#1} } ,
+  
+  fsize.usage:n = general ,
+  fsize .value_required:n = true ,
+  fsize .code:n ={ \tl_set:Nn \l__codedesc_tmpfsize_tl {#1} } ,
+
   meta.usage:n = general ,
   meta .value_forbidden:n = true ,
   meta .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {meta} } ,
@@ -544,7 +577,10 @@
     \tl_clear:N \l__codedesc_tmpshape_tl
     \tl_clear:N \l__codedesc_tmpcolor_tl        
     \tl_clear:N \l__codedesc_tmplbracket_tl        
-    \tl_clear:N \l__codedesc_tmprbracket_tl        
+    \tl_clear:N \l__codedesc_tmprbracket_tl 
+    \tl_clear:N \l__codedesc_tmpfont_tl
+    \tl_clear:N \l__codedesc_tmpfsize_tl
+           
 
     \keys_set:nn { codedesc / grp_scratch } {#1}
     \keys_set:nn { codedesc / scratch_def } {#2}
@@ -581,6 +617,20 @@
         \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
         \tl_put_right:Nn \l__codedesc_tmpa_tl { rbracket = } 
         \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmprbracket_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
+      }
+    \tl_if_empty:NF \l__codedesc_tmpfont_tl
+      { 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
+        \tl_put_right:Nn \l__codedesc_tmpa_tl { font = } 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfont_tl
+        \tl_set:Nn \l__codedesc_tmpb_tl { , }
+      }
+    \tl_if_empty:NF \l__codedesc_tmpfsize_tl
+      { 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
+        \tl_put_right:Nn \l__codedesc_tmpa_tl { fsize = } 
+        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfsize_tl
 %        \tl_set:Nn \l__codedesc_tmpb_tl { , }
       }
       
@@ -589,7 +639,9 @@
     \tl_clear:N \l__codedesc_makefmt_tmp_tl
     \keys_set:nV { codedesc / make fmt } \l__codedesc_tmpa_tl
     \cs_set:cV {__codedesc_grpfmt_ #1:} \l__codedesc_makefmt_tmp_tl
-
+%    \tl_show:n {<<#1>><<#2>>}
+%    \tl_show:N \l__codedesc_tmpa_tl
+%    \tl_show:N \l__codedesc_makefmt_tmp_tl
   }
 \cs_generate_variant:Nn \cs_set:Nn {cV}
 
@@ -620,6 +672,24 @@
 
 \keys_define:nn { codedesc / make fmt }
 {
+  fsize .usage:n = general , 
+  fsize .value_required:n = true ,
+  fsize .code:n  = { 
+    \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+      {
+        \exp_args:NNc \cs_set_eq:NN \__codedesc_metasize_tl: {#1}
+      }
+   } ,
+
+  font .usage:n = general , 
+  font .value_required:n = true ,
+  font .code:n  = { 
+    \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+      {
+        \exp_args:NNc \cs_set_eq:NN \__codedesc_metafont_tl: {#1}
+      }
+   } ,
+
   meta .usage:n = general , 
   meta .value_forbidden:n = true ,
   meta .code:n  = { 
@@ -725,68 +795,43 @@
 
 
 
-  %\colorlet{c__codedesc_none_color}{red!70!black}
-  %\color_set:nn {c__codedesc_none_color}{red!70!black}
-
-	%\colorlet{c__codedesc_verb_color}{ black }
-	%\color_set:nn{c__codedesc_verb_color}{ black }
 \__codedesc_group_define:nn {verb} {color=c__codedesc_verb_color}
 \__codedesc_object_define:nnn {verb}{verb}{verb}
 \__codedesc_object_define:nnn {xverb}{verb}{xverb}
 
-	%\colorlet{c__codedesc_marg_color}{ gray!60!black }
-	%\color_set:nn{c__codedesc_marg_color}{ gray!60!black }
 \__codedesc_group_define:nn {meta} {meta,color=c__codedesc_marg_color}
 \__codedesc_object_define:nnn {meta}{meta}{}
 \__codedesc_object_define:nnn {arg}{meta}{}
 \__codedesc_object_define:nnn {marg}{meta}{lbracket={\{},rbracket={\}}}
 
-	%\colorlet{c__codedesc_oarg_color}{ gray!90!black }
-	%\color_set:nn{c__codedesc_oarg_color}{ gray!90!black }
 \__codedesc_group_define:nn {oarg} {meta,color=c__codedesc_oarg_color}
 \__codedesc_object_define:nnn {oarg}{oarg}{lbracket={[},rbracket={]}}
 \__codedesc_object_define:nnn {parg}{oarg}{lbracket={(},rbracket={)}}
 \__codedesc_object_define:nnn {xarg}{oarg}{lbracket={<},rbracket={>}}
 
-	%\colorlet{c__codedesc_code_color}{ blue!40!black }
-	%\color_set:nn{c__codedesc_code_color}{ blue!40!black }
 \__codedesc_group_define:nn {code} {code,color=c__codedesc_code_color}
 \__codedesc_object_define:nnn {code}{code}{}
 \__codedesc_object_define:nnn {macro}{code}{}
 \__codedesc_object_define:nnn {function}{code}{}
-%\__codedesc_group_define:nn {code} {xverb,color=red}
-%\__codedesc_object_define:nnn {xcode}{code}{xverb}
 
-	%\colorlet{c__codedesc_syntax_color}{ blue!60!black }
-	%\color_set:nn{c__codedesc_syntax_color}{ blue!60!black }
 \__codedesc_group_define:nn {syntax} {color=c__codedesc_syntax_color}
 \__codedesc_object_define:nnn {syntax}{syntax}{}
 
-	%\colorlet{c__codedesc_keyval_color}{ teal!40!black }
-	%\color_set:nn{c__codedesc_keyval_color}{ teal!40!black }
 \__codedesc_group_define:nn {keyval} {slshape,color=c__codedesc_keyval_color}
 \__codedesc_object_define:nnn {keyval}{keyval}{}
 \__codedesc_object_define:nnn {key}{keyval}{}
 \__codedesc_object_define:nnn {keys}{keyval}{}
 \__codedesc_object_define:nnn {value}{keyval}{}
 
-	%\colorlet{c__codedesc_options_color}{ green!30!black }
-	%\color_set:nn{c__codedesc_options_color}{ green!30!black }
 \__codedesc_group_define:nn {option} {color=c__codedesc_options_color}
 \__codedesc_object_define:nnn {option}{option}{}
 
-	%\colorlet{c__codedesc_defaultval_color}{ blue!60!black }
-	%\color_set:nn{c__codedesc_defaultval_color}{ blue!60!black }
 \__codedesc_group_define:nn {defaultval} {color=c__codedesc_defaultval_color}
 \__codedesc_object_define:nnn {defaultval}{defaultval}{}
 
-	%\colorlet{c__codedesc_env_color}{ green!30!black }
-	%\color_set:nn{c__codedesc_env_color}{ green!30!black }
 \__codedesc_group_define:nn {env} {slshape,color=c__codedesc_env_color}
 \__codedesc_object_define:nnn {env}{env}{}
 
-	%\colorlet{c__codedesc_pkg_color}{ green!30!black }
-	%\color_set:nn{c__codedesc_pkg_color}{ green!30!black }
 \__codedesc_group_define:nn {pkg} {slshape,color=c__codedesc_pkg_color}
 \__codedesc_object_define:nnn {pkg}{pkg}{}
 \__codedesc_object_define:nnn {pack}{pkg}{}
@@ -884,26 +929,25 @@
       {
         \tl_set:Nn \l__codedesc_sep_tl { ~ #1 ~ }
       },
-  	%
-  	%
+
     sep.usage:n = general,
     sep.code:n = 
       {
         \tl_set:Nn \l__codedesc_lastsep_tl { ~ #1 ~ }
       },
-  	%
+
     or.usage:n = general,
     or.code:n = 
       {
         \tl_set:Nn \l__codedesc_lastsep_tl { ~ \l__codedesc_or_label_tl{} ~ }
       },
-  	%
+
     comma.usage:n = general,
     comma.code:n = 
       {
         \tl_set:Nn \l__codedesc_lastsep_tl { , ~ }
       },
-    %
+
     meta~ or .usage:n = general,
     meta~ or .code:n =
       {
@@ -1216,7 +1260,7 @@
         \bool_set_false:N \l__codedesc_longblock_bool
         \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codedesc_textcolwidth_dim}        
       }
-%    \coffin_clear:N \l__codedesc_syntax_coffin
+
     \bool_gset_false:N \g__codedesc_syntax_bool
     \vcoffin_set:Nnw \l__codedesc_text_coffin {\l__codedesc_textcolwidth_dim}
     
@@ -1301,7 +1345,7 @@
   
  
   
-\NewDocumentEnvironment{codesyntax}{}
+\NewDocumentEnvironment{codesyntax}{O{syntax}}
   {
     \bool_if:NTF \l__codedesc_codedescribe_activ_bool
       {
@@ -1319,7 +1363,7 @@
     \bool_set_true:N \l__codedesc_codesyntax_activ_bool
     
     \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
-    \__codedesc_metafmt:n {syntax}
+    \__codedesc_metafmt:n {#1}
     \hspace*{2em}     %% !!! together with \parindent{-2em}
     \begin{tabular} { @{} l @{} }
       \__codedesc_hline:nnnn {\color{white}}{0.5ex}{2}{-1.5ex}
@@ -1505,8 +1549,8 @@
 \regex_const:Nn   \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
 
 
-% TODO:
-% Test if already defined...
+% TODO: issue #18
+% Test if already defined...maybe not...
 %
 
 \NewDocumentEnvironment {tsremark} {O{ \l__codedesc_remark_label_tl :}}
