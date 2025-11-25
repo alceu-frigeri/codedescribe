@@ -91,6 +91,11 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
+* Version 1.19 (next)
+    - codesyntax new optional parameter, addressing [#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
+    - new format keys (font and fsize), addressing [#22](https://github.com/alceu-frigeri/codedescribe/issues/22)
+    - code demo logic reworked,  addressing [#20](https://github.com/alceu-frigeri/codedescribe/issues/20)
+    
 * Version 1.18 (this)
     - new commands and package option for label sets ('locale') 
       - addressing [#17](https://github.com/alceu-frigeri/codedescribe/issues/17) 
