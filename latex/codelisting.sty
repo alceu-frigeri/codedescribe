@@ -702,14 +702,14 @@
       { % paragraph wide OR one below the other
         \dim_set:Nn \l__codedesc_width_dim {\l__codedesc_textcolwidth_dim}
         \dim_set:Nn \l__codedesc_offset_dim {0pt}
-        \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-        \tl_set:Nn \l__codedesc_rule_out_tl {}
+        \cs_set:Npn \__codedesc_rule_in: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+        \cs_set:Npn \__codedesc_rule_out: {}
       }
       { % half as wide OR side-by-side
         \dim_set:Nn \l__codedesc_width_dim {0.5\l__codedesc_textcolwidth_dim}
         \dim_set:Nn \l__codedesc_offset_dim {0.5\l__codedesc_width_dim}
-        \tl_set:Nn \l__codedesc_rule_in_tl {}
-        \tl_set:Nn \l__codedesc_rule_out_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+        \cs_set:Npn \__codedesc_rule_in: {}
+        \cs_set:Npn \__codedesc_rule_out: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
       }
   
       \__codelist_set_verbsc:n {#2}
@@ -757,7 +757,7 @@
   {
     \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
       { 
-        \l__codedesc_rule_in_tl
+        \__codedesc_rule_in:
         \group_begin:
 %          \skip_vertical:n {\l__codedesc_largerskip_dim}
           \skip_vertical:n {\l__codedesc_tinyskip_dim}
@@ -767,7 +767,7 @@
             { \getstored [#2]{#1} }
           \skip_vertical:n {\l__codedesc_tinyskip_dim}
         \group_end:
-        \l__codedesc_rule_in_tl
+        \__codedesc_rule_in:
       }
   }
 
@@ -841,6 +841,9 @@
 \dim_new:N \l__codedesc_width_dim
 \dim_new:N \l__codedesc_offset_dim
 
+\dim_new:N \l__codelist_code_height_dim
+\dim_new:N \l__codelist_demo_height_dim
+
 
 \cs_new_protected:Npn \__codelist_ts_democode:nnnn #1#2#3#4
   {
@@ -870,7 +873,10 @@
             { \skip_vertical:n {\l__codedesc_large_skip} }
             { \skip_vertical:n {\l__codedesc_largeline_skip} }
         }
-        { % side-by-side
+        { % side-by-side          
+          \dim_set:Ne \l__codelist_code_height_dim { \coffin_ht_plus_dp:N \__codelist_code_coffin}
+          \dim_set:Ne \l__codelist_demo_height_dim { \coffin_ht_plus_dp:N \__codelist_demo_coffin}
+
           \coffin_join:NnnNnnnn
             \__codelist_code_label_coffin {r}{b}
             \__codelist_demo_label_coffin {l}{b}
@@ -882,16 +888,35 @@
         %%%
         %%% create a new coffin, just to have the rules inside
         %%%
-          \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codedesc_width_dim}
+        
+          \dim_compare:nNnTF \l__codelist_code_height_dim < \l__codelist_demo_height_dim
             {
-              \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}
-              \skip_vertical:n {0.5ex}
-              \l__codedesc_rule_out_tl
-              \skip_vertical:n {0.20ex}
-              \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
-              \skip_vertical:n {0.20ex}
-              \l__codedesc_rule_out_tl
+              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codedesc_width_dim}
+                {
+                  \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}
+                  \skip_vertical:n {0.5ex}
+                  \__codedesc_rule_out:
+%                  \skip_vertical:n {0.8611pt}  % was 0.20ex
+                  \skip_vertical:n {0.20ex}  % was 0.20ex
+                  \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
+%                  \skip_vertical:n {0.8611pt}  % was 0.20ex
+                  \skip_vertical:n {0.20ex}  % was 0.20ex
+                  \__codedesc_rule_out:
+                }
             }
+            {
+              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codedesc_width_dim}
+                {
+                  \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}                  
+                  \skip_vertical:n {0.5ex}
+                  \__codedesc_rule_out:
+                  \skip_vertical:n {0.8611pt} % was 0.20ex
+                  \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
+                  \skip_vertical:n {1.0764pt} % was 0.25ex
+                  \__codedesc_rule_out:
+                }
+            }
+
           \coffin_typeset:Nnnnn \__codelist_code_demo_coffin {l}{t}{0pt}{0pt}
           
           \bool_if:NTF \l__codelist_tscode_peek_bool
@@ -924,7 +949,7 @@
       \par\setlength\parindent{0pt}
       \__codelist_ts_settings:nn {#1}{#2}
       
-      \tl_set:Nn \l__codedesc_rule_in_tl {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+      \cs_set:Npn \__codedesc_rule_in: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
     
       \__codelist_democoffin:nn {#3}{#4}
 
