@@ -1,0 +1,161 @@
+%%%==============================================================================
+%% Copyright 2023-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.19} {2025/11/26}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codedescribe
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+   
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplPackage {codecmm}
+  {
+     name        = {codecmm} ,
+     prefix      = {codecmm} ,
+     date        = {2025/11/26} ,
+     version     = {1.19} ,
+     description = {codedescribe/list common commands}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+%%%%%%%
+%%% prep. for an eventual switch over l3color (from xcolor)
+%%%%%%%
+\cs_set_eq:NN \__codecmm_color_select:n \color
+\cs_set_eq:NN \__codecmm_color_set:nn   \colorlet
+\cs_set_eq:NN \__codecmm_color_set:nnn  \definecolor
+
+
+%%%%%%%
+%%%
+%%% 'simplified' bold versions of \hline and \rule
+%%% those don't peek ahead (to see if they are followed by another line)
+%%%
+%%%%%%%
+\cs_new:Npn \__codecmm_hline:nnnn #1#2#3#4 {\noalign{#1\vskip #2\vskip 0pt\hrule height #3\arrayrulewidth\vskip #4\vskip 0pt}}
+\cs_new:Npn \__codecmm_hline:nn #1#2       {\__codecmm_hline:nnnn {#1}{-0.5ex}{#2}{0.25ex}}
+\cs_new:Npn \__codecmm_hline:n #1          {\__codecmm_hline:nnnn {#1}{-0.5ex}{2}{0.25ex}}
+\cs_new:Npn \__codecmm_rule:n #1 {\hrule height #1\arrayrulewidth}
+\cs_new:Npn \__codecmm_rule:     {\hrule height 2\arrayrulewidth}
+
+%
+% Those skips are meant to be small adjustments
+%
+\cs_generate_variant:Nn \skip_set:Nn {Ne}
+\cs_generate_variant:Nn \dim_set:Nn  {Ne}  
+
+\tl_new:N \l__codecmm_ref_tl
+
+\skip_new:N \l__codecmm_null_skip
+\skip_new:N \l__codecmm_tiny_skip
+\skip_new:N \l__codecmm_small_skip
+\skip_new:N \l__codecmm_mid_skip
+\skip_new:N \l__codecmm_large_skip
+\skip_new:N \l__codecmm_larger_skip
+\skip_new:N \l__codecmm_largeline_skip
+\skip_new:N \l__codecmm_neg_skip
+\skip_new:N \l__codecmm_bigneg_skip
+\skip_new:N \l__codecmm_min_skip
+
+\dim_new:N \l__codecmm_tinyskip_dim
+\dim_new:N \l__codecmm_nullskip_dim
+\dim_new:N \l__codecmm_smallskip_dim
+\dim_new:N \l__codecmm_midskip_dim
+\dim_new:N \l__codecmm_largeskip_dim
+\dim_new:N \l__codecmm_largerskip_dim
+\dim_new:N \l__codecmm_baselineskip_dim
+\dim_new:N \l__codecmm_largelineskip_dim
+\dim_new:N \l__codecmm_coffinskip_dim
+
+%\dim_new:N \l__codecmm_baselineskip_dim
+\dim_new:N \l__codecmm_midlineskip_dim
+%\dim_new:N \l__codecmm_largelineskip_dim
+
+\cs_new_protected:Npn \__codecmm_set_skips:n #1 
+  {
+    \tl_set:Ne \l__codecmm_ref_tl       { \fp_eval:n {#1} pt }
+    
+    \tl_set:Ne \l__codecmm_minusA_tl    { minus~ \fp_eval:n { #1 * 3 / 50 } pt }
+    \tl_set:Ne \l__codecmm_minusB_tl    { minus~ \fp_eval:n { #1     / 8  } pt }
+    \tl_set:Ne \l__codecmm_plusA_tl     { plus~  \fp_eval:n { #1     / 5  } pt }
+    \tl_set:Ne \l__codecmm_plusB_tl     { plus~  \fp_eval:n { #1 * 8 / 25 } pt }
+
+    \dim_set:Ne \l__codecmm_tinyskip_dim       { \fp_eval:n { #1     / 10 } pt }
+    \dim_set:Ne \l__codecmm_smallskip_dim      { \fp_eval:n { #1     / 5  } pt }
+    \dim_set:Ne \l__codecmm_midskip_dim        { \fp_eval:n { #1 * 2 / 5  } pt }
+    \dim_set:Ne \l__codecmm_coffinskip_dim     { \fp_eval:n { #1 * 2 / 5  } pt } % minimum skip to avoid random spacing
+    \dim_set:Ne \l__codecmm_largeskip_dim      { \fp_eval:n { #1     / 2  } pt }
+    \dim_set:Ne \l__codecmm_largerskip_dim     { \fp_eval:n { #1 * 3 / 5  } pt }
+    \dim_set:Ne \l__codecmm_baselineskip_dim   { \fp_eval:n { #1          } pt }
+    \dim_set:Ne  \l__codecmm_midlineskip_dim   { \fp_eval:n { #1     / 2  } pt }
+    \dim_set:Ne  \l__codecmm_largelineskip_dim { \fp_eval:n { #1 * 3 / 2  } pt }
+      
+    \skip_set:Nn \l__codecmm_min_skip   { 0 pt plus 1pt minus 1pt }
+     
+    \skip_set:Ne \l__codecmm_null_skip       { 0 pt                            \l__codecmm_plusA_tl \l__codecmm_minusA_tl }
+    \skip_set:Ne \l__codecmm_tiny_skip       { \l__codecmm_tinyskip_dim       \l__codecmm_plusA_tl \l__codecmm_minusA_tl }
+    \skip_set:Ne \l__codecmm_small_skip      { \l__codecmm_smallskip_dim      \l__codecmm_plusA_tl \l__codecmm_minusA_tl }
+    \skip_set:Ne \l__codecmm_mid_skip        { \l__codecmm_midskip_dim        \l__codecmm_plusB_tl \l__codecmm_minusB_tl }
+    \skip_set:Ne \l__codecmm_large_skip      { \l__codecmm_largeskip_dim      \l__codecmm_plusB_tl \l__codecmm_minusB_tl }
+    \skip_set:Ne \l__codecmm_larger_skip     { \l__codecmm_largerskip_dim     \l__codecmm_plusB_tl \l__codecmm_minusB_tl }
+    \skip_set:Ne \l__codecmm_largeline_skip  { \l__codecmm_largelineskip_dim  \l__codecmm_plusB_tl \l__codecmm_minusB_tl }
+    \skip_set:Ne \l__codecmm_neg_skip        { - \l__codecmm_largeskip_dim    \l__codecmm_plusA_tl \l__codecmm_minusB_tl }
+    \skip_set:Ne \l__codecmm_bigneg_skip     { - \l__codecmm_baselineskip_dim \l__codecmm_plusA_tl \l__codecmm_minusB_tl }
+  }
+
+\__codecmm_set_skips:n {\f@size}
+
+
+%%%%%%%
+%%%
+%%% To get the 'real' columnwidth (multicolumn case)
+%%% given the current \linewidth and \textwidth
+%%%
+%%%%%%%
+
+%\dim_new:N \l__codecmm_linewidth_dim
+\dim_new:N \l__codecmm_textcolwidth_dim
+%\fp_new:N \l__codecmm_tmpa_fp
+%\fp_new:N \l__codecmm_tmpb_fp
+
+\cs_new_protected:Npn \__codecmm_set_textcolwidth: 
+  {
+    \dim_set:Nn \l__codecmm_textcolwidth_dim {\linewidth}
+%    \dim_compare:nNnTF {\linewidth} = {\l__codecmm_linewidth_dim}
+%      {}
+%      {
+%%        \dim_set:Nn \l__codecmm_linewidth_dim {\linewidth}
+%%        \fp_set:Nn \l__codecmm_tmpa_fp {(\textwidth - \linewidth) / \textwidth}
+%%        \dim_set:Nn \l__codecmm_textcolwidth_dim {\linewidth - \fp_use:N \l__codecmm_tmpa_fp \columnsep}
+%
+%        \dim_set:Nn \l__codecmm_textcolwidth_dim {\linewidth}
+%      }
+  }
+
+
+

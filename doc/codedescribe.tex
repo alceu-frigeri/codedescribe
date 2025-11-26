@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.18} {2025/11/22}
+%% This is version {1.19} {2025/11/26}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -29,7 +29,6 @@
 %\documentclass[dctools,english]{ufrgscca}
 \documentclass{article}
 \RequirePackage[verbose,a4paper,marginparwidth=28mm,top=3cm,bottom=1.5cm,hmargin={45mm,25mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
-%\usepackage[color scheme = darker]{codedescribe}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
@@ -42,6 +41,9 @@
 
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
+
+
+%\defgroupfmt{code}{color=red,font=\sffamily}
 
 
 \RequirePackage[hidelinks ,hypertexnames=false]{hyperref}
@@ -74,7 +76,7 @@
   
 \begin{typesetabstract}
 
-This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,xpeekahead,pifont}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
+This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,xpeekahead,pifont,xcolor}. Unlike other packages of the kind, a minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
 
 No assumption is made about page layout (besides ``having a marginpar''),  or underlying macros, so it should be possible to use these with any/most document classes.
 
@@ -88,7 +90,7 @@ No assumption is made about page layout (besides ``having a marginpar''),  or un
 This package aims to document both \tsobj[code]{Document} level (i.e. final user) commands, as well \tsobj[code]{Package/Class} level commands. It's fully implemented using \tsobj[pkg]{expl3} syntax and structures, in special \tsobj[pkg]{l3coffins, l3seq, l3keys}. Besides those \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable.
  
  
-No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, a class with compatibility issues is found, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
+Besides those, \tsobj[pkg]{xcolor} is needed to switch colors, and \tsobj[pkg]{xpeekahead} for spacing fine tuning. No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, a class with compatibility issues is found, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
 
 \tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
 
@@ -101,7 +103,7 @@ All packages (\tsobj[pkg]{codedescribe,codelisting,codelstlang,codedescsets}) sh
 
 \section{codelisting Package}
 
-It requires two packages: \tsobj[pkg]{listings,scontents},  defines an environment: \tsobj[env]{codestore}, a few commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
+It loads: \tsobj[pkg]{listings,scontents,xpeekahead},  defines an environment: \tsobj[env]{codestore}, a few commands for listing/demo code: \tsobj[code]{\tscode,\tsmergedcode,\tsdemo,\tsresult,\tsexec} and 2 auxiliary commands: \tsobj{\setcodekeys,\setnewcodekey}.
 
 \subsection{Package Options}\label{codelist.pack-options}
 The following options are also \tsobj[pkg]{codedescribe} options, see \ref{codedesc.pack-options}.
@@ -208,8 +210,10 @@ For Example:
 \begin{codestore}[stmeta]
 		Some \LaTeX{} coding, for example: \ldots.
 \end{codestore}  
+
 This will just typesets \tsobj[key]{stmeta}:
 \tscode*[codeprefix={Sample Code:}] {stmeta}
+
 and this will demonstrate it, side by side with source code:
 \tsdemo[numbers=left,ruleht=0.5, 
     codeprefix={inner sample code},
@@ -263,7 +267,7 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
 \end{codedescribe}
 
-\begin{codedescribe}[key,new={2025/11/22}]{lststyle}
+\begin{codedescribe}[key,new={2025/11/26}]{lststyle}
 \begin{codesyntax}% Also
 	\tsobj[key]{lststyle}
 \end{codesyntax}
@@ -312,7 +316,7 @@ for some extra emphasis sets.
 \begin{codesyntax} %
 	\tsobj[key]{letter,other}
 \end{codesyntax}
-These allow to redefine what a letter or other are (they correspond to the \tsobj[key]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other} default value is an empty list.
+These allow to redefine what a letter or other are (they correspond to the \tsobj[key]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other}'s default value is an empty list.
 \begin{tsremark}
   You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of an \tsobj[pkg]{expl3} function.
 \end{tsremark}
@@ -353,14 +357,14 @@ those set the \tsobj[key]{codeprefix} (default: \LaTeX{} Code:) and \tsobj[key]{
 Sets the indentation to be used when `demonstrating' \LaTeX{}code (\tsobj[code]{\tsdemo}). Defaults to whatever value \tsobj[code]{\parindent} was when the package was first loaded.
 \end{codedescribe}
 
-\begin{codedescribe}[key]{ruleht}%-very-long-long-long,xyz,xyh,kjh,ljd,kls}
+\begin{codedescribe}[key]{ruleht}
 \begin{codesyntax} %
 	\tsobj[key]{ruleht}
 \end{codesyntax}
 When typesetting the `code demo' (\tsobj{\tsdemo}) a set of rules are drawn. The Default, 1, equals to \tsobj{\arrayrulewidth} (usually 0.4pt).
 \end{codedescribe}
 
-\begin{codedescribe}[key,new=2023/11/18]{basicstyle}%-very-long-long-long,xyz,xyh,kjh,ljd,kls}
+\begin{codedescribe}[key,new=2023/11/18]{basicstyle}
 \begin{codesyntax} %
 	\tsobj[key]{basicstyle}
 \end{codesyntax}
@@ -381,11 +385,14 @@ This package aims at minimizing the number of commands, being the object kind (i
 \describe{strict}{Package Warnings will be reported as Package Errors.}
 \describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, TeX thinks they are too wide, when they are not. }
 \describe{color scheme}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
+\describe{load xtra dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
+\describe{TeX dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
+\begin{tsremark}
+   In case of an unknown \tsobj[option]{label set}, an error will be risen, and all known sets will be listed in the log file and terminal.
+\end{tsremark}
 \begin{tsremark}
   \tsobj[option]{color scheme} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
 \end{tsremark}
-\describe{load xtra dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
-\describe{TeX dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
 
 \end{describelist}
 
@@ -397,28 +404,21 @@ This package aims at minimizing the number of commands, being the object kind (i
 \subsubsection{Format Keys}\label{format-keys}
 Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[arg]{format-groups,obj-types} (see \ref{format-custom}):
 \begin{describelist*}{keys}
-  \describe {meta} {to typeset between angles,}
-  \describe {xmeta} {to typeset *verbatim* between angles,}
-  \describe {verb} {to typeset *verbatim*,}
-  \describe {xverb} {to typeset *verbatim*, suppressing all spaces,}
-  \describe {code} {to typeset *verbatim*, suppressing all spaces and replacing a TF by \underline{TF},}
-  \describe {nofmt} {in case of a redefinition, to remove the `base' formatting,}
+  \describe {meta} {sets base format to typeset between angles,}
+  \describe {xmeta} {sets base format to typeset *verbatim* between angles,}
+  \describe {verb} {sets base format to typeset *verbatim*,}
+  \describe {xverb} {sets base format to typeset *verbatim*, no spaces,}
+  \describe {code} {sets base format to typeset *verbatim*, no spaces, replacing a TF by \underline{TF},}
+  \describe {nofmt} {in case of a redefinition, removes the base formatting,}
   \describe {slshape} {to use a slanted font shape,}
   \describe {itshape} {to use an italic font shape,}
-  \describe {noshape} {in case of a redefinition, to remove the `base' shape,}
-  \describe {lbracket}  {defines the left bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
-  \describe {rbracket}  {defines the right bracket (when using \tsobj{\tsargs}). \textbf{Note:} this key must have an associated value,}
-  \describe {color}   {defines the text color. \textbf{Note:} this key must have an associated value (a color, as understood by \tsobj[pkg]{xcolor} package).}
+  \describe {noshape} {in case of a redefinition, removes the base shape,}
+  \describe {lbracket}  {sets the left bracket (when using \tsobj{\tsargs}),}
+  \describe {rbracket}  {sets the right bracket (when using \tsobj{\tsargs}),}
+  \describe {color}   {sets the text color. \textbf{NB:} color's name, as understood by \tsobj[pkg]{xcolor} package,}
+  \describe {font} {defaults to \tsobj{\ttfamily}. Sets font family,}
+  \describe {fsize} {defaults to \tsobj{\small}. Sets font size.}
 \end{describelist*}
-
-%\ExplSyntaxOn
-%\makeatletter
-%\cs_show:N \color_select:n
-%\cs_show:N \f@size
-%\skip_show:n {\lineskip}
-%\skip_show:n {\baselineskip}
-%\makeatother
-%\ExplSyntaxOff
 
 \subsubsection{Format Groups}\label{format-group}
 Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom \tsobj[arg]{format-groups}. The following ones are predefined:
@@ -584,13 +584,13 @@ With the \tsobj[option]{strict} package option
 an error will be raised if used inside another \tsobj[env]{codedescribe} environment. Otherwise a warning will be raised. (it's safe to do so, but it doesn't make much sense).
 \end{tsremark}
 
-\begin{codedescribe}[env,update=2025/09/25]{codesyntax}
+\begin{codedescribe}[env,update=2025/09/25,update=2025/11/25]{codesyntax}
 \begin{codesyntax}
-\tsmacro{\begin{codesyntax}}{}
+\tsmacro{\begin{codesyntax}}[obj-type]{}
 \ldots
 \tsmacro{\end{codesyntax}}{}
 \end{codesyntax}
-The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line.
+The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line. The content will be formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[syntax]{syntax}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom})
 \end{codedescribe}
 
 \begin{tsremark}
@@ -803,6 +803,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
   Those are usual document level, \LaTeXe, commands. In particular none of them includes any `@' symbol.
 \end{tsremark}  
 \end{describelist}
+
 
 \printbibliography
 

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.18} {2025/11/22}
+%% This is version {1.19} {2025/11/26}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/11/22} ,
-     version     = {1.18} ,
+     date        = {2025/11/26} ,
+     version     = {1.19} ,
      description = {LaTeX Code Listing}
   }
 %%%%%%%
@@ -44,8 +44,9 @@
 
 
 
-\RequirePackage{listings,scontents}
-\RequirePackage{xpeekahead}
+\RequirePackage{listings,scontents,xcolor}
+\RequirePackage{xpeekahead,codecmm}
+
 
 \bool_new:N \l__codelist_xtradialects_bool
 \tl_set:Nn \l__codelist_dialect_tl {alsolanguage = [doctools]TeX ,}
@@ -152,66 +153,66 @@
 
 \dim_set:Nn\l__codelist_org_parindent_dim{\parindent}
 
-\colorlet{c__codelist_lightred_color}{white!97!red}
-\colorlet{c__codelist_lightgreen_color}{white!97!green}
-\colorlet{c__codelist_lightblue_color}{white!97!blue}
-\colorlet{c__codelist_lightmagenta_color}{white!97!magenta}
-\colorlet{c__codelist_lightyellow_color}{white!97!yellow}
-\colorlet{c__codelist_lightteal_color}{white!97!teal}
-\colorlet{c__codelist_lightcyan_color}{white!97!cyan}
+\__codecmm_color_set:nn{c__codelist_lightred_color}{white!97!red}
+\__codecmm_color_set:nn{c__codelist_lightgreen_color}{white!97!green}
+\__codecmm_color_set:nn{c__codelist_lightblue_color}{white!97!blue}
+\__codecmm_color_set:nn{c__codelist_lightmagenta_color}{white!97!magenta}
+\__codecmm_color_set:nn{c__codelist_lightyellow_color}{white!97!yellow}
+\__codecmm_color_set:nn{c__codelist_lightteal_color}{white!97!teal}
+\__codecmm_color_set:nn{c__codelist_lightcyan_color}{white!97!cyan}
 
-\colorlet{c__codelist_lightgray_color}{white!97!black}
-\colorlet{c__codelist_gray_color}{gray}
-\definecolor{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
-\definecolor{c__codelist_blackgray_color}{rgb}{0.8,0.8,0.8}
+\__codecmm_color_set:nn{c__codelist_lightgray_color}{white!97!black}
+\__codecmm_color_set:nn{c__codelist_gray_color}{gray}
+\__codecmm_color_set:nnn{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
+\__codecmm_color_set:nnn{c__codelist_blackgray_color}{rgb}{0.8,0.8,0.8}
 
-\colorlet{c__codelist_darkred_color}{red!30!black!100}
-\colorlet{c__codelist_darkgreen_color}{green!30!black!100}
-\colorlet{c__codelist_darkblue_color}{blue!30!black!100}
-\colorlet{c__codelist_darkmagenta_color}{magenta!30!black!100}
-\colorlet{c__codelist_darkyellow_color}{yellow!30!black!100}
-\colorlet{c__codelist_darkteal_color}{teal!30!black!100}
-\colorlet{c__codelist_darkcyan_color}{cyan!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkred_color}{red!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkgreen_color}{green!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkblue_color}{blue!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkmagenta_color}{magenta!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkyellow_color}{yellow!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkteal_color}{teal!30!black!100}
+\__codecmm_color_set:nn{c__codelist_darkcyan_color}{cyan!30!black!100}
 
-\colorlet{c__codelist_redishblack_color}{red!50!black!100}
-\colorlet{c__codelist_greenishblack_color}{green!50!black!100}
-\colorlet{c__codelist_blueishblack_color}{blue!50!black!100}
-\colorlet{c__codelist_magentaishblack_color}{magenta!50!black!100}
-\colorlet{c__codelist_yellowishblack_color}{yellow!50!black!100}
-\colorlet{c__codelist_tealishblack_color}{teal!50!black!100}
-\colorlet{c__codelist_cyanishblack_color}{cyan!50!black!100}
+\__codecmm_color_set:nn{c__codelist_redishblack_color}{red!50!black!100}
+\__codecmm_color_set:nn{c__codelist_greenishblack_color}{green!50!black!100}
+\__codecmm_color_set:nn{c__codelist_blueishblack_color}{blue!50!black!100}
+\__codecmm_color_set:nn{c__codelist_magentaishblack_color}{magenta!50!black!100}
+\__codecmm_color_set:nn{c__codelist_yellowishblack_color}{yellow!50!black!100}
+\__codecmm_color_set:nn{c__codelist_tealishblack_color}{teal!50!black!100}
+\__codecmm_color_set:nn{c__codelist_cyanishblack_color}{cyan!50!black!100}
 
-\colorlet{c__codelist_redblack_color}{red!75!black!100}
-\colorlet{c__codelist_greenblack_color}{green!75!black!100}
-\colorlet{c__codelist_blueblack_color}{blue!75!black!100}
-\colorlet{c__codelist_magentablack_color}{magenta!75!black!100}
-\colorlet{c__codelist_yellowblack_color}{yellow!75!black!100}
-\colorlet{c__codelist_tealblack_color}{teal!75!black!100}
-\colorlet{c__codelist_cyanblack_color}{cyan!75!black!100}
+\__codecmm_color_set:nn{c__codelist_redblack_color}{red!75!black!100}
+\__codecmm_color_set:nn{c__codelist_greenblack_color}{green!75!black!100}
+\__codecmm_color_set:nn{c__codelist_blueblack_color}{blue!75!black!100}
+\__codecmm_color_set:nn{c__codelist_magentablack_color}{magenta!75!black!100}
+\__codecmm_color_set:nn{c__codelist_yellowblack_color}{yellow!75!black!100}
+\__codecmm_color_set:nn{c__codelist_tealblack_color}{teal!75!black!100}
+\__codecmm_color_set:nn{c__codelist_cyanblack_color}{cyan!75!black!100}
 
-\colorlet{c__codelist_grayred_color}{red!30!gray!100}
-\colorlet{c__codelist_graygreen_color}{green!30!gray!100}
-\colorlet{c__codelist_grayblue_color}{blue!30!gray!100}
-\colorlet{c__codelist_graymagenta_color}{magenta!30!gray!100}
-\colorlet{c__codelist_grayyellow_color}{yellow!30!gray!100}
-\colorlet{c__codelist_grayteal_color}{teal!30!gray!100}
-\colorlet{c__codelist_graycyan_color}{cyan!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_grayred_color}{red!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_graygreen_color}{green!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_grayblue_color}{blue!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_graymagenta_color}{magenta!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_grayyellow_color}{yellow!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_grayteal_color}{teal!30!gray!100}
+\__codecmm_color_set:nn{c__codelist_graycyan_color}{cyan!30!gray!100}
 
-\colorlet{c__codelist_redishgray_color}{red!50!gray!100}
-\colorlet{c__codelist_greenishgray_color}{green!50!gray!100}
-\colorlet{c__codelist_blueishgray_color}{blue!50!gray!100}
-\colorlet{c__codelist_magentaishgray_color}{magenta!50!gray!100}
-\colorlet{c__codelist_yellowishgray_color}{yellow!50!gray!100}
-\colorlet{c__codelist_tealishgray_color}{teal!50!gray!100}
-\colorlet{c__codelist_cyanishgray_color}{cyan!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_redishgray_color}{red!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_greenishgray_color}{green!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_blueishgray_color}{blue!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_magentaishgray_color}{magenta!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_yellowishgray_color}{yellow!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_tealishgray_color}{teal!50!gray!100}
+\__codecmm_color_set:nn{c__codelist_cyanishgray_color}{cyan!50!gray!100}
 
-\colorlet{c__codelist_redgray_color}{red!75!gray!100}
-\colorlet{c__codelist_greengray_color}{green!75!gray!100}
-\colorlet{c__codelist_bluegray_color}{blue!75!gray!100}
-\colorlet{c__codelist_magentagray_color}{magenta!75!gray!100}
-\colorlet{c__codelist_yellowgray_color}{yellow!75!gray!100}
-\colorlet{c__codelist_tealgray_color}{teal!75!gray!100}
-\colorlet{c__codelist_cyangray_color}{cyan!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_redgray_color}{red!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_greengray_color}{green!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_bluegray_color}{blue!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_magentagray_color}{magenta!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_yellowgray_color}{yellow!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_tealgray_color}{teal!75!gray!100}
+\__codecmm_color_set:nn{c__codelist_cyangray_color}{cyan!75!gray!100}
 
 \tl_set:Nn \l__codelist_bckgnd_color_default_tl{c__codelist_lightgray_color}%
 \tl_set:Nn \l__codelist_string_color_default_tl{c__codelist_darkteal_color}
@@ -250,7 +251,7 @@
 
   texcsstyle    .usage:n   =   general,
   texcsstyle    .code:n    =  { \tl_set:Nn \l__codelist_texcsAstyle_tl {#1} },
-  texcsstyle    .default:n =  \bfseries\color{ \l__codelist_texcsA_color_default_tl },
+  texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsA_color_default_tl },
 
   settexcs2     .usage:n   =   general,
   settexcs2     .code:n    =  { \tl_set:Nn \l__codelist_texcsB_tl {#1} },
@@ -262,7 +263,7 @@
 
   texcs2style   .usage:n   =   general,
   texcs2style   .code:n    =  { \tl_set:Nn \l__codelist_texcsBstyle_tl {#1} },
-  texcs2style   .default:n =  \bfseries\color{ \l__codelist_texcsB_color_default_tl } ,
+  texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsB_color_default_tl } ,
 
   settexcs3     .usage:n   =   general,
   settexcs3     .code:n    =  { \tl_set:Nn \l__codelist_texcsC_tl {#1} },
@@ -274,7 +275,7 @@
 
   texcs3style   .usage:n   =   general,
   texcs3style   .code:n    =  { \tl_set:Nn \l__codelist_texcsCstyle_tl {#1} },
-  texcs3style   .default:n =  \bfseries\color{ \l__codelist_texcsC_color_default_tl } ,
+  texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsC_color_default_tl } ,
 
   settexcs4     .usage:n   =   general,
   settexcs4     .code:n    =  { \tl_set:Nn \l__codelist_texcsD_tl {#1} },
@@ -286,7 +287,7 @@
 
   texcs4style   .usage:n   =   general,
   texcs4style   .code:n    =  { \tl_set:Nn \l__codelist_texcsDstyle_tl {#1} },
-  texcs4style   .default:n =  \bfseries\color{ \l__codelist_texcsD_color_default_tl } ,
+  texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsD_color_default_tl } ,
 
   setkeywd      .usage:n   =   general,
   setkeywd      .code:n    =  { \tl_set:Nn \l__codelist_keywdA_tl {#1} },
@@ -298,7 +299,7 @@
 
   keywdstyle    .usage:n   =   general,
   keywdstyle    .code:n    =  { \tl_set:Nn \l__codelist_keywdstyle_tl {#1} },
-  keywdstyle    .default:n =  \bfseries\color{ \l__codelist_keywdA_color_default_tl } ,
+  keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdA_color_default_tl } ,
 
   setkeywd2     .usage:n   =   general,
   setkeywd2     .code:n    =  { \tl_set:Nn \l__codelist_keywdB_tl {#1} },
@@ -310,7 +311,7 @@
 
   keywd2style   .usage:n   =   general,
   keywd2style   .code:n    =  { \tl_set:Nn \l__codelist_keywdBstyle_tl {#1} },
-  keywd2style   .default:n =  \bfseries\color{ \l__codelist_keywdB_color_default_tl } ,
+  keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdB_color_default_tl } ,
 
   setkeywd3     .usage:n   =   general,
   setkeywd3     .code:n    =  { \tl_set:Nn \l__codelist_keywdC_tl {#1} },
@@ -322,7 +323,7 @@
 
   keywd3style   .usage:n   =   general,
   keywd3style   .code:n    =  { \tl_set:Nn \l__codelist_keywdCstyle_tl {#1} },
-  keywd3style   .default:n =  \bfseries\color{ \l__codelist_keywdC_color_default_tl } ,
+  keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdC_color_default_tl } ,
 
   setkeywd4     .usage:n   =   general,
   setkeywd4     .code:n    =  { \tl_set:Nn \l__codelist_keywdD_tl {#1} },
@@ -334,7 +335,7 @@
 
   keywd4style   .usage:n   =   general,
   keywd4style   .code:n    =  { \tl_set:Nn \l__codelist_keywdDstyle_tl {#1} },
-  keywd4style   .default:n =  \bfseries\color{ \l__codelist_keywdD_color_default_tl } ,
+  keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdD_color_default_tl } ,
 
   setemph       .usage:n   =   general,
   setemph       .code:n    =  { \tl_set:Nn \l__codelist_emphA_tl {#1} },
@@ -346,7 +347,7 @@
 
   emphstyle     .usage:n   =   general,
   emphstyle     .code:n    =  { \tl_set:Nn \l__codelist_emphAstyle_tl {#1} },
-  emphstyle     .default:n =  \bfseries\color{ \l__codelist_emphA_color_default_tl } ,
+  emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphA_color_default_tl } ,
 
   setemph2      .usage:n   =   general,
   setemph2      .code:n    =  { \tl_set:Nn \l__codelist_emphB_tl {#1} },
@@ -358,7 +359,7 @@
 
   emph2style    .usage:n   =   general,
   emph2style    .code:n    =  { \tl_set:Nn \l__codelist_emphBstyle_tl {#1} },
-  emph2style    .default:n =  \bfseries\color{ \l__codelist_emphB_color_default_tl } ,
+  emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphB_color_default_tl } ,
 
   setemph3      .usage:n   =   general,
   setemph3      .code:n    =  { \tl_set:Nn \l__codelist_emphC_tl {#1} },
@@ -370,7 +371,7 @@
 
   emph3style    .usage:n   =   general,
   emph3style    .code:n    =  { \tl_set:Nn \l__codelist_emphCstyle_tl {#1} },
-  emph3style    .default:n =  \bfseries\color{ \l__codelist_emphC_color_default_tl } ,
+  emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphC_color_default_tl } ,
 
   setemph4      .usage:n   =   general,
   setemph4      .code:n    =  { \tl_set:Nn \l__codelist_emphD_tl {#1} },
@@ -382,23 +383,23 @@
 
   emph4style    .usage:n   =   general,
   emph4style    .code:n    =  { \tl_set:Nn \l__codelist_emphDstyle_tl {#1} },
-  emph4style    .default:n =  \bfseries\color{ \l__codelist_emphD_color_default_tl } ,
+  emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphD_color_default_tl } ,
 
   stringstyle   .usage:n   =   general,
   stringstyle   .code:n    =  { \tl_set:Nn \l__codelist_stringstyle_tl {#1} },
-  stringstyle   .default:n =  \color{ \l__codelist_string_color_default_tl } ,
+  stringstyle   .default:n =  \__codecmm_color_select:n{ \l__codelist_string_color_default_tl } ,
 
   commentstyle  .usage:n   =   general,
   commentstyle  .code:n    =  { \tl_set:Nn \l__codelist_commentstyle_tl {#1} },
-  commentstyle  .default:n =  \color{ \l__codelist_comment_color_default_tl } ,
+  commentstyle  .default:n =  \__codecmm_color_select:n{ \l__codelist_comment_color_default_tl } ,
 
   bckgndcolor   .usage:n   =   general,
   bckgndcolor   .code:n    =  { \tl_set:Nn \l__codelist_bckgndcolor_tl {#1} },
-  bckgndcolor   .default:n =  \color{ \l__codelist_bckgnd_color_default_tl } ,
+  bckgndcolor   .default:n =  \__codecmm_color_select:n{ \l__codelist_bckgnd_color_default_tl } ,
 
   rulecolor     .usage:n   =   general,
   rulecolor     .code:n    =  { \tl_set:Nn \l__codelist_rulecolor_tl {#1} },
-  rulecolor     .default:n =  \color{ \l__codelist_rule_color_default_tl } ,
+  rulecolor     .default:n =  \__codecmm_color_select:n{ \l__codelist_rule_color_default_tl } ,
 
   numbers       .usage:n   =   general,
   numbers       .code:n    =  { \tl_set:Nn \l__codelist_numbers_tl {#1} },
@@ -406,7 +407,7 @@
 
   numberstyle   .usage:n   =   general,
   numberstyle   .code:n    =  { \tl_set:Nn \l__codelist_numberstyle_tl {#1} },
-  numberstyle   .default:n =  \tiny\color{ \l__codelist_number_color_default_tl },
+  numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ \l__codelist_number_color_default_tl },
 
   parindent     .usage:n   =   general,
   parindent     .code:n    =  { \dim_set:Nn\l__codelist_demo_parindent_dim{#1} },
@@ -700,26 +701,26 @@
   {
     \bool_if:NTF #1
       { % paragraph wide OR one below the other
-        \dim_set:Nn \l__codedesc_width_dim {\l__codedesc_textcolwidth_dim}
-        \dim_set:Nn \l__codedesc_offset_dim {0pt}
-        \cs_set:Npn \__codedesc_rule_in: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
-        \cs_set:Npn \__codedesc_rule_out: {}
+        \dim_set:Nn \l__codelist_width_dim {\l__codecmm_textcolwidth_dim}
+        \dim_set:Nn \l__codelist_offset_dim {0pt}
+        \cs_set:Npn \__codelist_rule_in: {\__codecmm_rule:n {\l__codelist_ruleheight_tl}}
+        \cs_set:Npn \__codelist_rule_out: {}
       }
       { % half as wide OR side-by-side
-        \dim_set:Nn \l__codedesc_width_dim {0.5\l__codedesc_textcolwidth_dim}
-        \dim_set:Nn \l__codedesc_offset_dim {0.5\l__codedesc_width_dim}
-        \cs_set:Npn \__codedesc_rule_in: {}
-        \cs_set:Npn \__codedesc_rule_out: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+        \dim_set:Nn \l__codelist_width_dim {0.5\l__codecmm_textcolwidth_dim}
+        \dim_set:Nn \l__codelist_offset_dim {0.5\l__codelist_width_dim}
+        \cs_set:Npn \__codelist_rule_in: {}
+        \cs_set:Npn \__codelist_rule_out: {\__codecmm_rule:n {\l__codelist_ruleheight_tl}}
       }
   
       \__codelist_set_verbsc:n {#2}
       \tl_if_blank:VTF \l__codelist_codeprefix_tl
         {
-          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codedesc_width_dim}
+          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codelist_width_dim}
             {}
         }
         {
-          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codedesc_width_dim}
+          \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codelist_width_dim}
             {
               \raggedright
               \l__codelist_codeprefix_tl
@@ -730,11 +731,11 @@
 
       \tl_if_blank:VTF \l__codelist_resultprefix_tl
         {
-          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
+          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codelist_width_dim}
             {}
         }
         {
-          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codedesc_width_dim}
+          \vcoffin_set:Nnn \__codelist_demo_label_coffin {\l__codelist_width_dim}
             {
               \raggedright
               \l__codelist_resultprefix_tl
@@ -744,7 +745,7 @@
 
 \cs_new_protected:Npn \__codelist_codecoffin:nnnn #1#2#3#4
   {
-    \vcoffin_set:Nnn \__codelist_code_coffin {\l__codedesc_width_dim}
+    \vcoffin_set:Nnn \__codelist_code_coffin {\l__codelist_width_dim}
       {
         \raggedright #4
         \tl_if_blank:nTF {#2}
@@ -755,25 +756,25 @@
 
 \cs_new_protected:Npn \__codelist_democoffin:nn #1#2
   {
-    \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codedesc_width_dim}
+    \vcoffin_set:Nnn \__codelist_demo_coffin {\l__codelist_width_dim}
       { 
-        \__codedesc_rule_in:
+        \__codelist_rule_in:
         \group_begin:
-%          \skip_vertical:n {\l__codedesc_largerskip_dim}
-          \skip_vertical:n {\l__codedesc_tinyskip_dim}
+%          \skip_vertical:n {\l__codecmm_largerskip_dim}
+          \skip_vertical:n {\l__codecmm_tinyskip_dim}
           \setlength\parindent{\l__codelist_demo_parindent_dim}
           \tl_if_blank:nTF {#2}
             { \getstored {#1} }
             { \getstored [#2]{#1} }
-          \skip_vertical:n {\l__codedesc_tinyskip_dim}
+          \skip_vertical:n {\l__codecmm_tinyskip_dim}
         \group_end:
-        \__codedesc_rule_in:
+        \__codelist_rule_in:
       }
   }
 
 \cs_new_protected:Npn \__codelist_ts_code:nnnnn #1#2#3#4#5
   {
-    \__codedesc_set_textcolwidth:
+    \__codecmm_set_textcolwidth:
     \group_begin:
       \__codelist_ts_settings:nn {#1}{#2}
       \__codelist_codecoffin:nnnn {#3}{#4}{#5}{}
@@ -783,10 +784,10 @@
           \__codelist_code_coffin {l}{t}
           {0pt}{-1ex}
         \skip_vertical:n{-1ex}\noindent
-        \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
+        \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{\l__codelist_offset_dim}{0pt}
         \bool_if:NTF \l__codelist_tscode_peek_bool
-          { \skip_vertical:n {\l__codedesc_large_skip} }
-          { \skip_vertical:n {\l__codedesc_largeline_skip} }
+          { \skip_vertical:n {\l__codecmm_large_skip} }
+          { \skip_vertical:n {\l__codecmm_largeline_skip} }
     \group_end: 
   }
 
@@ -838,8 +839,8 @@
 \coffin_new:N \__codelist_demo_label_coffin
 \coffin_new:N \__codelist_code_demo_coffin
 
-\dim_new:N \l__codedesc_width_dim
-\dim_new:N \l__codedesc_offset_dim
+\dim_new:N \l__codelist_width_dim
+\dim_new:N \l__codelist_offset_dim
 
 \dim_new:N \l__codelist_code_height_dim
 \dim_new:N \l__codelist_demo_height_dim
@@ -847,7 +848,7 @@
 
 \cs_new_protected:Npn \__codelist_ts_democode:nnnn #1#2#3#4
   {
-    \__codedesc_set_textcolwidth:
+    \__codecmm_set_textcolwidth:
     \group_begin:
       \par\setlength\parindent{0pt}
       \__codelist_ts_settings:nn {#1}{#2}
@@ -870,8 +871,8 @@
             {0pt}{-1ex}
           \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{0pt}{0pt}
           \bool_if:NTF \l__codelist_tscode_peek_bool
-            { \skip_vertical:n {\l__codedesc_large_skip} }
-            { \skip_vertical:n {\l__codedesc_largeline_skip} }
+            { \skip_vertical:n {\l__codecmm_large_skip} }
+            { \skip_vertical:n {\l__codecmm_largeline_skip} }
         }
         { % side-by-side          
           \dim_set:Ne \l__codelist_code_height_dim { \coffin_ht_plus_dp:N \__codelist_code_coffin}
@@ -886,42 +887,42 @@
             \__codelist_demo_coffin {l}{vc}
             {0pt}{0pt}    
         %%%
-        %%% create a new coffin, just to have the rules inside
+        %%% a new coffin, just to have the rules inside
         %%%
         
           \dim_compare:nNnTF \l__codelist_code_height_dim < \l__codelist_demo_height_dim
             {
-              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codedesc_width_dim}
+              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codelist_width_dim}
                 {
                   \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}
                   \skip_vertical:n {0.5ex}
-                  \__codedesc_rule_out:
+                  \__codelist_rule_out:
 %                  \skip_vertical:n {0.8611pt}  % was 0.20ex
                   \skip_vertical:n {0.20ex}  % was 0.20ex
                   \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
 %                  \skip_vertical:n {0.8611pt}  % was 0.20ex
                   \skip_vertical:n {0.20ex}  % was 0.20ex
-                  \__codedesc_rule_out:
+                  \__codelist_rule_out:
                 }
             }
             {
-              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codedesc_width_dim}
+              \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codelist_width_dim}
                 {
                   \coffin_typeset:Nnnnn \__codelist_code_label_coffin {l}{t}{0pt}{0pt}                  
                   \skip_vertical:n {0.5ex}
-                  \__codedesc_rule_out:
+                  \__codelist_rule_out:
                   \skip_vertical:n {0.8611pt} % was 0.20ex
                   \coffin_typeset:Nnnnn \__codelist_code_coffin {l}{t}{0pt}{0pt}
                   \skip_vertical:n {1.0764pt} % was 0.25ex
-                  \__codedesc_rule_out:
+                  \__codelist_rule_out:
                 }
             }
 
           \coffin_typeset:Nnnnn \__codelist_code_demo_coffin {l}{t}{0pt}{0pt}
           
           \bool_if:NTF \l__codelist_tscode_peek_bool
-            { \skip_vertical:n {\l__codedesc_large_skip} }
-            { \skip_vertical:n {\l__codedesc_largeline_skip} }
+            { \skip_vertical:n {\l__codecmm_large_skip} }
+            { \skip_vertical:n {\l__codecmm_largeline_skip} }
         }
     \group_end:
   }
@@ -944,12 +945,12 @@
 
 \cs_new_protected:Npn \__codelist_ts_demo:nnnn #1#2#3#4
   {
-    \__codedesc_set_textcolwidth:
+    \__codecmm_set_textcolwidth:
     \group_begin:
       \par\setlength\parindent{0pt}
       \__codelist_ts_settings:nn {#1}{#2}
       
-      \cs_set:Npn \__codedesc_rule_in: {\__codedesc_rule:n {\l__codelist_ruleheight_tl}}
+      \cs_set:Npn \__codelist_rule_in: {\__codecmm_rule:n {\l__codelist_ruleheight_tl}}
     
       \__codelist_democoffin:nn {#3}{#4}
 
@@ -957,10 +958,10 @@
         \__codelist_demo_label_coffin {l}{b}
         \__codelist_demo_coffin {l}{t}
         {0pt}{-1ex}
-      \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{\l__codedesc_offset_dim}{0pt}
+      \coffin_typeset:Nnnnn \__codelist_demo_label_coffin {l}{t}{\l__codelist_offset_dim}{0pt}
         \bool_if:NTF \l__codelist_tscode_peek_bool
-          { \skip_vertical:n {\l__codedesc_large_skip} }
-          { \skip_vertical:n {\l__codedesc_largeline_skip} }
+          { \skip_vertical:n {\l__codecmm_large_skip} }
+          { \skip_vertical:n {\l__codecmm_largeline_skip} }
     \group_end:
   }
 
@@ -984,8 +985,8 @@
   {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
   {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
   {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
-	{ã}{{\~{a}}}1 {õ}{{\~{o}}}1
-	{Ã}{{\~{A}}}1 {Õ}{{\~{O}}}1
+	{ã}{{\~{a}}}1 {Ã}{{\~{A}}}1 
+  {õ}{{\~{o}}}1	{Õ}{{\~{O}}}1
 	{ñ}{{\~{n}}}1 {Ñ}{{\~{N}}}1
   {ý}{{\'{y}}}1 {Ý}{{\'{Y}}}1  {ÿ}{{\"{y}}}1 {Ÿ}{{\"{Y}}}1
   {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1

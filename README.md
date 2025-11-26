@@ -79,6 +79,9 @@ The Current Maintainer of this work is Alceu Frigeri
 * codelstlang.sty
     - sets of listings dialect/language definitions
 
+* codecmm.sty
+    - a few auxiliary commands (mostly skip/dim related)
+
 * README.md (this file)
     - quick introduction
 
@@ -91,12 +94,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
-* Version 1.19 (next)
+* Version 1.19 (this)
     - codesyntax new optional parameter, addressing [#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
     - new format keys (font and fsize), addressing [#22](https://github.com/alceu-frigeri/codedescribe/issues/22)
     - code demo logic reworked,  addressing [#20](https://github.com/alceu-frigeri/codedescribe/issues/20)
+    - new auxiliary package codecmm, to hold those few commands shared between codedescribe and codelisting making them independent from each other.
     
-* Version 1.18 (this)
+* Version 1.18
     - new commands and package option for label sets ('locale') 
       - addressing [#17](https://github.com/alceu-frigeri/codedescribe/issues/17) 
     - partially addressing [#18](https://github.com/alceu-frigeri/codedescribe/issues/18) in the documentation
