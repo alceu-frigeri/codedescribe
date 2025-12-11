@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.19} {2025/11/26}
+%% This is version {1.20} {2025/12/11}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/11/26} ,
-     version     = {1.19} ,
+     date        = {2025/12/11} ,
+     version     = {1.20} ,
      description = {LaTeX Code Listing}
   }
 %%%%%%%
@@ -468,7 +468,10 @@
 %%%%%%
 %%% This one can't be protected
 %%%%%%
-\cs_new:Npn \__codelist_set_options:n #1 {\keys_set:nn {codelist / options}{#1}}
+\cs_new:Npn \__codelist_set_options:n #1 
+  {
+    \keys_set:nn {codelist / options}{#1}
+  }
 
 \__codelist_set_options:n{default}
 
@@ -652,36 +655,36 @@
   }
 
 %%% !!! DEPRECATED !!!
-\NewDocumentEnvironment {verbsc} {m}
-  {
-      \cs_undefine:c{verbatimsc}
-      \cs_undefine:c{verbatimsc@@}
-      \cs_undefine:c{verbatimsc@}
-      \cs_undefine:c{endverbatimsc}
-      
-  		\__codelist_set_options:n{#1}
-
-      \lstnewenvironment{verbatimsc}
-        {
-          \exp_args:Ne \lstset
-            {
-              style=codestyle,
-              moretexcs     =     {\l__codelist_texcsA_tl},
-              moretexcs     =[2]  {\l__codelist_texcsB_tl},
-              moretexcs     =[3]  {\l__codelist_texcsC_tl},
-        		  morekeywords  =     {\l__codelist_keywdA_tl},
-              morekeywords  =[2]  {\l__codelist_keywdB_tl},
-              morekeywords  =[3]  {\l__codelist_keywdC_tl},
-        		  emph          =     {\l__codelist_emphA_tl}, 
-              emph          =[2]  {\l__codelist_emphB_tl}, 
-              emph          =[3]  {\l__codelist_emphC_tl},
-        	    numbers       =     \l__codelist_numbers_tl
-            }
-        }
-        {}
-  }
-  {  } %environment's end
-
+%\NewDocumentEnvironment {verbsc} {m}
+%  {
+%      \cs_undefine:c{verbatimsc}
+%      \cs_undefine:c{verbatimsc@@}
+%      \cs_undefine:c{verbatimsc@}
+%      \cs_undefine:c{endverbatimsc}
+%      
+%  		\__codelist_set_options:n{#1}
+%
+%      \lstnewenvironment{verbatimsc}
+%        {
+%          \exp_args:Ne \lstset
+%            {
+%              style=codestyle,
+%              moretexcs     =     {\l__codelist_texcsA_tl},
+%              moretexcs     =[2]  {\l__codelist_texcsB_tl},
+%              moretexcs     =[3]  {\l__codelist_texcsC_tl},
+%        		  morekeywords  =     {\l__codelist_keywdA_tl},
+%              morekeywords  =[2]  {\l__codelist_keywdB_tl},
+%              morekeywords  =[3]  {\l__codelist_keywdC_tl},
+%        		  emph          =     {\l__codelist_emphA_tl}, 
+%              emph          =[2]  {\l__codelist_emphB_tl}, 
+%              emph          =[3]  {\l__codelist_emphC_tl},
+%        	    numbers       =     \l__codelist_numbers_tl
+%            }
+%        }
+%        {}
+%  }
+%  {  } %environment's end
+%
 
 \NewDocumentCommand \setcodekeys {m}
   {
@@ -791,6 +794,10 @@
     \group_end: 
   }
 
+
+\bool_new:N \l__codelist_tscode_peek_bool
+\tl_new:N \l__codelist_tscode_tl
+
 \regex_const:Nn \c__codelist_peek_regex 
   {
     \c{typesetcode} | \c{tscode} | \c{typesetmergedcode} | \c{tsmergedcode} | 
@@ -810,9 +817,6 @@
   }    
   
 
-\bool_new:N \l__codelist_tscode_peek_bool
-
-\tl_new:N \l__codelist_tscode_tl
 
 
 \NewDocumentCommand{\tscode}{sO{}mO{}}
@@ -820,8 +824,6 @@
     \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{#4}{\typestored} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
-
-
 \cs_new_eq:NN \typesetcode \tscode 
 
 
@@ -830,7 +832,6 @@
     \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_code:nnnnn {#1}{#2}{#3}{}{\mergesc[typestored,print-cmd]} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
-  
 \cs_new_eq:NN \typesetmergedcode \tsmergedcode
 
 \coffin_new:N \__codelist_code_coffin
@@ -885,11 +886,11 @@
           \coffin_join:NnnNnnnn
             \__codelist_code_coffin {r}{vc}
             \__codelist_demo_coffin {l}{vc}
-            {0pt}{0pt}    
+            {0pt}{0pt}  
+              
         %%%
         %%% a new coffin, just to have the rules inside
-        %%%
-        
+        %%%     
           \dim_compare:nNnTF \l__codelist_code_height_dim < \l__codelist_demo_height_dim
             {
               \vcoffin_set:Nnn \__codelist_code_demo_coffin {2\l__codelist_width_dim}
@@ -932,8 +933,6 @@
     \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_democode:nnnn {#1}{#2}{#3}{#4} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode: 
   }
-
-
 \cs_new_eq:NN \typesetdemo \tsdemo 
 
 \NewDocumentCommand{\tsexec}{mO{}}
@@ -970,7 +969,6 @@
     \tl_set:Nn \l__codelist_tscode_tl { \__codelist_ts_demo:nnnn {#1}{#2}{#3}{#4} }
     \xpeekahead_cmd_peek:N \__codelist_cmd_peek_tscode:
   }
-
 \cs_new_eq:NN \typesetresult \tsresult 
 
 

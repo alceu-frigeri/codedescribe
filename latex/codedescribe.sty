@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.19} {2025/11/26}
+%% This is version {1.20} {2025/12/11}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/11/26} ,
-     version     = {1.19} ,
+     date        = {2025/12/11} ,
+     version     = {1.20} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -50,18 +50,25 @@
 \RequirePackage{xpeekahead,codecmm}
 
 
-%%%%%%%
-%%% prep. for an eventual `side notes` parametrization
-%%%%%%%
+\cs_generate_variant:Nn \tl_set:Nn {Ne}
+\cs_generate_variant:Nn \keys_set:nn {ne}
+\cs_generate_variant:Nn \keys_define:nn {ne}
+\cs_generate_variant:Nn \keys_precompile:nnN {nV}
+\cs_generate_variant:Nn \tl_to_str:n {o , e}
+\cs_generate_variant:Nn \msg_error:nnnnn {nnnne}
+\cs_generate_variant:Nn \cs_set:Nn {cV}
+\cs_generate_variant:Nn \cs_gset:Nn {cV}
+
+
+    %%%%%%%
+    %%% prep. for an eventual `side notes` parametrization
+    %%%%%%%
 \cs_set_eq:NN \__codedesc_note_fmt: \scriptsize
-
-
-
 
 \bool_new:N \l__codedesc_loadlisting_bool
 \bool_set_true:N \l__codedesc_loadlisting_bool
 
-%% instead of using expl scratch variables.
+%% instead of using kernel scratch variables.
 \tl_new:N \l__codedesc_tmpa_tl
 \tl_new:N \l__codedesc_tmpb_tl
 \seq_new:N \l__codedesc_tmpa_seq
@@ -69,9 +76,9 @@
 \coffin_new:N \l__codedesc_tmpa_coffin
 \coffin_new:N \l__codedesc_tmpb_coffin
 
-%%%%%%%
-%%% Color schemes (package option)
-%%%%%%%
+    %%%%%%%
+    %%% Color schemes (package option)
+    %%%%%%%
 \cs_new_protected:Npn \__codedesc_set_color_scheme:n #1
   {
     \str_case:nnF {#1}
@@ -83,10 +90,10 @@
           	\__codecmm_color_set:nn{c__codedesc_marg_color}{ gray!60!black }
           	\__codecmm_color_set:nn{c__codedesc_oarg_color}{ gray!90!black }
           	\__codecmm_color_set:nn{c__codedesc_code_color}{ blue!40!black }
-          	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!60!black }
+          	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!50!black }
           	\__codecmm_color_set:nn{c__codedesc_keyval_color}{ teal!40!black }
           	\__codecmm_color_set:nn{c__codedesc_options_color}{ green!30!black }
-          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ blue!60!black }
+          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ green!50!black }
           	\__codecmm_color_set:nn{c__codedesc_env_color}{ green!30!black }
           	\__codecmm_color_set:nn{c__codedesc_pkg_color}{ green!30!black }
           }
@@ -114,7 +121,7 @@
           	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!90!black }
           	\__codecmm_color_set:nn{c__codedesc_keyval_color}{ teal!80!black }
           	\__codecmm_color_set:nn{c__codedesc_options_color}{ green!70!black }
-          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ blue!90!black }
+          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ green!90!black }
           	\__codecmm_color_set:nn{c__codedesc_env_color}{ green!70!black }
           	\__codecmm_color_set:nn{c__codedesc_pkg_color}{ green!70!black }
           }
@@ -128,7 +135,7 @@
           	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!20!black }
           	\__codecmm_color_set:nn{c__codedesc_keyval_color}{ teal!20!black }
           	\__codecmm_color_set:nn{c__codedesc_options_color}{ green!20!black }
-          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ blue!20!black }
+          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ green!20!black }
           	\__codecmm_color_set:nn{c__codedesc_env_color}{ green!20!black }
           	\__codecmm_color_set:nn{c__codedesc_pkg_color}{ green!20!black }
           }
@@ -139,27 +146,26 @@
           	\__codecmm_color_set:nn{c__codedesc_marg_color}{ gray!60!black }
           	\__codecmm_color_set:nn{c__codedesc_oarg_color}{ gray!90!black }
           	\__codecmm_color_set:nn{c__codedesc_code_color}{ blue!40!black }
-          	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!60!black }
+          	\__codecmm_color_set:nn{c__codedesc_syntax_color}{ blue!50!black }
           	\__codecmm_color_set:nn{c__codedesc_keyval_color}{ teal!40!black }
           	\__codecmm_color_set:nn{c__codedesc_options_color}{ green!30!black }
-          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ blue!60!black }
+          	\__codecmm_color_set:nn{c__codedesc_defaultval_color}{ green!50!black }
           	\__codecmm_color_set:nn{c__codedesc_env_color}{ green!30!black }
           	\__codecmm_color_set:nn{c__codedesc_pkg_color}{ green!30!black }
       }
   }
-
 \__codedesc_set_color_scheme:n {default}
 
 
-%%%%%%%
-%%% label sets (package option)
-%%%%%%%
+    %%%%%%%
+    %%% label sets (package option)
+    %%%%%%%
+\prop_new:N \l__codedesc_labelsets_prop
+\seq_new:N \l__codedesc_labelsets_seq
 
-
-
-%%%%%%%
-%%% This one comes first because can be called while loading.
-%%%%%%%
+    %%%%%%%
+    %%% This one comes first because can be called while loading.
+    %%%%%%%
 \msg_new:nnnn {codedesc} {locale-err}
   {
     (ID:#1)~label~set~(#2)~not~defined! ~valid~ones:~#3
@@ -207,9 +213,6 @@
     \keys_set:Nn {codedescribe / labels}{#1}
   }
 
-\prop_new:N \l__codedesc_labelsets_prop
-\seq_new:N \l__codedesc_labelsets_seq
-
 \cs_new_protected:Npn \__codedesc_new_labelset:nn #1#2
   {
     \keys_precompile:nnN {codedescribe / labels} {#2} \l__codedesc_tmpa_tl
@@ -217,10 +220,8 @@
     \seq_put_right:Nn \l__codedesc_labelsets_seq {#1}
   }
 
-\cs_generate_variant:Nn \msg_error:nnnnn {nnnne}
 \cs_new_protected:Npn \__codedesc_select_labelset:n #1
   {
-    %\prop_item:Nn \l__codedesc_labelsets_prop {#1}
     \prop_get:NnNTF \l__codedesc_labelsets_prop {#1} \l__codedesc_tmpa_tl
       { \l__codedesc_tmpa_tl }
       {
@@ -234,14 +235,14 @@
 \cs_new_eq:NN \setcodelabels  \__codedesc_setlabels:n
 
 
-    %%%
-    % language set are to be defined at codedescsets
-    %%%  
+    %%%%%%%
+    %%% language set are to be defined at codedescsets
+    %%%%%%%
 \RequirePackage{codedescsets}
 
-    %%%
-    % Default label set
-    %%%  
+    %%%%%%%
+    %%% Default label set
+    %%%%%%%
 \__codedesc_select_labelset:n {english}
 
 \keys_define:nn { codedescribe }
@@ -307,13 +308,17 @@
   { \pkginfograb_set_aliases: }
 
 
+\msg_new:nnnn {codedesc} {key choice}
+  {
+    (ID:#1)~Choice~'#2'~not~defined!~Possible~values:~ #3
+  }
+  {
+    You~tried~to~select~a~non~defined~value:#2.
+    ~Possible~values:~#3
+    ~Error~Code~ ID:<#1>.
+  }
 
 
-\cs_generate_variant:Nn \tl_set:Nn {Ne}
-\cs_generate_variant:Nn \keys_set:nn {ne}
-\cs_generate_variant:Nn \keys_define:nn {ne}
-\cs_generate_variant:Nn \tl_to_str:n {o , e}
- 
 
 \msg_new:nnnn {codedesc} {format-err}
   {
@@ -383,10 +388,6 @@
 
 
 
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -395,68 +396,168 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    %%%%%%%
+    %%% group/object formats
+    %%%%%%%
 
 \tl_new:N \l__codedesc_tmpfont_tl
 \tl_new:N \l__codedesc_tmpfsize_tl
+\tl_new:N \l__codedesc_tmpfmt_tl
+\tl_new:N \l__codedesc_tmpshape_tl
+\tl_new:N \l__codedesc_tmpcolor_tl
+\tl_new:N \l__codedesc_tmplbracket_tl
+\tl_new:N \l__codedesc_tmprbracket_tl
+\tl_new:N \l__codedesc_tmpshapepreadj_tl
+\tl_new:N \l__codedesc_tmpshapeposadj_tl
+\tl_new:N \l__codedesc_makefmt_tmp_tl
+
 \keys_define:nn { codedesc / scratch_def }
 {
-  font.usage:n = general ,
-  font .value_required:n = true ,
-  font .code:n ={ \tl_set:Nn \l__codedesc_tmpfont_tl {#1} } ,
+  font            .usage:n            = general ,
+  font            .value_required:n   = true ,
+  font            .code:n             = 
+    { \tl_set:Nn \l__codedesc_tmpfont_tl { font = #1 } },
   
-  fsize.usage:n = general ,
-  fsize .value_required:n = true ,
-  fsize .code:n ={ \tl_set:Nn \l__codedesc_tmpfsize_tl {#1} } ,
+  fsize           .usage:n            = general ,
+  fsize           .value_required:n   = true ,
+  fsize           .code:n             = 
+    { \tl_set:Nn \l__codedesc_tmpfsize_tl {fsize = #1} } ,
 
-  meta.usage:n = general ,
-  meta .value_forbidden:n = true ,
-  meta .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {meta} } ,
+  meta            .usage:n            = general ,
+  meta            .value_forbidden:n  = true ,
+  meta            .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpfmt_tl {meta} } ,
   
-  xmeta.usage:n = general ,
-  xmeta .value_forbidden:n = true ,
-  xmeta .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {xmeta} } ,
+  xmeta           .usage:n            = general ,
+  xmeta           .value_forbidden:n  = true ,
+  xmeta           .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpfmt_tl {xmeta} } ,
   
-  code.usage:n = general ,
-  code .value_forbidden:n = true ,
-  code .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {code} } ,
+  code            .usage:n            = general ,
+  code            .value_forbidden:n  = true ,
+  code            .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpfmt_tl {code} } ,
   
-  verb.usage:n = general ,
-  verb .value_forbidden:n = true ,
-  verb .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {verb} } ,
+  verb            .usage:n            = general ,
+  verb            .value_forbidden:n  = true ,
+  verb            .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpfmt_tl {verb} } ,
   
-  xverb.usage:n = general ,
-  xverb .value_forbidden:n = true ,
-  xverb .code:n ={ \tl_set:Nn \l__codedesc_tmpfmt_tl {xverb} } ,
+  xverb           .usage:n            = general ,
+  xverb           .value_forbidden:n  = true ,
+  xverb           .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpfmt_tl {xverb} } ,
   
-  nofmt.usage:n = general ,
-  nofmt .value_forbidden:n = true ,
-  nofmt .code:n = {\tl_clear:N \l__codedesc_tmpfmt_tl } ,
+  nofmt           .usage:n            = general ,
+  nofmt           .value_forbidden:n  = true ,
+  nofmt           .code:n             = 
+    {\tl_clear:N \l__codedesc_tmpfmt_tl } ,
 
-  slshape.usage:n = general ,
-  slshape .value_forbidden:n = true ,
-  slshape .code:n ={ \tl_set:Nn \l__codedesc_tmpshape_tl { slshape} } ,
-  
-  itshape.usage:n = general ,
-  itshape .value_forbidden:n = true ,
-  itshape .code:n ={ \tl_set:Nn \l__codedesc_tmpshape_tl { itshape} } ,
-  
-  noshape.usage:n = general ,
-  noshape .value_forbidden:n = true ,
-  noshape .code:n ={ \tl_clear:N \l__codedesc_tmpshape_tl } ,
+  no~fmt          .usage:n            = general ,
+  no~fmt          .value_forbidden:n  = true ,
+  no~fmt          .code:n             = 
+    {\tl_clear:N \l__codedesc_tmpfmt_tl } ,
     
-  color.usage:n = general ,
-  color .value_required:n = true ,
-  color.code:n = { \tl_set:Nn \l__codedesc_tmpcolor_tl { #1 } } ,
-  
-  lbracket .usage:n = general ,
-  lbracket .value_required:n = true ,
-  lbracket .code:n = { \tl_set:Nn \l__codedesc_tmplbracket_tl { #1 } } ,
+  format          .usage:n            = general ,
+  format          .value_required:n   = true ,
+  format          .choice: , 
+  format / meta 
+    .code:n = { \tl_set:Nn \l__codedesc_tmpfmt_tl {meta} } ,
+  format / xmeta 
+    .code:n = { \tl_set:Nn \l__codedesc_tmpfmt_tl {xmeta} } ,
+  format / code 
+    .code:n = { \tl_set:Nn \l__codedesc_tmpfmt_tl {code} } ,
+  format / verb 
+    .code:n = { \tl_set:Nn \l__codedesc_tmpfmt_tl {verb} } ,
+  format / xverb
+    .code:n = { \tl_set:Nn \l__codedesc_tmpfmt_tl {xverb} } ,
+  format / nofmt
+    .code:n = { \tl_clear:N \l__codedesc_tmpfmt_tl } ,
+  format / no~fmt
+    .code:n = { \tl_clear:N \l__codedesc_tmpfmt_tl } ,
+  format / none
+    .code:n = { \tl_clear:N \l__codedesc_tmpfmt_tl } ,
+  format / unknown .code:n =
+    {
+     \msg_error:nneee { codedesc } {key choice} {format02}{\l_keys_value_tl}{meta,~xmeta,~code,~verb,~xverb,~nofmt,~none}
+    },    
 
-  rbracket .usage:n = general ,
-  rbracket .value_required:n = true ,
-  rbracket .code:n = { \tl_set:Nn \l__codedesc_tmprbracket_tl { #1 } } ,
+  slshape         .usage:n            = general ,
+  slshape         .value_forbidden:n  = true ,
+  slshape         .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpshape_tl { slshape} } ,
   
-	unknown.code:n = 
+  itshape         .usage:n            = general ,
+  itshape         .value_forbidden:n  = true ,
+  itshape         .code:n             =
+    { \tl_set:Nn \l__codedesc_tmpshape_tl { itshape} } ,
+  
+  noshape         .usage:n            = general ,
+  noshape         .value_forbidden:n  = true ,
+  noshape         .code:n             =
+    { \tl_clear:N \l__codedesc_tmpshape_tl } ,
+
+  shape           .usage:n            = general , 
+  shape           .value_required:n   = true ,
+  shape           .choice: , 
+  shape / none    
+    .code:n = { \tl_clear:N \l__codedesc_tmpshape_tl } ,
+  shape / noshape
+    .code:n = { \tl_clear:N \l__codedesc_tmpshape_tl } ,
+  shape / italic
+    .code:n = { \tl_set:Nn \l__codedesc_tmpshape_tl { itshape} } ,
+  shape / itshape
+    .code:n = { \tl_set:Nn \l__codedesc_tmpshape_tl { itshape} } ,
+  shape / slanted
+    .code:n = { \tl_set:Nn \l__codedesc_tmpshape_tl { slshape} } ,
+  shape / slshape
+    .code:n = { \tl_set:Nn \l__codedesc_tmpshape_tl { slshape} } ,
+  shape / unknown .code:n =
+    {
+     \msg_error:nneee { codedesc } {key choice} {shape02}{\l_keys_value_tl}{italic,~itshape,~slanted,~slshape,~noshape,~none}
+    },    
+    
+  shape~ preadj   .usage:n            = general , 
+  shape~ preadj   .value_required:n   = true ,
+  shape~ preadj   .choice: , 
+  shape~ preadj / none  
+    .code:n = { \tl_clear:N \l__codedesc_tmpshapepreadj_tl },
+  shape~ preadj / very ~ thin 
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapepreadj_tl { shape~ preadj = very~ thin } },
+  shape~ preadj / thin  
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapepreadj_tl { shape~ preadj = thin } },
+  shape~ preadj / mid   
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapepreadj_tl { shape~ preadj = mid } },
+    
+  shape~ posadj   .usage:n            = general , 
+  shape~ posadj   .value_required:n   = true ,
+  shape~ posadj   .choice: , 
+  shape~ posadj / none  
+    .code:n = { \tl_clear:N \l__codedesc_tmpshapeposadj_tl },
+  shape~ posadj / very ~ thin 
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapeposadj_tl { shape~ posadj = very~ thin } },
+  shape~ posadj / thin  
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapeposadj_tl { shape~ posadj = thin } },
+  shape~ posadj / mid   
+    .code:n = { \tl_set:Nn  \l__codedesc_tmpshapeposadj_tl { shape~ posadj = mid } },
+
+  color           .usage:n            = general ,
+  color           .value_required:n   = true ,
+  color           .code:n             = 
+    { \tl_set:Nn \l__codedesc_tmpcolor_tl { color = #1 } },
+  
+  lbracket        .usage:n            = general ,
+  lbracket        .value_required:n   = true ,
+  lbracket        .code:n             =  
+    { \tl_set:Nn \l__codedesc_tmplbracket_tl { lbracket = #1 } } ,
+
+  rbracket        .usage:n            = general ,
+  rbracket        .value_required:n   = true ,
+  rbracket        .code:n             = 
+    { \tl_set:Nn \l__codedesc_tmprbracket_tl { rbracket = #1 } } ,
+
+  
+	unknown   .code:n = 
     {
      \msg_error:nnxx { codedesc } {format-err} {format}{\l_keys_key_str}
     },    
@@ -470,81 +571,114 @@
   }
 
 
-\cs_generate_variant:Nn \keys_precompile:nnN {nV}
+\tl_new:N \l__codedesc_keyconstruct_tmpa_tl
+\tl_new:N \l__codedesc_keyconstruct_tmpb_tl
+\tl_new:N \g__codedesc_keyconstruct_tmpc_tl
+
+\cs_new_protected:Npn \__codedesc_keys_construct:nn #1#2
+  {
+    \tl_put_right:Nn \l__codedesc_keyconstruct_tmpa_tl {#1 #2}
+  }
+\cs_generate_variant:Nn   \__codedesc_keys_construct:nn {eV}
+
+\tl_const:Nn \c__codedesc_comma_tl { , }
 
 \cs_new_protected:Npn \__codedesc_group_define:nn #1#2
   {
-    \tl_clear:N \l__codedesc_tmpfmt_tl
-    \tl_clear:N \l__codedesc_tmpshape_tl
-    \tl_clear:N \l__codedesc_tmpcolor_tl        
-    \tl_clear:N \l__codedesc_tmplbracket_tl        
-    \tl_clear:N \l__codedesc_tmprbracket_tl 
-    \tl_clear:N \l__codedesc_tmpfont_tl
-    \tl_clear:N \l__codedesc_tmpfsize_tl
-           
-
-    \keys_set:nn { codedesc / grp_scratch } {#1}
-    \keys_set:nn { codedesc / scratch_def } {#2}
-    
-    \tl_clear:N \l__codedesc_tmpa_tl
-    \tl_clear:N \l__codedesc_tmpb_tl
-    \tl_if_empty:NF \l__codedesc_tmpfmt_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfmt_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmpshape_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpshape_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmpcolor_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
-        \tl_put_right:Nn \l__codedesc_tmpa_tl{ color =  } 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpcolor_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmplbracket_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
-        \tl_put_right:Nn \l__codedesc_tmpa_tl { lbracket = } 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmplbracket_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmprbracket_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
-        \tl_put_right:Nn \l__codedesc_tmpa_tl { rbracket = } 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmprbracket_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmpfont_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
-        \tl_put_right:Nn \l__codedesc_tmpa_tl { font = } 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfont_tl
-        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
-    \tl_if_empty:NF \l__codedesc_tmpfsize_tl
-      { 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpb_tl
-        \tl_put_right:Nn \l__codedesc_tmpa_tl { fsize = } 
-        \tl_put_right:NV \l__codedesc_tmpa_tl \l__codedesc_tmpfsize_tl
-%        \tl_set:Nn \l__codedesc_tmpb_tl { , }
-      }
+    \group_begin:           
+      \keys_set:nn { codedesc / grp_scratch } {#1}
+      \keys_set:nn { codedesc / scratch_def } {#2}
       
-    \keys_precompile:nVN { codedesc / scratch_def }  
-      \l__codedesc_tmpa_tl
-      \l__codedesc_tmpb_tl
-    \__codedesc_grp_scratch_def:nV {#1} \l__codedesc_tmpb_tl
-    
-    \tl_clear:N \l__codedesc_makefmt_tmp_tl
-    \keys_set:nV { codedesc / make fmt } \l__codedesc_tmpa_tl
-    \cs_set:cV {__codedesc_grpfmt_ #1:} \l__codedesc_makefmt_tmp_tl
+      \tl_if_empty:NF \l__codedesc_tmpfmt_tl
+        { 
+          \tl_put_right:NV \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpfmt_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmpshape_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpshape_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmpcolor_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpcolor_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmplbracket_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmplbracket_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmprbracket_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmprbracket_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+        
+      \tl_if_empty:NF \l__codedesc_tmpshapepreadj_tl
+        {
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpshapepreadj_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmpshapeposadj_tl
+        {
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpshapeposadj_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+            
+      \tl_if_empty:NF \l__codedesc_tmpfont_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpfont_tl
+          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+      \tl_if_empty:NF \l__codedesc_tmpfsize_tl
+        { 
+          \__codedesc_keys_construct:eV
+            \l__codedesc_keyconstruct_tmpb_tl
+            \l__codedesc_tmpfsize_tl
+%          \tl_set_eq:NN \l__codedesc_keyconstruct_tmpb_tl \c__codedesc_comma_tl
+        }
+  
+      \keys_precompile:nVN { codedesc / scratch_def }  
+        \l__codedesc_keyconstruct_tmpa_tl
+        \l__codedesc_keyconstruct_tmpb_tl
+
+    %%%%%%%
+    %%% \keys_define:nn is LOCAL !!!
+    %%%%%%%      
+      \tl_gset:NV \g__codedesc_keyconstruct_tmpc_tl \l__codedesc_keyconstruct_tmpb_tl
+      
+      \keys_set:nV { codedesc / make fmt } \l__codedesc_keyconstruct_tmpa_tl
+      \cs_gset:cV {__codedesc_grpfmt_ #1:} \l__codedesc_makefmt_tmp_tl
+
+    \group_end:
+    \__codedesc_grp_scratch_def:nV {#1} \g__codedesc_keyconstruct_tmpc_tl
   }
-\cs_generate_variant:Nn \cs_set:Nn {cV}
+
+\cs_new_protected:Npn \__codedesc_group_dup:nn #1#2
+  {
+    \group_begin:
+      \keys_precompile:nnN { codedesc / grp_scratch } {#2}
+        \l__codedesc_keyconstruct_tmpb_tl
+      \tl_gset:NV \g__codedesc_keyconstruct_tmpc_tl \l__codedesc_keyconstruct_tmpb_tl
+    \group_end:
+
+    \__codedesc_grp_scratch_def:nV {#1} \g__codedesc_keyconstruct_tmpc_tl
+  }
 
 
 \cs_new_protected:Npn \__codedesc_grp_scratch_def:nn #1#2
@@ -577,7 +711,10 @@
 
 
 
-
+    %%%%%%%
+    %%% group/object format effective commands
+    %%%%%%%
+    
 \keys_define:nn { codedesc / make fmt }
 {
   fsize .usage:n = general , 
@@ -665,6 +802,76 @@
         \cs_set_eq:NN \__codedesc_metashape: \itshape
       }
    } , 
+   
+  shape~ preadj .usage:n = general , 
+  shape~ preadj .value_required:n = true ,
+  shape~ preadj .choices:nn = 
+    { very~ thin , thin , mid }
+    { 
+      \str_case:enTF \l_keys_choice_str
+        {
+          {very~ thin}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_preadj: 
+                 { \skip_horizontal:N \l__codecmm_verythin_skip } 
+              }               
+            }
+          {thin}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_preadj: 
+                 { \skip_horizontal:N \l__codecmm_thin_skip } 
+              }               
+            }
+          {mid}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_preadj: 
+                 { \skip_horizontal:N \l__codecmm_midthin_skip } 
+              }               
+            }
+        }
+        {}{}
+    } , 
+
+  shape~ posadj .usage:n = general , 
+  shape~ posadj .value_required:n = true ,
+  shape~ posadj .choices:nn = 
+    { very~ thin , thin , mid }
+    { 
+      \str_case:enTF \l_keys_choice_str
+        {
+          {very ~ thin}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_posadj: 
+                 { \skip_horizontal:N \l__codecmm_verythin_skip } 
+              }               
+            }
+          {thin}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_posadj: 
+                 { \skip_horizontal:N \l__codecmm_thin_skip } 
+              }               
+            }
+          {mid}
+            {
+              \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+              {
+               \cs_set:Npn \__codedesc_shape_posadj: 
+                 { \skip_horizontal:N \l__codecmm_midthin_skip } 
+              }               
+            }
+        }
+        {}{}
+    } , 
   
   lbracket .usage:n = general ,
   lbracket .value_required:n = true ,
@@ -696,10 +903,9 @@
 
  
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%
+    %%% group/object formats pre-set
+    %%%%%%%
 
 \__codedesc_group_define:nn {verb} {color=c__codedesc_verb_color}
 \__codedesc_object_define:nnn {verb}{verb}{verb}
@@ -728,6 +934,7 @@
 \__codedesc_object_define:nnn {key}{keyval}{}
 \__codedesc_object_define:nnn {keys}{keyval}{}
 \__codedesc_object_define:nnn {value}{keyval}{}
+\__codedesc_object_define:nnn {values}{keyval}{}
 
 \__codedesc_group_define:nn {option} {color=c__codedesc_options_color}
 \__codedesc_object_define:nnn {option}{option}{}
@@ -744,14 +951,9 @@
 
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
+    %%%%%%%
+    %%% codedescribe/tsobj common keys
+    %%%%%%%
 
 \keys_define:nn { codedesc / format }
 {
@@ -768,6 +970,10 @@
      \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
     },    
 }
+
+    %%%%%%%
+    %%% codedescribe keys
+    %%%%%%%
 
 \keys_define:nn {}
   { codedesc / desc format .inherit:n = codedesc / format }
@@ -802,19 +1008,19 @@
       {
         \cs_set:Npn \__codedesc_rulecolor: { \__codecmm_color_select:n{#1} }
       },
-    %
+
     EXP.usage:n = general,
     EXP.code:n = 
       {
         \tl_set:Nn \l__codedesc_exp_tl { ~\hfill{\__codedesc_note_fmt:\ding{72}} }
       },
-  	%
+
     rEXP.usage:n = general,
     rEXP.code:n = 
       {
         \tl_set:Nn \l__codedesc_exp_tl { ~\hfill{\__codedesc_note_fmt:\ding{73}} }
       },
-	%
+
     unknown.usage:n = general,
   	unknown.code:n = 
       {
@@ -824,6 +1030,9 @@
   }
 
 
+    %%%%%%%
+    %%% tsobj and friends keys
+    %%%%%%%
 
 \keys_define:nn {}
   { codedesc / list format .inherit:n = codedesc / format }
@@ -889,26 +1098,33 @@
       },    
   }
 
+    %%%%%%%
+    %%% variables/commands initializing
+    %%%%%%%
+
 \cs_new_protected:Npn \__codedesc_metafmt_clear:
   {
     \cs_set_eq:NN    \__codedesc_metasize_tl: \small
     \cs_set_eq:NN    \__codedesc_metafont_tl: \ttfamily
 
-    \cs_set:Npn \__codedesc_metashape: { }
-    \cs_set:Npn \__codedesc_metacolor: { }
+    \cs_set_eq:NN \__codedesc_metashape: \relax
+    \cs_set_eq:NN \__codedesc_metacolor: \relax
+    
+    \cs_set_eq:NN \__codedesc_shape_preadj: \relax
+    \cs_set_eq:NN \__codedesc_shape_posadj: \relax
 
     \cs_set:Npn \__codedesc_rulecolor: { \__codedesc_metacolor: }
-    \cs_set:Npn \__codedesc_typeset:n { }
-    \cs_set:Npn \__codedesc_typeset:V { }
+    \cs_set_eq:NN \__codedesc_typeset:n \relax
+    \cs_set_eq:NN \__codedesc_typeset:V \relax
     
-    \tl_set:Nn \l__codedesc_Lbracket_tl { }
-    \tl_set:Nn \l__codedesc_Rbracket_tl { }
+    \tl_clear:N \l__codedesc_Lbracket_tl
+    \tl_clear:N \l__codedesc_Rbracket_tl
     \tl_set:Nn \l__codedesc_sep_tl {,~}
     \tl_set:Nn \l__codedesc_lastsep_tl {~ \l__codedesc_and_label_tl{} ~}
-    \tl_set:Nn \l__codedesc_exp_tl { }
-    \tl_set:Nn \l__codedesc_Lbrace_tl { }
-    \tl_set:Nn \l__codedesc_Rbrace_tl { }
-    \tl_set:Nn \l__codedesc_strut_tl { }
+    \tl_clear:N \l__codedesc_exp_tl 
+    \tl_clear:N \l__codedesc_Lbrace_tl
+    \tl_clear:N \l__codedesc_Rbrace_tl
+    \tl_clear:N \l__codedesc_strut_tl
     
     \bool_set_false:N \l__codedesc_descnotes_bool
     \bool_set_false:N \l__codedesc_descdate_new_bool 
@@ -919,11 +1135,14 @@
 \__codedesc_metafmt_clear:
 
 \cs_new_protected:Npn \__codedesc_metafmt_set:nn #1#2
-  { \keys_set:nn {codedesc / #1}{#2} }
+  { 
+    \keys_set:nn {codedesc / #1}{#2} 
+  }
 
 \cs_new_protected:Npn \__codedesc_metafmt_set:n #1
-  { \keys_set:nn {codedesc / format}{#1} }
-  
+  { 
+    \keys_set:nn {codedesc / format}{#1} 
+  }
 \cs_generate_variant:Nn \__codedesc_metafmt_set:n {V}
 
 \cs_new_protected:Npn \__codedesc_metafmt:n #1
@@ -931,7 +1150,6 @@
     \__codedesc_metafmt_set:n {#1}
     \__codedesc_metafmt:
   }
-
 \cs_generate_variant:Nn \__codedesc_metafmt:n {V}
   
 \cs_new_protected:Npn \__codedesc_metafmt: 
@@ -939,30 +1157,31 @@
     \__codedesc_metasize_tl:
     \__codedesc_metafont_tl:
     \__codedesc_metashape:
-    \__codedesc_metacolor:
+    \__codedesc_metacolor: {}
   }
 
-%%%%%%%
-%%%
-%%% < meta >
-%%%
-%%%%%%%
+
+    %%%%%%%
+    %%% < meta >
+    %%%%%%%
 \cs_new_protected:Npn \__codedesc_meta:n #1
   {
     \ensuremath\langle #1 \ensuremath\rangle
   }  
 \cs_generate_variant:Nn \__codedesc_meta:n {V}  
 
-%%%%%%%
-%%%
-%%% < meta > 'detokenized'
-%%%
-%%%%%%%
+    %%%%%%%
+    %%% < meta > 'detokenized'
+    %%%%%%%
 \cs_new_protected:Npn \__codedesc_meta*:n #1
   {
     \ensuremath\langle \tl_to_str:n {#1} \ensuremath\rangle
   }  
 \cs_generate_variant:cn {__codedesc_meta*:n} {V}  
+
+    %%%%%%%
+    %%% code 'detokenized'
+    %%%%%%%
 
 \regex_const:Nn \c__codedesc_tf_regex {TF$}
 
@@ -979,6 +1198,10 @@
 
 \cs_generate_variant:Nn \__codedesc_macro_typeset:n {V}
 
+    %%%%%%%
+    %%% just 'detokenized'
+    %%%%%%%
+
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
     \str_set:Nn \l__codedesc_tmpb_tl {#1}
@@ -988,42 +1211,54 @@
 
 \cs_generate_variant:Nn \__codedesc_verb_nospc_typeset:n {V}
 
+    %%%%%%%
+    %%% processing as a list
+    %%%%%%%
+
 \cs_new_protected:Npn \__codedesc_list_typeset:nnn #1#2#3
   {
     \seq_set_from_clist:Nn \l__codedesc_tmpa_seq {#1}
         
     \l__codedesc_strut_tl
-    \l__codedesc_Lbrace_tl
-
+    \l__codedesc_Lbrace_tl 
+%    \cs_show:N \__codedesc_metafmt:
+%    \cs_show:N \__codedesc_shape_preadj:
+%    \cs_show:N \__codedesc_shape_posadj:
+    
     \seq_pop_left:NNTF \l__codedesc_tmpa_seq \l__codedesc_tmpa_tl
       {
         {
+          \__codedesc_shape_preadj:
           \__codedesc_metafmt:
           \__codedesc_typeset:V \l__codedesc_tmpa_tl
+          \__codedesc_shape_posadj:
         }
         \seq_pop_right:NNTF \l__codedesc_tmpa_seq \l__codedesc_tmpb_tl   % last one, if any
           {
             \seq_map_inline:Nn \l__codedesc_tmpa_seq
               {
-                #2
+                #2 
                 {
+                  \__codedesc_shape_preadj:
                   \__codedesc_metafmt:
                   \__codedesc_typeset:n {##1}
-                }
+                  \__codedesc_shape_posadj:
+                } 
               }
-            #3
+            #3 
             {
+              \__codedesc_shape_preadj:
               \__codedesc_metafmt:
               \__codedesc_typeset:V \l__codedesc_tmpb_tl
-            }
+              \__codedesc_shape_posadj:
+            } 
           }
           {} %% there was only one
       }
       {}  %% none there
 
-    \l__codedesc_Rbrace_tl
+      \l__codedesc_Rbrace_tl
   }
-
 
 \cs_generate_variant:Nn \__codedesc_list_typeset:nnn {nVV}
 
@@ -1040,12 +1275,9 @@
   }
 
 
-%%%%%%%%%%%%%%%%%%%
-%%%%
-%%%%  Variables used in the codedescibe environment
-%%%%
-%%%%%%%%%%%%%%%%%%%
-  
+    %%%%%%%
+    %%%  Variables used in the codedescibe environment
+    %%%%%%%
   
 \bool_new:N   \l__codedesc_longblock_bool
 
@@ -1057,9 +1289,7 @@
 \dim_new:N    \l__codedesc_margin_wd_dim
   
 \seq_new:N    \l__codedesc_descdate_new_seq 
-
 \seq_new:N    \l__codedesc_descdate_update_seq
-
 \seq_new:N    \l__codedesc_sidenote_seq
 
 \coffin_new:N \l__codedesc_describe_coffin
@@ -1072,17 +1302,24 @@
 \dim_new:N    \l__codedesc_tmpa_dim
 \dim_new:N    \l__codedesc_tmpb_dim
   
-  
-%%%%%%%%%%%%%%%%%%%
-%%%%
-%%%%  User/Document level commands
-%%%%
-%%%%%%%%%%%%%%%%%%%
+\bool_new:N       \l__codedesc_codedescribe_activ_bool
+\bool_set_false:N \l__codedesc_codedescribe_activ_bool
+\bool_new:N       \l__codedesc_codesyntax_activ_bool
+\bool_set_false:N \l__codedesc_codesyntax_activ_bool
 
+  
+    %%%%%%%
+    %%%  User/Document level commands/environments
+    %%%%%%%
 
 \NewDocumentCommand \defgroupfmt {mm}
   {
     \__codedesc_group_define:nn {#1} {#2}
+  }
+
+\NewDocumentCommand \dupgroupfmt {mm}
+  {
+    \__codedesc_group_dup:nn {#1} {#2}
   }
 
 \NewDocumentCommand \defobjectfmt {mmm}
@@ -1282,6 +1519,22 @@
     \bool_set_false:N \l__codedesc_codesyntax_activ_bool    
   }
 
+
+    %%%%%%%
+    %%%  Variables used in the describelist/tsremark environments
+    %%%%%%%
+
+\coffin_new:N     \l__codedesc_tsremark_coffin
+
+\bool_new:N       \l__codedesc_tsremark_peek_bool
+\bool_set_false:N \l__codedesc_tsremark_peek_bool
+
+\bool_new:N       \l__codedesc_describe_peek_bool
+\bool_set_false:N \l__codedesc_describe_peek_bool
+
+\regex_const:Nn \c__codedesc_describe_regex { \c{describe} }
+\regex_const:Nn \c__codedesc_remark_regex   { \c{begin} \cB{tsremark} }
+
   
 \NewDocumentEnvironment{describelist}{O{20mm}m}
   {
@@ -1319,7 +1572,6 @@
   {
   }
 
-\regex_const:Nn \c__codedesc_describe_regex { \c{describe} }
 
 \cs_new_protected:Npn \__codedesc_describe:nn #1#2
   {    
@@ -1380,33 +1632,35 @@
   }
 
   
-\NewDocumentCommand \typesetmeta {m} {\__codedesc_meta:n {#1}}
+\NewDocumentCommand \tsmeta {m} 
+  {
+    \__codedesc_meta:n {#1}
+  }
 
-\cs_new_eq:NN \tsmeta \typesetmeta  
+\cs_new_eq:NN \typesetmeta  \tsmeta 
 
 
-\NewDocumentCommand \typesetargs {O{meta}m}
+\NewDocumentCommand \tsargs {O{meta}m}
   { 
     \__codedesc_args_typeset:nnnn {#1} {\l__codedesc_Lbracket_tl} {#2} {\l__codedesc_Rbracket_tl}
   }
   
-\cs_new_eq:NN \tsargs \typesetargs  
+\cs_new_eq:NN \typesetargs  \tsargs 
 
 
-
-\NewDocumentCommand \typesetmacro {mO{}m} 
+\NewDocumentCommand \tsmacro {mO{}m} 
   {
     \group_begin:
-    \__codedesc_metafmt_set:n {code} %.... argh!
-    \__codedesc_list_typeset:nnn{#1}{,~}{,~}
-    \,\__codedesc_args_typeset:nnnn {oarg} [ {#2} ]
-    \__codedesc_args_typeset:nnnn {marg} \{ {#3} \}
+      \__codedesc_metafmt_set:n {code} %.... argh!
+      \__codedesc_list_typeset:nnn{#1}{,~}{,~}
+      \,\__codedesc_args_typeset:nnnn {oarg} [ {#2} ]
+      \__codedesc_args_typeset:nnnn {marg} \{ {#3} \}
     \group_end:
   }
-\cs_new_eq:NN \tsmacro \typesetmacro
+\cs_new_eq:NN \typesetmacro \tsmacro 
 
 
-\NewDocumentCommand \typesetverb {O{code}m} 
+\NewDocumentCommand \tsverb {O{code}m} 
   {
     \group_begin:
       \__codedesc_metafmt_set:n {#1} 
@@ -1415,44 +1669,33 @@
       \tl_to_str:n {#2}
     \group_end:
   }
-\cs_new_eq:NN \tsverb \typesetverb
+\cs_new_eq:NN \typesetverb \tsverb 
 
-\NewDocumentCommand \typesetobj {O{code}m} 
+\NewDocumentCommand \tsobj {O{code}m} 
   {
     \group_begin:
-    \__codedesc_metafmt_set:nn {list format}{#1}
-    \__codedesc_list_typeset:nVV{#2} \l__codedesc_sep_tl \l__codedesc_lastsep_tl
+      \__codedesc_metafmt_set:nn {list format}{#1}
+      \__codedesc_list_typeset:nVV{#2} \l__codedesc_sep_tl \l__codedesc_lastsep_tl
     \group_end:
   }
 
-\cs_new_eq:NN \tsobj \typesetobj
+\cs_new_eq:NN \typesetobj \tsobj
 
 
-\NewDocumentCommand \typesetmarginnote {m}{\marginpar{{\__codedesc_note_fmt:\raggedleft #1 \par}}}
-\cs_new_eq:NN \tsmarginnote \typesetmarginnote
+\NewDocumentCommand \tsmarginnote {m}
+  {
+    \marginpar
+      {
+        { \__codedesc_note_fmt:\raggedleft #1 \par }
+      }
+  }
+\cs_new_eq:NN \typesetmarginnote \tsmarginnote 
 
-
-
-\bool_new:N       \l__codedesc_codedescribe_activ_bool
-\bool_set_false:N \l__codedesc_codedescribe_activ_bool
-\bool_new:N       \l__codedesc_codesyntax_activ_bool
-\bool_set_false:N \l__codedesc_codesyntax_activ_bool
-
-\coffin_new:N     \l__codedesc_tsremark_coffin
-
-\bool_new:N       \l__codedesc_tsremark_peek_bool
-\bool_set_false:N \l__codedesc_tsremark_peek_bool
-
-\bool_new:N       \l__codedesc_describe_peek_bool
-\bool_set_false:N \l__codedesc_describe_peek_bool
-
-\regex_const:Nn   \c__codedesc_remark_regex { \c{begin} \cB{tsremark} }
 
 
 % TODO: issue #18
 % Test if already defined...maybe not...
 %
-
 \NewDocumentEnvironment {tsremark} {O{ \l__codedesc_remark_label_tl :}}
   {
     \xpeekahead_env_set:nNTF {tsremark}
@@ -1492,6 +1735,8 @@
     \group_end:
   }
   
+\cs_new_eq:NN \typesetremark \tsremark
+\cs_new_eq:NN \endtypesetremark \endtsremark
 
 \NewDocumentEnvironment {tsremark*} {O{Note:}}
   {
@@ -1542,13 +1787,13 @@
 
 
 
-\NewDocumentCommand \typesetdate {}
+\NewDocumentCommand \tsdate {}
   {
       \seq_item:NV \l__codedesc_months_label_seq \c_sys_month_int
       \use:n {~} \int_to_arabic:n {\c_sys_year_int}
   }
   
-\cs_new_eq:NN \tsdate \typesetdate
+\cs_new_eq:NN \typesetdate \tsdate 
 
 %%%ARGH !!!!!
 %%% 'adapted' from 'abstract.cls'
@@ -1579,7 +1824,7 @@
       { \__codedesc_footnote:nn {#1}{#2} }
   }
   
-\NewDocumentCommand \typesettitle {m}
+\NewDocumentCommand \tstitle {m}
   {
     \keys_set:nn {codedesc / title}{#1}
   	\group_begin:
@@ -1607,7 +1852,7 @@
   	\group_end:
   }
 
-\cs_new_eq:NN \tstitle \typesettitle
+\cs_new_eq:NN \typesettitle \tstitle 
 
 
 \NewDocumentEnvironment{tsabstract}{}

@@ -9,9 +9,9 @@ These are expl3 based packages for LaTeX/expl3 code documetation.
  provides a few macros for LaTeX code listing/demo.
 
 They are designed to be 'as class independent as possible',
-no assumption about underline macros is made.
+no assumption about underlying macros is made.
 Furthermore, it's assumed that *\maketitle* and the *abstract* environment
-were modified by the underline class, so alternatives (based on the article class) are provided.
+were modified by the underlying class, so alternatives (based on the article class) are provided.
 
 For more details,  see the documentation,
 [codedescribe.pdf](http://mirrors.ctan.org/macros/latex/contrib/codedescribe/doc/codedescribe.pdf)
@@ -94,7 +94,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
-* Version 1.19 (this)
+* Version 1.20 (this)
+    - some code clean up/comments
+    - new format keys to adjust spacing with \tsobj (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
+    - new command for group format duplication.
+    - documentation review
+    
+* Version 1.19
     - codesyntax new optional parameter, addressing [#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
     - new format keys (font and fsize), addressing [#22](https://github.com/alceu-frigeri/codedescribe/issues/22)
     - code demo logic reworked,  addressing [#20](https://github.com/alceu-frigeri/codedescribe/issues/20)
