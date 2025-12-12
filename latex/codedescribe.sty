@@ -1134,16 +1134,6 @@
   
 \__codedesc_metafmt_clear:
 
-\cs_new_protected:Npn \__codedesc_metafmt_set:nn #1#2
-  { 
-    \keys_set:nn {codedesc / #1}{#2} 
-  }
-
-\cs_new_protected:Npn \__codedesc_metafmt_set:n #1
-  { 
-    \keys_set:nn {codedesc / format}{#1} 
-  }
-\cs_generate_variant:Nn \__codedesc_metafmt_set:n {V}
 
 \cs_new_protected:Npn \__codedesc_metafmt:n #1
   {
@@ -1159,6 +1149,38 @@
     \__codedesc_metashape:
     \__codedesc_metacolor: {}
   }
+
+
+\tl_new:N \l__codedesc_metafmt_tmp_tl
+\cs_new_protected:Npn \__codedesc_metafmt_set:nn #1#2
+  { 
+    \keys_set:nn {codedesc / #1}{#2} 
+
+    \cs_set:Npe  \__codedesc_metafmt: 
+      { 
+        \exp_not:o \__codedesc_metasize_tl: 
+        \exp_not:o \__codedesc_metafont_tl:
+        \exp_not:o \__codedesc_metashape:
+        \exp_not:o \__codedesc_metacolor: {}
+      }
+%    \cs_show:N \__codedesc_metafmt:
+  }
+
+\cs_new_protected:Npn \__codedesc_metafmt_set:n #1
+  { 
+    \keys_set:nn {codedesc / format}{#1} 
+
+    \cs_set:Npe  \__codedesc_metafmt: 
+      { 
+        \exp_not:o \__codedesc_metasize_tl: 
+        \exp_not:o \__codedesc_metafont_tl:
+        \exp_not:o \__codedesc_metashape:
+        \exp_not:o \__codedesc_metacolor: {}
+      }
+%    \cs_show:N \__codedesc_metafmt:    
+  }
+\cs_generate_variant:Nn \__codedesc_metafmt_set:n {V}
+
 
 
     %%%%%%%
@@ -1427,7 +1449,8 @@
 
     \bool_if:NTF \l__codedesc_longblock_bool
       { % __describeblock starting at marginpar
-        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > {0.33 \marginparsep}
+%        \dim_compare:nNnTF {\l__codedesc_margin_wd_dim - \marginparwidth} > { 0.33 \marginparsep}
+        \dim_compare:nNnTF { \marginparwidth + \marginparsep - \l__codedesc_margin_wd_dim } < { \l__codecmm_marginminsep_dim }
           {
             \coffin_join:NnnNnnnn 
               \l__codedesc_syntax_coffin {l}{t} 

@@ -96,6 +96,7 @@
 \dim_new:N \l__codecmm_baselineskip_dim
 \dim_new:N \l__codecmm_largelineskip_dim
 \dim_new:N \l__codecmm_coffinskip_dim
+\dim_new:N \l__codecmm_marginminsep_dim
 
 %\dim_new:N \l__codecmm_baselineskip_dim
 \dim_new:N \l__codecmm_midlineskip_dim
@@ -112,7 +113,7 @@
     \tl_set:Ne \l__codecmm_plusB_tl     { plus~  \fp_eval:n { #1 * 8 / 25 } pt }
     \tl_set:Ne \l__codecmm_plusC_tl     { plus~  \fp_eval:n { #1 * 3 / 50 } pt }
 
-    \dim_set:Ne \l__codecmm_tinyskip_dim       { \fp_eval:n { #1     / 15 } pt }
+    \dim_set:Ne \l__codecmm_verytinyskip_dim   { \fp_eval:n { #1     / 15 } pt }
     \dim_set:Ne \l__codecmm_tinyskip_dim       { \fp_eval:n { #1     / 10 } pt }
     \dim_set:Ne \l__codecmm_smallerskip_dim    { \fp_eval:n { #1 * 3 / 20 } pt }
     \dim_set:Ne \l__codecmm_smallskip_dim      { \fp_eval:n { #1     / 5  } pt }
@@ -121,8 +122,10 @@
     \dim_set:Ne \l__codecmm_largeskip_dim      { \fp_eval:n { #1     / 2  } pt }
     \dim_set:Ne \l__codecmm_largerskip_dim     { \fp_eval:n { #1 * 3 / 5  } pt }
     \dim_set:Ne \l__codecmm_baselineskip_dim   { \fp_eval:n { #1          } pt }
-    \dim_set:Ne  \l__codecmm_midlineskip_dim   { \fp_eval:n { #1     / 2  } pt }
-    \dim_set:Ne  \l__codecmm_largelineskip_dim { \fp_eval:n { #1 * 3 / 2  } pt }
+    \dim_set:Ne \l__codecmm_midlineskip_dim    { \fp_eval:n { #1     / 2  } pt }
+    \dim_set:Ne \l__codecmm_largelineskip_dim  { \fp_eval:n { #1 * 3 / 2  } pt }
+    
+    \dim_set:Ne \l__codecmm_marginminsep_dim   { \fp_eval:n { #1 * 1 / 8 } pt }
       
     \skip_set:Nn \l__codecmm_min_skip   { 0 pt plus 1pt minus 1pt }
      
@@ -140,6 +143,7 @@
     \skip_set:Ne \l__codecmm_verythin_skip   { \l__codecmm_verytinyskip_dim   \l__codecmm_plusC_tl \l__codecmm_minusC_tl }
     \skip_set:Ne \l__codecmm_thin_skip       { \l__codecmm_tinyskip_dim       \l__codecmm_plusC_tl \l__codecmm_minusC_tl }
     \skip_set:Ne \l__codecmm_midthin_skip    { \l__codecmm_smallerskip_dim    \l__codecmm_plusC_tl \l__codecmm_minusC_tl }
+    
   }                                           
 
 \__codecmm_set_skips:n {\f@size}
