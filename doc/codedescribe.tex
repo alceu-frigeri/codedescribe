@@ -457,7 +457,7 @@ Its up to the user to choose a companion package to format and display index ent
 \end{codestore}
 \tscode*[codedesc,codeprefix={}]{index-demo}
 
-The command \tsobj[code,no index]{\tsobj} and environment \tsobj[env,no index]{codedescribe} create index entries with the command \tsobj[code,no index]{\index} based on the object type (see \ref{obj-type-def}, \ref{desc-env} and \ref{ts-commands}).
+The command \tsobj[code,no index]{\tsobj} and environments \tsobj[env,no index]{codedescribe,describelist} create index entries with the command \tsobj[code,no index]{\index} based on the object type (see \ref{obj-type-def}, \ref{desc-env} and \ref{ts-commands}).
 The many items will be grabbed as \textbf{\tsmeta{index prefix}\tsmeta{item}@\tsmeta{index group}!\tsmeta{item}}. That way \tsobj[meta]{index prefix} can be used to force items to be sorted together  and \tsobj[meta]{index group} can be used to group, indent, similar items. The backslash, if any, is removed from the first \tsmeta{item} (preceding the @). Note that, when defining an Object Type (see below) only \tsobj[meta]{index group} can be preset. \tsobj[meta]{index-prefix} can only be set when calling \tsobj[code,no index]{\tsobj} or using the \tsobj[env,no index]{codedescribe} environment.
 %\begin{tsremark}
 %  Note that \tsobj[meta]{index prefix} can only be set on using \tsobj[code,no index]{\tsobj} viz-à-viz \tsobj[env,no index]{codedescribe} environment. When defining an Object Type (see below) only \tsobj[meta]{index group} can be preset.
@@ -527,7 +527,7 @@ Object types are the \tsobj[meta]{keys} used with \tsobj{\tsobj} (and friends, s
 With \tsobj{\defobjectfmt} (see \ref{format-custom}) one can (re-)define custom \tsobj[arg]{obj-types}. 
 The predefined ones are:
 
-\begin{describelist*}{keys}
+\begin{describelist*}{keys,no index}
   \describe {arg, meta} {based on (group) \tsobj[key]{meta}}
   \describe {verb, xverb} {based on (group) \tsobj[key]{verb} plus \tsobj[key,sep=or]{verb,xverb}}
   \describe {marg} {based on (group) \tsobj[key]{meta} plus brackets}
@@ -747,12 +747,18 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 \tsmacro{\begin{describelist}}[item-indent]{obj-type}
   ~~\tsmacro{\describe}{item-name,item-description}
   ~~\tsmacro{\describe}{item-name,item-description}
-  ~~\ldots
 \tsmacro{\end{describelist}}{}
   \end{codesyntax}
 This sets a \tsobj[env]{description} like `list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the marginpar. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
-\tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}. 
+\tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}, it can be any object from \ref{obj-types} (or \ref{format-custom}) and the following keys:
+\begin{describelist*}{key}
+  \describe {no index} {to NOT include {item names} in the default index}
+  \describe {index} {to include {item names} in the default index}
+  \describe {index group} {(defaults to `blank') sets the \tsobj[meta]{index group} for those items (see \ref{indexing}).}
+  \describe {index prefix} {(defaults to `blank') sets the \tsobj[meta]{index prefix} for those items (see \ref{indexing}).}  
+\end{describelist*}
 \end{codedescribe}
+
 
 \begin{codedescribe}[code]{\describe}
 \begin{codesyntax}
@@ -767,7 +773,7 @@ An error will be raised (undefined control sequence) if called outside of a \tso
 
 
 \subsection{Typeset Commands}\label{ts-commands}
-Note that, in the following commands, \tsobj[oarg]{obj-type} refers to any object type defined in  \ref{obj-types} and \ref{format-custom}.
+%Note that, in the following commands, \tsobj[oarg]{obj-type} refers to any object type defined in  \ref{obj-types} and \ref{format-custom}.
 % plus the following key:
 %\begin{describelist*}{key}
 %  \describe{strut}{This was a work around a bug when using \tsobj{\color} at the begin of an \tsobj[marg]{item-description} (from \tsobj{\describe}).}
@@ -834,7 +840,7 @@ These are just short-cuts for\par \tsobj[code,no index]{\tsobj [code] {macro-lis
 \end{codesyntax}
  Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator by \tsobj{\tsobj}.
 \begin{tsremark}
-This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! otherwise, some low level \TeX\ errors might  pop out.
+This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! %otherwise, some low level \TeX\ errors might  pop out.
 \end{tsremark}
 \end{codedescribe}
 
@@ -861,7 +867,7 @@ Typesets a small note at the margin.
     This is an example. 
   \end{tsremark}
  \end{codestore}
- \tsdemo[codedesc]{demo.remark}
+ \tsdemo[codedesc,codeprefix={},resultprefix={}]{demo.remark}
 \end{codedescribe}
 
 \subsection{Auxiliary Commands and Environment}\label{aux-commands}
@@ -905,7 +911,7 @@ This provides the current date (in Month Year, format).
 
 \section{codelstlang Package}\label{lstlang.pack}
 This is an auxiliary package (which can be used on its own). It assumes the package \tsobj[pkg]{listings} was already loaded, and just defines the following \TeX{} dialects, all of them derived from (listings) \tsverb[key]{[LaTeX]TeX}:
-\begin{describelist}{key}
+\begin{describelist}{key,no index}
   \describe{[l3kernelsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel}\cite{l3kernel} packages, including signatures. }
   \describe{[l3expsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} experimental packages, including signatures. }
   \describe{[l3amssign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{ams,siunitx} and related packages, including signatures. }

@@ -1101,6 +1101,40 @@
     %%% codedescribe/tsobj common keys
     %%%%%%%
 
+\keys_define:nn { codedesc / index keys}
+  {
+    index .usage:n = general ,
+    index .value_forbidden:n = true ,
+    index .code:n = 
+      { 
+        \bool_set_true:N \l__codedesc_index_bool
+      } ,
+    
+    no~ index .usage:n = general ,
+    no~ index .value_forbidden:n = true ,
+    no~ index .code:n = 
+      { 
+        \bool_set_false:N \l__codedesc_index_bool
+      } ,
+    
+    index~ group .usage:n = general ,
+    index~ group .value_required:n = true ,
+    index~ group .code:n = 
+      { 
+        \tl_set:Nn \l__codedesc_indexgrp_tl { #1 ! } 
+      } ,
+     
+    index~ prefix .usage:n = general ,
+    index~ prefix .value_required:n = true ,
+    index~ prefix .code:n = 
+      { 
+        \tl_set:Nn \l__codedesc_indexprefix_tl { #1 } 
+      } ,
+  }
+
+\keys_define:nn {}
+  { codedesc / format .inherit:n = codedesc / index keys }
+
 \keys_define:nn { codedesc / format }
 {
   strut .usage:n = general,
@@ -1108,34 +1142,6 @@
     {
       \tl_set:Nn \l__codedesc_strut_tl { \strut }
     },  
-
-  index .usage:n = general ,
-  index .value_forbidden:n = true ,
-  index .code:n = 
-    { 
-      \bool_set_true:N \l__codedesc_index_bool
-    } ,
-
-  no~ index .usage:n = general ,
-  no~ index .value_forbidden:n = true ,
-  no~ index .code:n = 
-    { 
-      \bool_set_false:N \l__codedesc_index_bool
-    } ,
-
-  index~ group .usage:n = general ,
-  index~ group .value_required:n = true ,
-  index~ group .code:n = 
-    { 
-      \tl_set:Nn \l__codedesc_indexgrp_tl { #1 ! } 
-    } ,
-   
-  index~ prefix .usage:n = general ,
-  index~ prefix .value_required:n = true ,
-  index~ prefix .code:n = 
-    { 
-      \tl_set:Nn \l__codedesc_indexprefix_tl { #1 } 
-    } ,
 
   unknown.usage:n = general,
 	unknown.code:n = 
@@ -1560,6 +1566,25 @@
 \regex_const:Nn \l__codedescribe_ast_regex {\*}
 
 
+\cs_new_protected:Npn \__codedescribe_index_aux:n #1
+  {
+    \str_set:Nn \l__codedesc_tmpa_tl {#1}
+    \regex_replace_all:NnN \l__codedescribe_ast_regex {} \l__codedesc_tmpa_tl
+    \tl_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
+    \regex_replace_once:NnNTF \l__codedescribe_slash_regex {} \l__codedesc_tmpa_tl
+      {
+        \regex_replace_once:NnN \l__codedescribe_slash_regex {\\string\\} \l__codedesc_tmpb_tl
+        \__codedescribe_index:VVVV 
+          \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+          \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+      }
+      {
+        \__codedescribe_index:VVVV 
+          \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+          \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+      }
+  }
+
 \cs_new_protected:Npn \__codedescribe_index:nnnn #1#2#3#4
   {
     \index{#1#2@#3#4}
@@ -1594,21 +1619,22 @@
         {
           \seq_map_inline:Nn \l__codedesc_tmpa_seq
             {
-              \str_set:Nn \l__codedesc_tmpa_tl {##1}
-              \regex_replace_all:NnN \l__codedescribe_ast_regex {} \l__codedesc_tmpa_tl
-              \tl_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
-              \regex_replace_once:NnNTF \l__codedescribe_slash_regex {} \l__codedesc_tmpa_tl
-                {
-                  \regex_replace_once:NnN \l__codedescribe_slash_regex {\\string\\} \l__codedesc_tmpb_tl
-                  \__codedescribe_index:VVVV 
-                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
-                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
-                }
-                {
-                  \__codedescribe_index:VVVV 
-                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
-                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
-                }
+              \__codedescribe_index_aux:n {##1}
+%              \str_set:Nn \l__codedesc_tmpa_tl {##1}
+%              \regex_replace_all:NnN \l__codedescribe_ast_regex {} \l__codedesc_tmpa_tl
+%              \tl_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
+%              \regex_replace_once:NnNTF \l__codedescribe_slash_regex {} \l__codedesc_tmpa_tl
+%                {
+%                  \regex_replace_once:NnN \l__codedescribe_slash_regex {\\string\\} \l__codedesc_tmpb_tl
+%                  \__codedescribe_index:VVVV 
+%                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+%                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+%                }
+%                {
+%                  \__codedescribe_index:VVVV 
+%                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+%                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+%                }
             }
         }
         {}
@@ -1857,6 +1883,9 @@
     \hcoffin_set:Nn \l__codedesc_tmpb_coffin 
       { 
         \l__codedesc_metafmt_describe_set_tl
+        \bool_if:NTF \l__codedesc_index_bool
+          { \__codedescribe_index_aux:n {#1} }
+          {}
         \__codedesc_metafmt: %V \l__codedesc_listkind_tl 
         \l__codedesc_ragged_tl 
         \__codedesc_typeset:n {#1}
@@ -1876,6 +1905,9 @@
           { \l__codedesc_describelabel_wd_dim } 
           { 
             \l__codedesc_metafmt_describe_set_tl
+            \bool_if:NTF \l__codedesc_index_bool
+              { \__codedescribe_index_aux:n {#1} }
+              {}
             \__codedesc_metafmt: %V \l__codedesc_listkind_tl
             \noindent\l__codedesc_ragged_tl \__codedesc_typeset:n {#1}
           }          
@@ -1965,27 +1997,25 @@
       
       \bool_if:NTF \l__codedesc_index_bool
         {
-%          \tl_show:n {<<#1::~~#2>>}
           \seq_set_from_clist:Nn \l__codedesc_tmpa_seq {#2}
           \seq_map_inline:Nn \l__codedesc_tmpa_seq
             {
-              \str_set:Nn \l__codedesc_tmpa_tl {##1}
-              \regex_replace_all:NnN \l__codedescribe_ast_regex {} \l__codedesc_tmpa_tl
-              \tl_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
-      %        \tl_show:N \l__codedesc_tmpb_tl
-              \regex_replace_once:NnNTF \l__codedescribe_slash_regex {} \l__codedesc_tmpa_tl
-                {
-      %            \tl_show:N \l__codedesc_tmpa_tl
-                  \regex_replace_once:NnN \l__codedescribe_slash_regex {\\string\\} \l__codedesc_tmpb_tl
-                  \__codedescribe_index:VVVV 
-                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
-                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
-                }
-                {
-                  \__codedescribe_index:VVVV 
-                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
-                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
-                }
+              \__codedescribe_index_aux:n {##1}
+%              \str_set:Nn \l__codedesc_tmpa_tl {##1}
+%              \regex_replace_all:NnN \l__codedescribe_ast_regex {} \l__codedesc_tmpa_tl
+%              \tl_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
+%              \regex_replace_once:NnNTF \l__codedescribe_slash_regex {} \l__codedesc_tmpa_tl
+%                {
+%                  \regex_replace_once:NnN \l__codedescribe_slash_regex {\\string\\} \l__codedesc_tmpb_tl
+%                  \__codedescribe_index:VVVV 
+%                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+%                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+%                }
+%                {
+%                  \__codedescribe_index:VVVV 
+%                    \l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl 
+%                    \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl 
+%                }
             }
         }
         {}      
