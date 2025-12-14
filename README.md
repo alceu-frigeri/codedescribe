@@ -98,6 +98,8 @@ The Current Maintainer of this work is Alceu Frigeri
     - some code clean up/comments
     - new format keys to adjust spacing with \tsobj (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
     - new command for group format duplication.
+    - new setup for 'auto-generating' an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
+    - new commands for color customization (both codedescribe and codelisting as well)
     - documentation review
     
 * Version 1.19

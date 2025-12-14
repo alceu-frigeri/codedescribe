@@ -43,13 +43,15 @@
 %%%%%%%
 
 
-
-\RequirePackage{listings,scontents,xcolor}
 \RequirePackage{xpeekahead,codecmm}
+\RequirePackage{xcolor,listings,scontents}
+
 
 
 \bool_new:N \l__codelist_xtradialects_bool
 \tl_set:Nn \l__codelist_dialect_tl {alsolanguage = [doctools]TeX ,}
+
+\tl_set:Nn \l__codelist_colors_bright_tl {default}
 
 \keys_define:nn { codelisting }
   {    
@@ -71,6 +73,19 @@
           } 
       },
     TeX~ dialects  .value_required:n = true,
+    
+        
+    colors .usage:n = load ,
+    colors .choices:nn =
+      { default , black , brighter , darker }
+      { \tl_set_eq:NN \l__codelist_colors_bright_tl \l_keys_choice_tl } ,
+    colors .value_required:n = true ,
+
+    listing~ colors .usage:n = load ,
+    listing~ colors .choices:nn =
+      { default , black , brighter , darker }
+      { \tl_set_eq:NN \l__codelist_colors_bright_tl \l_keys_choice_tl } ,
+    listing~ colors .value_required:n = true ,
     
   }
 \ProcessKeyOptions [codelisting ]
@@ -153,88 +168,239 @@
 
 \dim_set:Nn\l__codelist_org_parindent_dim{\parindent}
 
-\__codecmm_color_set:nn{c__codelist_lightred_color}{white!97!red}
-\__codecmm_color_set:nn{c__codelist_lightgreen_color}{white!97!green}
-\__codecmm_color_set:nn{c__codelist_lightblue_color}{white!97!blue}
-\__codecmm_color_set:nn{c__codelist_lightmagenta_color}{white!97!magenta}
-\__codecmm_color_set:nn{c__codelist_lightyellow_color}{white!97!yellow}
-\__codecmm_color_set:nn{c__codelist_lightteal_color}{white!97!teal}
-\__codecmm_color_set:nn{c__codelist_lightcyan_color}{white!97!cyan}
 
-\__codecmm_color_set:nn{c__codelist_lightgray_color}{white!97!black}
-\__codecmm_color_set:nn{c__codelist_gray_color}{gray}
-\__codecmm_color_set:nnn{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
-\__codecmm_color_set:nnn{c__codelist_blackgray_color}{rgb}{0.8,0.8,0.8}
+%\__codecmm_color_set:nn{c__codelist_gray_color}{gray}
+%\__codecmm_color_set:nnn{c__codelist_grayblack_color}{rgb}{0.8,0.8,0.8}
+%\__codecmm_color_set:nnn{c__codelist_blackgray_color}{rgb}{0.8,0.8,0.8}
+%
+%\cs_new_protected:Npn \__codelist_set_colors:n #1
+%  {
+%    \__codecmm_color_set:ne {c__codelist_lightred_color}        { white!    \fp_eval:n{ 96.5 + 1 * #1 } !red     }
+%    \__codecmm_color_set:ne {c__codelist_lightgreen_color}      { white!    \fp_eval:n{ 96.5 + 1 * #1 } !green   }
+%    \__codecmm_color_set:ne {c__codelist_lightblue_color}       { white!    \fp_eval:n{ 96.5 + 1 * #1 } !blue    }
+%    \__codecmm_color_set:ne {c__codelist_lightmagenta_color}    { white!    \fp_eval:n{ 96.5 + 1 * #1 } !magenta }
+%    \__codecmm_color_set:ne {c__codelist_lightyellow_color}     { white!    \fp_eval:n{ 96.5 + 1 * #1 } !yellow  }
+%    \__codecmm_color_set:ne {c__codelist_lightteal_color}       { white!    \fp_eval:n{ 96.5 + 1 * #1 } !teal    }
+%    \__codecmm_color_set:ne {c__codelist_lightcyan_color}       { white!    \fp_eval:n{ 96.5 + 1 * #1 } !cyan    }
+%    \__codecmm_color_set:ne {c__codelist_lightgray_color}       { white!    \fp_eval:n{ 96.5 + 1 * #1 } !black   }
+%
+%    \__codecmm_color_set:ne {c__codelist_darkred_color}         { red!      \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkgreen_color}       { green!    \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkblue_color}        { blue!     \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkmagenta_color}     { magenta!  \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkyellow_color}      { yellow!   \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkteal_color}        { teal!     \fp_eval:n{ 30 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_darkcyan_color}        { cyan!     \fp_eval:n{ 30 * #1 } !black!100 }
+%    
+%    \__codecmm_color_set:ne {c__codelist_redishblack_color}     { red!      \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_greenishblack_color}   { green!    \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_blueishblack_color}    { blue!     \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_magentaishblack_color} { magenta!  \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_yellowishblack_color}  { yellow!   \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_tealishblack_color}    { teal!     \fp_eval:n{ 50 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_cyanishblack_color}    { cyan!     \fp_eval:n{ 50 * #1 } !black!100 }
+%    
+%    \__codecmm_color_set:ne {c__codelist_redblack_color}        { red!      \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_greenblack_color}      { green!    \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_blueblack_color}       { blue!     \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_magentablack_color}    { magenta!  \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_yellowblack_color}     { yellow!   \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_tealblack_color}       { teal!     \fp_eval:n{ 75 * #1 } !black!100 }
+%    \__codecmm_color_set:ne {c__codelist_cyanblack_color}       { cyan!     \fp_eval:n{ 75 * #1 } !black!100 }
+%    
+%    \__codecmm_color_set:ne {c__codelist_grayred_color}         { red!      \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_graygreen_color}       { green!    \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_grayblue_color}        { blue!     \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_graymagenta_color}     { magenta!  \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_grayyellow_color}      { yellow!   \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_grayteal_color}        { teal!     \fp_eval:n{ 30 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_graycyan_color}        { cyan!     \fp_eval:n{ 30 * #1 } !gray!100 }
+%    
+%    \__codecmm_color_set:ne {c__codelist_redishgray_color}      { red!      \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_greenishgray_color}    { green!    \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_blueishgray_color}     { blue!     \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_magentaishgray_color}  { magenta!  \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_yellowishgray_color}   { yellow!   \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_tealishgray_color}     { teal!     \fp_eval:n{ 50 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_cyanishgray_color}     { cyan!     \fp_eval:n{ 50 * #1 } !gray!100 }
+%    
+%    \__codecmm_color_set:ne {c__codelist_redgray_color}         { red!      \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_greengray_color}       { green!    \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_bluegray_color}        { blue!     \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_magentagray_color}     { magenta!  \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_yellowgray_color}      { yellow!   \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_tealgray_color}        { teal!     \fp_eval:n{ 75 * #1 } !gray!100 }
+%    \__codecmm_color_set:ne {c__codelist_cyangray_color}        { cyan!     \fp_eval:n{ 75 * #1 } !gray!100 }
+%  }    
 
-\__codecmm_color_set:nn{c__codelist_darkred_color}{red!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkgreen_color}{green!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkblue_color}{blue!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkmagenta_color}{magenta!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkyellow_color}{yellow!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkteal_color}{teal!30!black!100}
-\__codecmm_color_set:nn{c__codelist_darkcyan_color}{cyan!30!black!100}
 
-\__codecmm_color_set:nn{c__codelist_redishblack_color}{red!50!black!100}
-\__codecmm_color_set:nn{c__codelist_greenishblack_color}{green!50!black!100}
-\__codecmm_color_set:nn{c__codelist_blueishblack_color}{blue!50!black!100}
-\__codecmm_color_set:nn{c__codelist_magentaishblack_color}{magenta!50!black!100}
-\__codecmm_color_set:nn{c__codelist_yellowishblack_color}{yellow!50!black!100}
-\__codecmm_color_set:nn{c__codelist_tealishblack_color}{teal!50!black!100}
-\__codecmm_color_set:nn{c__codelist_cyanishblack_color}{cyan!50!black!100}
+\cs_new_protected:Npn \__codelist_set_colors:n #1
+  {
+    \__codecmm_color_set:ne {c__codelist_bckgnd_color}          { white!    \fp_eval:n{ 96.5 + 1 * #1 } ! \l__codelist_scheme_bckgnd_tl }
+    
+    \__codecmm_color_set:ne {c__codelist_string_color}          { \l__codelist_scheme_string_tl  ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_comment_color}         { \l__codelist_scheme_comment_tl ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    
+    \__codecmm_color_set:ne {c__codelist_texcsA_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_texcsB_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_texcsC_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 50 * #1 }      ! gray  ! 100 }
+    \__codecmm_color_set:ne {c__codelist_texcsD_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 65 * #1 }      ! gray  ! 100 }
+    
+    \__codecmm_color_set:ne {c__codelist_keywdA_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdB_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdC_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 50 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdD_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 65 * #1 }      ! black ! 100 }
+    
+    \__codecmm_color_set:ne {c__codelist_emphA_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphB_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphC_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 50 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphD_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 65 * #1 }      ! black ! 100 }
+    
+%    \__codecmm_color_set:ne {c__codelist_rule_color}            { \l__codelist_scheme_rule_tl   ! \fp_eval:n{ 50 * #1 }      ! gray ! 100 }
+%    \__codecmm_color_set:ne {c__codelist_number_color}          { \l__codelist_scheme_number_tl   ! \fp_eval:n{ 50 * #1 }      ! gray ! 100 }
+    \__codecmm_color_set:ne {c__codelist_rule_color}            { \l__codelist_scheme_rule_tl    !    \fp_eval:n{ 40 + 20 * #1 } !  white}
+    \__codecmm_color_set:ne {c__codelist_number_color}          { \l__codelist_scheme_number_tl  !    \fp_eval:n{ 40 + 20 * #1 } ! white }
 
-\__codecmm_color_set:nn{c__codelist_redblack_color}{red!75!black!100}
-\__codecmm_color_set:nn{c__codelist_greenblack_color}{green!75!black!100}
-\__codecmm_color_set:nn{c__codelist_blueblack_color}{blue!75!black!100}
-\__codecmm_color_set:nn{c__codelist_magentablack_color}{magenta!75!black!100}
-\__codecmm_color_set:nn{c__codelist_yellowblack_color}{yellow!75!black!100}
-\__codecmm_color_set:nn{c__codelist_tealblack_color}{teal!75!black!100}
-\__codecmm_color_set:nn{c__codelist_cyanblack_color}{cyan!75!black!100}
+  }
 
-\__codecmm_color_set:nn{c__codelist_grayred_color}{red!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_graygreen_color}{green!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_grayblue_color}{blue!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_graymagenta_color}{magenta!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_grayyellow_color}{yellow!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_grayteal_color}{teal!30!gray!100}
-\__codecmm_color_set:nn{c__codelist_graycyan_color}{cyan!30!gray!100}
+\cs_new_protected:Npn \__codelist_set_color_brightness:n #1
+  {
+    \str_case:enF {#1}
+      {
+        {default}
+          { \__codelist_set_colors:n {1} }
+        {black}
+          { \__codelist_set_colors:n {0} }        
+        {brighter}
+          { \__codelist_set_colors:n {2} }
+        {darker}
+          { \__codelist_set_colors:n {0.65} }
+      } %% fail-safe: default
+      { \__codelist_set_colors:n {1} }
+  }
+\cs_generate_variant:Nn   \__codelist_set_color_brightness:n {V}
 
-\__codecmm_color_set:nn{c__codelist_redishgray_color}{red!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_greenishgray_color}{green!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_blueishgray_color}{blue!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_magentaishgray_color}{magenta!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_yellowishgray_color}{yellow!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_tealishgray_color}{teal!50!gray!100}
-\__codecmm_color_set:nn{c__codelist_cyanishgray_color}{cyan!50!gray!100}
 
-\__codecmm_color_set:nn{c__codelist_redgray_color}{red!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_greengray_color}{green!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_bluegray_color}{blue!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_magentagray_color}{magenta!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_yellowgray_color}{yellow!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_tealgray_color}{teal!75!gray!100}
-\__codecmm_color_set:nn{c__codelist_cyangray_color}{cyan!75!gray!100}
+%\__codelist_set_colors:n {1}
 
-\tl_set:Nn \l__codelist_bckgnd_color_default_tl{c__codelist_lightgray_color}%
-\tl_set:Nn \l__codelist_string_color_default_tl{c__codelist_darkteal_color}
-\tl_set:Nn \l__codelist_comment_color_default_tl{c__codelist_darkgreen_color}
 
-\tl_set:Nn \l__codelist_texcsA_color_default_tl{c__codelist_darkblue_color}
-\tl_set:Nn \l__codelist_texcsB_color_default_tl{c__codelist_blueishblack_color}
-\tl_set:Nn \l__codelist_texcsC_color_default_tl{c__codelist_blueblack_color}
-\tl_set:Nn \l__codelist_texcsD_color_default_tl{c__codelist_blueishgray_color}
 
-\tl_set:Nn \l__codelist_keywdA_color_default_tl{c__codelist_darkcyan_color}
-\tl_set:Nn \l__codelist_keywdB_color_default_tl{c__codelist_cyanishblack_color}
-\tl_set:Nn \l__codelist_keywdC_color_default_tl{c__codelist_cyanblack_color}
-\tl_set:Nn \l__codelist_keywdD_color_default_tl{c__codelist_cyanishgray_color}
+\keys_define:nn { codelist / color scheme } 
+  {
+    bckgnd   .usage:n              = general ,
+    bckgnd   .tl_set:N             = \l__codelist_scheme_bckgnd_tl ,
+    bckgnd   .default:n            = black ,
 
-\tl_set:Nn \l__codelist_emphA_color_default_tl{c__codelist_darkred_color}
-\tl_set:Nn \l__codelist_emphB_color_default_tl{c__codelist_redishblack_color}
-\tl_set:Nn \l__codelist_emphC_color_default_tl{c__codelist_redblack_color}
-\tl_set:Nn \l__codelist_emphD_color_default_tl{c__codelist_redishgray_color}
+    string    .usage:n              = general ,
+    string    .tl_set:N             = \l__codelist_scheme_string_tl ,
+    string    .default:n            = teal ,
+  
+    comment    .usage:n              = general ,
+    comment    .tl_set:N             = \l__codelist_scheme_comment_tl ,
+    comment    .default:n            = green ,
+    
+    texcs    .usage:n              = general ,
+    texcs    .tl_set:N             = \l__codelist_scheme_texcs_tl ,
+    texcs    .default:n            = blue ,
+    
+    keywd    .usage:n              = general ,
+    keywd    .tl_set:N             = \l__codelist_scheme_keywd_tl ,
+    keywd    .default:n            = cyan ,
+    
+    emph  .usage:n              = general ,
+    emph  .tl_set:N             = \l__codelist_scheme_emph_tl ,
+    emph  .default:n            = red ,
+      
+    rule     .usage:n              = general ,
+    rule     .tl_set:N             = \l__codelist_scheme_rule_tl ,
+    rule     .default:n            = black ,
 
-\tl_set:Nn \l__codelist_rule_color_default_tl{c__codelist_gray_color}
-\tl_set:Nn \l__codelist_number_color_default_tl{c__codelist_gray_color}
+    number    .usage:n              = general ,
+    number    .tl_set:N             = \l__codelist_scheme_number_tl ,
+    number    .default:n            = black ,
+    
+    brightness  .usage:n          = general ,
+    brightness  .tl_set:N         = \l__codelist_scheme_bright_tl ,
+    brightness  .default:n        = 1 ,
+    
+    default     .usage:n           = general ,
+    default     .value_forbidden:n = true ,
+    default     .meta:n            = 
+      { bckgnd , string , comment , texcs , keywd , emph , rule , number , brightness } ,
+    
+    scheme  .usage:n              = general ,
+    scheme  .choice: ,
+    scheme / default
+      .meta:n = default ,
+    scheme / test
+      .code:n =
+        {
+          \tl_set:Nn \l__codelist_scheme_bckgnd_tl    {red}
+          \tl_set:Nn \l__codelist_scheme_string_tl     {blue}
+          \tl_set:Nn \l__codelist_scheme_comment_tl     {brown}
+          \tl_set:Nn \l__codelist_scheme_texcs_tl     {pink}
+          \tl_set:Nn \l__codelist_scheme_keywd_tl     {teal}
+          \tl_set:Nn \l__codelist_scheme_emph_tl   {magenta}
+          \tl_set:Nn \l__codelist_scheme_rule_tl      {yellow}
+          \tl_set:Nn \l__codelist_scheme_number_tl     {green}
+          \tl_set:Nn \l__codelist_scheme_bright_tl   {1.8}
+        }  
+  }
+
+
+\cs_new_protected:Npn \__codelist_set_color_scheme:n #1
+  {
+    \keys_set:nn { codelist / color scheme } {#1}
+    \__codelist_set_colors:n \l__codelist_scheme_bright_tl    
+  }
+
+\keys_set:nn { codelist / color scheme } {default}
+%\__codelist_set_colors:n {1}
+\__codelist_set_color_brightness:n \l__codelist_colors_bright_tl
+
+
+\NewDocumentCommand \setlistcolorscheme {m}
+  { \__codelist_set_color_scheme:n {#1} }
+
+\tl_new:N \l__codelist_scheme_tmp_tl
+
+\NewDocumentCommand \newlistcolorscheme {mm}
+  { 
+    \keys_precompile:nnN { codelist / color scheme } {#2}
+      \l__codelist_scheme_tmp_tl
+    \keys_define:ne { codelist / color scheme }
+      {
+        scheme / #1
+          .code:n = { \exp_not:V \l__codelist_scheme_tmp_tl }
+      }
+  }
+
+
+
+
+
+
+\tl_set:Nn \l__codelist_bckgnd_color_default_tl   { c__codelist_lightgray_color }%
+\tl_set:Nn \l__codelist_string_color_default_tl   { c__codelist_darkteal_color }
+\tl_set:Nn \l__codelist_comment_color_default_tl  { c__codelist_darkgreen_color }
+
+\tl_set:Nn \l__codelist_texcsA_color_default_tl   { c__codelist_darkblue_color }
+\tl_set:Nn \l__codelist_texcsB_color_default_tl   { c__codelist_blueishblack_color }
+\tl_set:Nn \l__codelist_texcsC_color_default_tl   { c__codelist_blueblack_color }
+\tl_set:Nn \l__codelist_texcsD_color_default_tl   { c__codelist_blueishgray_color }
+
+\tl_set:Nn \l__codelist_keywdA_color_default_tl   { c__codelist_darkcyan_color }
+\tl_set:Nn \l__codelist_keywdB_color_default_tl   { c__codelist_cyanishblack_color }
+\tl_set:Nn \l__codelist_keywdC_color_default_tl   { c__codelist_cyanblack_color }
+\tl_set:Nn \l__codelist_keywdD_color_default_tl   { c__codelist_cyanishgray_color }
+
+\tl_set:Nn \l__codelist_emphA_color_default_tl    { c__codelist_darkred_color }
+\tl_set:Nn \l__codelist_emphB_color_default_tl    { c__codelist_redishblack_color }
+\tl_set:Nn \l__codelist_emphC_color_default_tl    { c__codelist_redblack_color }
+\tl_set:Nn \l__codelist_emphD_color_default_tl    { c__codelist_redishgray_color }
+
+\tl_set:Nn \l__codelist_rule_color_default_tl     { c__codelist_gray_color }
+\tl_set:Nn \l__codelist_number_color_default_tl   { c__codelist_gray_color }
 
 \keys_define:nn {codelist / options} {  
   lststyle      .usage:n   =  general,
@@ -251,7 +417,8 @@
 
   texcsstyle    .usage:n   =   general,
   texcsstyle    .code:n    =  { \tl_set:Nn \l__codelist_texcsAstyle_tl {#1} },
-  texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsA_color_default_tl },
+%  texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsA_color_default_tl },
+  texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsA_color },
 
   settexcs2     .usage:n   =   general,
   settexcs2     .code:n    =  { \tl_set:Nn \l__codelist_texcsB_tl {#1} },
@@ -263,7 +430,8 @@
 
   texcs2style   .usage:n   =   general,
   texcs2style   .code:n    =  { \tl_set:Nn \l__codelist_texcsBstyle_tl {#1} },
-  texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsB_color_default_tl } ,
+%  texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsB_color_default_tl } ,
+  texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsB_color } ,
 
   settexcs3     .usage:n   =   general,
   settexcs3     .code:n    =  { \tl_set:Nn \l__codelist_texcsC_tl {#1} },
@@ -275,7 +443,8 @@
 
   texcs3style   .usage:n   =   general,
   texcs3style   .code:n    =  { \tl_set:Nn \l__codelist_texcsCstyle_tl {#1} },
-  texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsC_color_default_tl } ,
+%  texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsC_color_default_tl } ,
+  texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsC_color } ,
 
   settexcs4     .usage:n   =   general,
   settexcs4     .code:n    =  { \tl_set:Nn \l__codelist_texcsD_tl {#1} },
@@ -287,7 +456,8 @@
 
   texcs4style   .usage:n   =   general,
   texcs4style   .code:n    =  { \tl_set:Nn \l__codelist_texcsDstyle_tl {#1} },
-  texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsD_color_default_tl } ,
+%  texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsD_color_default_tl } ,
+  texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsD_color } ,
 
   setkeywd      .usage:n   =   general,
   setkeywd      .code:n    =  { \tl_set:Nn \l__codelist_keywdA_tl {#1} },
@@ -299,7 +469,8 @@
 
   keywdstyle    .usage:n   =   general,
   keywdstyle    .code:n    =  { \tl_set:Nn \l__codelist_keywdstyle_tl {#1} },
-  keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdA_color_default_tl } ,
+%  keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdA_color_default_tl } ,
+  keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdA_color } ,
 
   setkeywd2     .usage:n   =   general,
   setkeywd2     .code:n    =  { \tl_set:Nn \l__codelist_keywdB_tl {#1} },
@@ -311,7 +482,8 @@
 
   keywd2style   .usage:n   =   general,
   keywd2style   .code:n    =  { \tl_set:Nn \l__codelist_keywdBstyle_tl {#1} },
-  keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdB_color_default_tl } ,
+%  keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdB_color_default_tl } ,
+  keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdB_color } ,
 
   setkeywd3     .usage:n   =   general,
   setkeywd3     .code:n    =  { \tl_set:Nn \l__codelist_keywdC_tl {#1} },
@@ -323,7 +495,8 @@
 
   keywd3style   .usage:n   =   general,
   keywd3style   .code:n    =  { \tl_set:Nn \l__codelist_keywdCstyle_tl {#1} },
-  keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdC_color_default_tl } ,
+%  keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdC_color_default_tl } ,
+  keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdC_color } ,
 
   setkeywd4     .usage:n   =   general,
   setkeywd4     .code:n    =  { \tl_set:Nn \l__codelist_keywdD_tl {#1} },
@@ -335,7 +508,8 @@
 
   keywd4style   .usage:n   =   general,
   keywd4style   .code:n    =  { \tl_set:Nn \l__codelist_keywdDstyle_tl {#1} },
-  keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdD_color_default_tl } ,
+%  keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdD_color_default_tl } ,
+  keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdD_color } ,
 
   setemph       .usage:n   =   general,
   setemph       .code:n    =  { \tl_set:Nn \l__codelist_emphA_tl {#1} },
@@ -347,7 +521,8 @@
 
   emphstyle     .usage:n   =   general,
   emphstyle     .code:n    =  { \tl_set:Nn \l__codelist_emphAstyle_tl {#1} },
-  emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphA_color_default_tl } ,
+%  emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphA_color_default_tl } ,
+  emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphA_color } ,
 
   setemph2      .usage:n   =   general,
   setemph2      .code:n    =  { \tl_set:Nn \l__codelist_emphB_tl {#1} },
@@ -359,7 +534,8 @@
 
   emph2style    .usage:n   =   general,
   emph2style    .code:n    =  { \tl_set:Nn \l__codelist_emphBstyle_tl {#1} },
-  emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphB_color_default_tl } ,
+%  emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphB_color_default_tl } ,
+  emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphB_color } ,
 
   setemph3      .usage:n   =   general,
   setemph3      .code:n    =  { \tl_set:Nn \l__codelist_emphC_tl {#1} },
@@ -371,7 +547,8 @@
 
   emph3style    .usage:n   =   general,
   emph3style    .code:n    =  { \tl_set:Nn \l__codelist_emphCstyle_tl {#1} },
-  emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphC_color_default_tl } ,
+%  emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphC_color_default_tl } ,
+  emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphC_color } ,
 
   setemph4      .usage:n   =   general,
   setemph4      .code:n    =  { \tl_set:Nn \l__codelist_emphD_tl {#1} },
@@ -383,23 +560,28 @@
 
   emph4style    .usage:n   =   general,
   emph4style    .code:n    =  { \tl_set:Nn \l__codelist_emphDstyle_tl {#1} },
-  emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphD_color_default_tl } ,
+%  emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphD_color_default_tl } ,
+  emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphD_color } ,
 
   stringstyle   .usage:n   =   general,
   stringstyle   .code:n    =  { \tl_set:Nn \l__codelist_stringstyle_tl {#1} },
-  stringstyle   .default:n =  \__codecmm_color_select:n{ \l__codelist_string_color_default_tl } ,
+%  stringstyle   .default:n =  \__codecmm_color_select:n{ \l__codelist_string_color_default_tl } ,
+  stringstyle   .default:n =  \__codecmm_color_select:n{ c__codelist_string_color } ,
 
   commentstyle  .usage:n   =   general,
   commentstyle  .code:n    =  { \tl_set:Nn \l__codelist_commentstyle_tl {#1} },
-  commentstyle  .default:n =  \__codecmm_color_select:n{ \l__codelist_comment_color_default_tl } ,
+%  commentstyle  .default:n =  \__codecmm_color_select:n{ \l__codelist_comment_color_default_tl } ,
+  commentstyle  .default:n =  \__codecmm_color_select:n{ c__codelist_comment_color } ,
 
   bckgndcolor   .usage:n   =   general,
   bckgndcolor   .code:n    =  { \tl_set:Nn \l__codelist_bckgndcolor_tl {#1} },
-  bckgndcolor   .default:n =  \__codecmm_color_select:n{ \l__codelist_bckgnd_color_default_tl } ,
+%  bckgndcolor   .default:n =  \__codecmm_color_select:n{ \l__codelist_bckgnd_color_default_tl } ,
+  bckgndcolor   .default:n =  \__codecmm_color_select:n{ c__codelist_bckgnd_color } ,
 
   rulecolor     .usage:n   =   general,
   rulecolor     .code:n    =  { \tl_set:Nn \l__codelist_rulecolor_tl {#1} },
-  rulecolor     .default:n =  \__codecmm_color_select:n{ \l__codelist_rule_color_default_tl } ,
+%  rulecolor     .default:n =  \__codecmm_color_select:n{ \l__codelist_rule_color_default_tl } ,
+  rulecolor     .default:n =  \__codecmm_color_select:n{ c__codelist_rule_color } ,
 
   numbers       .usage:n   =   general,
   numbers       .code:n    =  { \tl_set:Nn \l__codelist_numbers_tl {#1} },
@@ -407,7 +589,8 @@
 
   numberstyle   .usage:n   =   general,
   numberstyle   .code:n    =  { \tl_set:Nn \l__codelist_numberstyle_tl {#1} },
-  numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ \l__codelist_number_color_default_tl },
+%  numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ \l__codelist_number_color_default_tl },
+  numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ c__codelist_number_color },
 
   parindent     .usage:n   =   general,
   parindent     .code:n    =  { \dim_set:Nn\l__codelist_demo_parindent_dim{#1} },
@@ -439,29 +622,16 @@
 
   default       .usage:n   =   general,
   default       .meta:n    = {
-      settexcs     , texcsstyle  , 
-      settexcs2    , texcs2style , 
-      settexcs3    , texcs3style ,
-      settexcs4    , texcs4style ,
-		  setkeywd     , keywdstyle  , 
-      setkeywd2    , keywd2style , 
-      setkeywd3    , keywd3style ,
-      setkeywd4    , keywd4style ,
-		  setemph      , emphstyle   , 
-      setemph2     , emph2style  , 
-      setemph3     , emph3style  ,
-      setemph4     , emph4style  ,
-		  stringstyle  , 
-      commentstyle , 
-      bckgndcolor  , rulecolor   ,
-		  numbers      , numberstyle ,
-      parindent    ,
-      codeprefix   , resultprefix ,
-      ruleht       , 
-      letter       ,
-      other        ,
-      basicstyle   ,
-      lststyle
+      settexcs     , texcsstyle   , settexcs2    , texcs2style , 
+      settexcs3    , texcs3style  , settexcs4    , texcs4style ,
+		  setkeywd     , keywdstyle   , setkeywd2    , keywd2style , 
+      setkeywd3    , keywd3style  , setkeywd4    , keywd4style ,
+		  setemph      , emphstyle    , setemph2     , emph2style  , 
+      setemph3     , emph3style   , setemph4     , emph4style  ,
+		  stringstyle  , commentstyle , basicstyle   , lststyle    , 
+		  numbers      , numberstyle  , codeprefix   , resultprefix ,
+      bckgndcolor  , rulecolor    , ruleht       , parindent    ,
+      letter       , other        ,
   },
 }
 
