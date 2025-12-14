@@ -100,7 +100,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - new command for group format duplication.
     - new setup for 'auto-generating' an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
     - new commands for color customization (both codedescribe and codelisting as well)
-    - documentation review
+    - documentation review.
     
 * Version 1.19
     - codesyntax new optional parameter, addressing [#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
