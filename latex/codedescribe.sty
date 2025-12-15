@@ -68,7 +68,7 @@
 \bool_new:N \l__codedesc_loadlisting_bool
 \bool_set_true:N \l__codedesc_loadlisting_bool
 \bool_new:N \l__codedesc_indexdefault_bool
-\bool_set_true:N \l__codedesc_indexdefault_bool
+%\bool_set_true:N \l__codedesc_indexdefault_bool
 
 \tl_set:Nn \l__codedesc_colors_bright_tl {default}
 
@@ -180,13 +180,13 @@
   	no~ listing .bool_set_inverse:N = \l__codedesc_loadlisting_bool ,
     no~ listing .default:n  = {true} ,
     
-    noindex .usage:n    = load ,
-  	noindex .bool_set_inverse:N = \l__codedesc_indexdefault_bool ,
-    noindex .default:n  = {true} ,
+    index .usage:n    = load ,
+  	index .bool_set:N = \l__codedesc_indexdefault_bool ,
+    index .default:n  = {true} ,
     
-    no~ index .usage:n    = load ,
-  	no~ index .bool_set_inverse:N = \l__codedesc_indexdefault_bool ,
-    no~ index .default:n  = {true} ,
+    index .usage:n    = load ,
+  	index .bool_set:N = \l__codedesc_indexdefault_bool ,
+    index .default:n  = {true} ,
 
     load~ xtra~ dialects .usage:n    = load ,
   	load~ xtra~ dialects .code:n    =  { \PassOptionsToPackage{\CurrentOption}{codelisting} } ,

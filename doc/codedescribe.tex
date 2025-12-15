@@ -36,7 +36,7 @@
 %    l3kernel, l3exp, l3ams, l3pgf, l3bibtex, kernel, xpacks, ams, pgf, pgfplots, 
 %    bibtex, babel, hyperref}]{codedescribe}
 %\usepackage[strict,infograb,silence,color scheme=darker,listing color scheme=darker]{codedescribe}
-\usepackage[strict,infograb,silence]{codedescribe}
+\usepackage[strict,infograb,silence,index]{codedescribe}
 \usepackage{enumitem}
 
 \RequirePackage[backend=biber]{biblatex}
@@ -426,7 +426,7 @@ This package aims at minimizing the number of commands, being the object kind (i
 
 \begin{describelist}{key}
 \describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
-\describe{no index}{This will change all object types default to \tsobj[key,no index]{no index}. This won't suppress index generation, but just change the objects' type default behaviour (see \ref{indexing} and \ref{obj-type-def})}
+\describe{index}{(new: 2025/12/15)This will set the default of some object groups to \tsobj[key,no index]{index}. This won't load any index package, but just change some objects' default behaviour (see \ref{indexing} and \ref{obj-type-def})}
 \describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[option]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
@@ -520,6 +520,9 @@ Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom 
 \end{describelist*}
 \begin{tsremark}
 \tsobj[keys]{color} was used in the list above just as a `reminder' that a color is defined/associated with the given group, it can be changed with \tsobj{\defgroupfmt}.
+\end{tsremark}
+\begin{tsremark}
+\tsobj[keys]{index,index group} will only be set if the option \tsobj[option]{index} was used when loading this package, see \ref{codedesc.pack-options}.
 \end{tsremark}
 
 \subsubsection{Object Types}\label{obj-types}
