@@ -583,6 +583,10 @@
 %  rulecolor     .default:n =  \__codecmm_color_select:n{ \l__codelist_rule_color_default_tl } ,
   rulecolor     .default:n =  \__codecmm_color_select:n{ c__codelist_rule_color } ,
 
+  firstnumber       .usage:n   =   general,
+  firstnumber       .code:n    =  { \tl_set:Nn \l__codelist_firstnumber_tl {#1} },
+  firstnumber       .default:n =  last,
+
   numbers       .usage:n   =   general,
   numbers       .code:n    =  { \tl_set:Nn \l__codelist_numbers_tl {#1} },
   numbers       .default:n =  none,
@@ -631,7 +635,7 @@
 		  stringstyle  , commentstyle , basicstyle   , lststyle    , 
 		  numbers      , numberstyle  , codeprefix   , resultprefix ,
       bckgndcolor  , rulecolor    , ruleht       , parindent    ,
-      letter       , other        ,
+      letter       , other        , firstnumber
   },
 }
 
@@ -705,8 +709,7 @@
       numberblanklines  =      true  ,    %
       stepnumber        =      1  ,             % seperation between numbers
       numberfirstline   =      false  ,    % number first line always
-    
-    
+        
       rulecolor         =      {\l__codelist_rulecolor_tl}  ,
     	backgroundcolor   =      {\l__codelist_bckgndcolor_tl}  ,
       stringstyle       =      {\l__codelist_stringstyle_tl}  ,
@@ -818,43 +821,13 @@
               emph          =[2]  {\l__codelist_emphB_tl}, 
               emph          =[3]  {\l__codelist_emphC_tl},
               emph          =[4]  {\l__codelist_emphD_tl},
-        	    numbers       =     \l__codelist_numbers_tl
+        	    numbers       =     \l__codelist_numbers_tl,
+              firstnumber   =     \l__codelist_firstnumber_tl,
             }
         }
         {}
   }
 
-%%% !!! DEPRECATED !!!
-%\NewDocumentEnvironment {verbsc} {m}
-%  {
-%      \cs_undefine:c{verbatimsc}
-%      \cs_undefine:c{verbatimsc@@}
-%      \cs_undefine:c{verbatimsc@}
-%      \cs_undefine:c{endverbatimsc}
-%      
-%  		\__codelist_set_options:n{#1}
-%
-%      \lstnewenvironment{verbatimsc}
-%        {
-%          \exp_args:Ne \lstset
-%            {
-%              style=codestyle,
-%              moretexcs     =     {\l__codelist_texcsA_tl},
-%              moretexcs     =[2]  {\l__codelist_texcsB_tl},
-%              moretexcs     =[3]  {\l__codelist_texcsC_tl},
-%        		  morekeywords  =     {\l__codelist_keywdA_tl},
-%              morekeywords  =[2]  {\l__codelist_keywdB_tl},
-%              morekeywords  =[3]  {\l__codelist_keywdC_tl},
-%        		  emph          =     {\l__codelist_emphA_tl}, 
-%              emph          =[2]  {\l__codelist_emphB_tl}, 
-%              emph          =[3]  {\l__codelist_emphC_tl},
-%        	    numbers       =     \l__codelist_numbers_tl
-%            }
-%        }
-%        {}
-%  }
-%  {  } %environment's end
-%
 
 \NewDocumentCommand \setcodekeys {m}
   {

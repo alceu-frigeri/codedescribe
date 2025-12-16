@@ -95,11 +95,12 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 ## Change log
 * Version 1.20 (this)
-    - some code clean up/comments
     - new format keys to adjust spacing with \tsobj (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
-    - new command for group format duplication.
-    - new setup for 'auto-generating' an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
+    - new command to copy/duplicate a group format.
+    - new setup to help making an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
     - new commands for color customization (both codedescribe and codelisting as well)
+    - added a listings' key, firstnumber (codelisting, \tscode and related)
+    - codedescribe package options regarding changes above.
     - documentation review.
     
 * Version 1.19
