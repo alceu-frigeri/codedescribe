@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.20} {2025/12/11}
+%% This is version {1.20} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,7 +34,7 @@
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/12/11} ,
+     date        = {2025/12/17} ,
      version     = {1.20} ,
      description = {LaTeX Code Listing}
   }
@@ -241,20 +241,20 @@
     \__codecmm_color_set:ne {c__codelist_string_color}          { \l__codelist_scheme_string_tl  ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
     \__codecmm_color_set:ne {c__codelist_comment_color}         { \l__codelist_scheme_comment_tl ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
     
-    \__codecmm_color_set:ne {c__codelist_texcsA_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_texcsA_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 35 * #1 }      ! black ! 100 }
     \__codecmm_color_set:ne {c__codelist_texcsB_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
     \__codecmm_color_set:ne {c__codelist_texcsC_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 50 * #1 }      ! gray  ! 100 }
     \__codecmm_color_set:ne {c__codelist_texcsD_color}          { \l__codelist_scheme_texcs_tl   ! \fp_eval:n{ 65 * #1 }      ! gray  ! 100 }
     
-    \__codecmm_color_set:ne {c__codelist_keywdA_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdA_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 35 * #1 }      ! black ! 100 }
     \__codecmm_color_set:ne {c__codelist_keywdB_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
-    \__codecmm_color_set:ne {c__codelist_keywdC_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 50 * #1 }      ! black ! 100 }
-    \__codecmm_color_set:ne {c__codelist_keywdD_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 65 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdC_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 50 * #1 }      ! gray  ! 100 }
+    \__codecmm_color_set:ne {c__codelist_keywdD_color}          { \l__codelist_scheme_keywd_tl   ! \fp_eval:n{ 65 * #1 }      ! gray  ! 100 }
     
-    \__codecmm_color_set:ne {c__codelist_emphA_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphA_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 35 * #1 }      ! black ! 100 }
     \__codecmm_color_set:ne {c__codelist_emphB_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 45 * #1 }      ! black ! 100 }
-    \__codecmm_color_set:ne {c__codelist_emphC_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 50 * #1 }      ! black ! 100 }
-    \__codecmm_color_set:ne {c__codelist_emphD_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 65 * #1 }      ! black ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphC_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 50 * #1 }      ! gray  ! 100 }
+    \__codecmm_color_set:ne {c__codelist_emphD_color}           { \l__codelist_scheme_emph_tl    ! \fp_eval:n{ 65 * #1 }      ! gray  ! 100 }
     
 %    \__codecmm_color_set:ne {c__codelist_rule_color}            { \l__codelist_scheme_rule_tl   ! \fp_eval:n{ 50 * #1 }      ! gray ! 100 }
 %    \__codecmm_color_set:ne {c__codelist_number_color}          { \l__codelist_scheme_number_tl   ! \fp_eval:n{ 50 * #1 }      ! gray ! 100 }
@@ -332,19 +332,19 @@
     scheme  .choice: ,
     scheme / default
       .meta:n = default ,
-    scheme / test
-      .code:n =
-        {
-          \tl_set:Nn \l__codelist_scheme_bckgnd_tl    {red}
-          \tl_set:Nn \l__codelist_scheme_string_tl     {blue}
-          \tl_set:Nn \l__codelist_scheme_comment_tl     {brown}
-          \tl_set:Nn \l__codelist_scheme_texcs_tl     {pink}
-          \tl_set:Nn \l__codelist_scheme_keywd_tl     {teal}
-          \tl_set:Nn \l__codelist_scheme_emph_tl   {magenta}
-          \tl_set:Nn \l__codelist_scheme_rule_tl      {yellow}
-          \tl_set:Nn \l__codelist_scheme_number_tl     {green}
-          \tl_set:Nn \l__codelist_scheme_bright_tl   {1.8}
-        }  
+%    scheme / test
+%      .code:n =
+%        {
+%          \tl_set:Nn \l__codelist_scheme_bckgnd_tl    {red}
+%          \tl_set:Nn \l__codelist_scheme_string_tl    {blue}
+%          \tl_set:Nn \l__codelist_scheme_comment_tl   {brown}
+%          \tl_set:Nn \l__codelist_scheme_texcs_tl     {pink}
+%          \tl_set:Nn \l__codelist_scheme_keywd_tl     {teal}
+%          \tl_set:Nn \l__codelist_scheme_emph_tl      {magenta}
+%          \tl_set:Nn \l__codelist_scheme_rule_tl      {yellow}
+%          \tl_set:Nn \l__codelist_scheme_number_tl    {green}
+%          \tl_set:Nn \l__codelist_scheme_bright_tl    {1.8}
+%        }  
   }
 
 
@@ -374,11 +374,6 @@
           .code:n = { \exp_not:V \l__codelist_scheme_tmp_tl }
       }
   }
-
-
-
-
-
 
 \tl_set:Nn \l__codelist_bckgnd_color_default_tl   { c__codelist_lightgray_color }%
 \tl_set:Nn \l__codelist_string_color_default_tl   { c__codelist_darkteal_color }
@@ -417,7 +412,6 @@
 
   texcsstyle    .usage:n   =   general,
   texcsstyle    .code:n    =  { \tl_set:Nn \l__codelist_texcsAstyle_tl {#1} },
-%  texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsA_color_default_tl },
   texcsstyle    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsA_color },
 
   settexcs2     .usage:n   =   general,
@@ -430,7 +424,6 @@
 
   texcs2style   .usage:n   =   general,
   texcs2style   .code:n    =  { \tl_set:Nn \l__codelist_texcsBstyle_tl {#1} },
-%  texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsB_color_default_tl } ,
   texcs2style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsB_color } ,
 
   settexcs3     .usage:n   =   general,
@@ -443,7 +436,6 @@
 
   texcs3style   .usage:n   =   general,
   texcs3style   .code:n    =  { \tl_set:Nn \l__codelist_texcsCstyle_tl {#1} },
-%  texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsC_color_default_tl } ,
   texcs3style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsC_color } ,
 
   settexcs4     .usage:n   =   general,
@@ -456,7 +448,6 @@
 
   texcs4style   .usage:n   =   general,
   texcs4style   .code:n    =  { \tl_set:Nn \l__codelist_texcsDstyle_tl {#1} },
-%  texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_texcsD_color_default_tl } ,
   texcs4style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_texcsD_color } ,
 
   setkeywd      .usage:n   =   general,
@@ -469,7 +460,6 @@
 
   keywdstyle    .usage:n   =   general,
   keywdstyle    .code:n    =  { \tl_set:Nn \l__codelist_keywdstyle_tl {#1} },
-%  keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdA_color_default_tl } ,
   keywdstyle    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdA_color } ,
 
   setkeywd2     .usage:n   =   general,
@@ -482,7 +472,6 @@
 
   keywd2style   .usage:n   =   general,
   keywd2style   .code:n    =  { \tl_set:Nn \l__codelist_keywdBstyle_tl {#1} },
-%  keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdB_color_default_tl } ,
   keywd2style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdB_color } ,
 
   setkeywd3     .usage:n   =   general,
@@ -495,7 +484,6 @@
 
   keywd3style   .usage:n   =   general,
   keywd3style   .code:n    =  { \tl_set:Nn \l__codelist_keywdCstyle_tl {#1} },
-%  keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdC_color_default_tl } ,
   keywd3style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdC_color } ,
 
   setkeywd4     .usage:n   =   general,
@@ -508,7 +496,6 @@
 
   keywd4style   .usage:n   =   general,
   keywd4style   .code:n    =  { \tl_set:Nn \l__codelist_keywdDstyle_tl {#1} },
-%  keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_keywdD_color_default_tl } ,
   keywd4style   .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_keywdD_color } ,
 
   setemph       .usage:n   =   general,
@@ -521,7 +508,6 @@
 
   emphstyle     .usage:n   =   general,
   emphstyle     .code:n    =  { \tl_set:Nn \l__codelist_emphAstyle_tl {#1} },
-%  emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphA_color_default_tl } ,
   emphstyle     .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphA_color } ,
 
   setemph2      .usage:n   =   general,
@@ -534,7 +520,6 @@
 
   emph2style    .usage:n   =   general,
   emph2style    .code:n    =  { \tl_set:Nn \l__codelist_emphBstyle_tl {#1} },
-%  emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphB_color_default_tl } ,
   emph2style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphB_color } ,
 
   setemph3      .usage:n   =   general,
@@ -547,7 +532,6 @@
 
   emph3style    .usage:n   =   general,
   emph3style    .code:n    =  { \tl_set:Nn \l__codelist_emphCstyle_tl {#1} },
-%  emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphC_color_default_tl } ,
   emph3style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphC_color } ,
 
   setemph4      .usage:n   =   general,
@@ -560,27 +544,22 @@
 
   emph4style    .usage:n   =   general,
   emph4style    .code:n    =  { \tl_set:Nn \l__codelist_emphDstyle_tl {#1} },
-%  emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ \l__codelist_emphD_color_default_tl } ,
   emph4style    .default:n =  \bfseries\__codecmm_color_select:n{ c__codelist_emphD_color } ,
 
   stringstyle   .usage:n   =   general,
   stringstyle   .code:n    =  { \tl_set:Nn \l__codelist_stringstyle_tl {#1} },
-%  stringstyle   .default:n =  \__codecmm_color_select:n{ \l__codelist_string_color_default_tl } ,
   stringstyle   .default:n =  \__codecmm_color_select:n{ c__codelist_string_color } ,
 
   commentstyle  .usage:n   =   general,
   commentstyle  .code:n    =  { \tl_set:Nn \l__codelist_commentstyle_tl {#1} },
-%  commentstyle  .default:n =  \__codecmm_color_select:n{ \l__codelist_comment_color_default_tl } ,
   commentstyle  .default:n =  \__codecmm_color_select:n{ c__codelist_comment_color } ,
 
   bckgndcolor   .usage:n   =   general,
   bckgndcolor   .code:n    =  { \tl_set:Nn \l__codelist_bckgndcolor_tl {#1} },
-%  bckgndcolor   .default:n =  \__codecmm_color_select:n{ \l__codelist_bckgnd_color_default_tl } ,
   bckgndcolor   .default:n =  \__codecmm_color_select:n{ c__codelist_bckgnd_color } ,
 
   rulecolor     .usage:n   =   general,
   rulecolor     .code:n    =  { \tl_set:Nn \l__codelist_rulecolor_tl {#1} },
-%  rulecolor     .default:n =  \__codecmm_color_select:n{ \l__codelist_rule_color_default_tl } ,
   rulecolor     .default:n =  \__codecmm_color_select:n{ c__codelist_rule_color } ,
 
   firstnumber       .usage:n   =   general,
@@ -593,7 +572,6 @@
 
   numberstyle   .usage:n   =   general,
   numberstyle   .code:n    =  { \tl_set:Nn \l__codelist_numberstyle_tl {#1} },
-%  numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ \l__codelist_number_color_default_tl },
   numberstyle   .default:n =  \tiny\__codecmm_color_select:n{ c__codelist_number_color },
 
   parindent     .usage:n   =   general,
@@ -758,7 +736,6 @@
 
 \lstset{style=codestyle}
 
-\cs_generate_variant:Nn \keys_set:nn {nx}
 %%%
 %%% extending scontents package options !!!!
 %%% changing it's default key handling from \msg_error to 'store-env'.
@@ -770,7 +747,7 @@
   	store-at.meta:nn          = { scontents } { store-env = {#1} },
     store-at.value_required:n = true,
     unknown . undefine: ,
-    unknown . code:n = { \keys_set:nx {scontents}{ store-env = {\l_keys_key_str}} }
+    unknown . code:n = { \keys_set:ne {scontents}{ store-env = {\l_keys_key_str}} }
  }
 
 \newenvsc{codestore}

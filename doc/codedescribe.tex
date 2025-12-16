@@ -20,13 +20,12 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.20} {2025/12/11}
+%% This is version {1.20} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
 %%
 %%%==============================================================================
-%\documentclass[dctools,english]{ufrgscca}
 \documentclass{article}
 \RequirePackage[verbose,a4paper,marginparwidth=28mm,top=3cm,bottom=1.5cm,hmargin={45mm,25mm},marginparsep=2.5mm,columnsep=10mm,asymmetric]{geometry}
 \usepackage[T1]{fontenc}
@@ -35,7 +34,7 @@
 %\usepackage[strict,infograb,load xtra dialects,TeX dialects={doctools,l3kernelsign, l3expsign, l3amssign, l3pgfsign, l3bibtexsign, 
 %    l3kernel, l3exp, l3ams, l3pgf, l3bibtex, kernel, xpacks, ams, pgf, pgfplots, 
 %    bibtex, babel, hyperref}]{codedescribe}
-%\usepackage[strict,infograb,silence,color scheme=darker,listing color scheme=darker]{codedescribe}
+%\usepackage[strict,infograb,silence,colors=darker,listing colors=darker]{codedescribe}
 \usepackage[strict,infograb,silence]{codedescribe}
 \usepackage{enumitem}
 
@@ -83,14 +82,16 @@ No assumption is made about page layout (besides ``having a margin paragraph''),
 \section{Introduction}
 
 
-This package aims at documenting both document level (i.e. final user)  and package/class level commands. It's fully implemented using \tsobj[pkg]{expl3}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. The package \tsobj[pkg]{pifont} is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable. \tsobj[pkg]{xcolor} is needed to switch colors, and \tsobj[pkg]{xpeekahead} for spacing fine tuning. 
+This package aims at documenting both document level (i.e. final user)  and package/class level commands. It's fully implemented using \tsobj[pkg]{expl3}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. 
+The package \tsobj[pkg]{pifont} (see \cite{pifont}) is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable. 
+\tsobj[pkg]{xcolor} (see \cite{xcolor}) is needed to switch colors, and \tsobj[pkg]{xpeekahead} (see \cite{xpeekahead}) for spacing fine tuning. The package \tsobj[pkg]{infograb} (see \cite{pkginfograb}) is also loaded, for package's documentation only (including tracking of package's version).
  
 
 No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, a class with compatibility issues is found, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
 
-Generating an index of is supported (see \ref{indexing} and \ref{obj-types}) but but no index package is pre-loaded, leaving to it to the end user.
+Generating an index is supported (see \ref{indexing} and \ref{obj-types}) but no index package is pre-loaded, leaving it to the end user.
 
-\tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} TeX dialects.
+\tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} \TeX{} dialects.
 
 All packages (\tsobj[pkg]{codedescribe,codelisting,codelstlang,codedescsets}) share the same version, currently: \PkgInfo{codedescribe}{version}. Those packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
 
@@ -262,7 +263,7 @@ This allows to customize the default colors used by \tsobj[code,no index]{\tscod
   \describe{number}{(default: gray) Sets the (small line) numbers base color. Note this is mixed with white, not black as the others. }
   \describe{brightness}{(default: 1) Sets the mixing proportion between each base color and black.}
   \describe{default}{Sets all the above to their default value}
-  \describe{scheme}{(no default) selects a pre-set color scheme. see below} 
+  \describe{scheme}{Selects a pre-set color scheme. see below} 
 \end{describelist*}
 
 \begin{codedescribe}[code,new=2025/12/14]{\newlistcolorscheme}
@@ -407,7 +408,7 @@ This package aims at minimizing the number of commands, being the object kind (i
 \subsection{Package Options}\label{codedesc.pack-options}
 
 \begin{describelist}{key}
-\describe{nolisting}{it will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
+\describe{nolisting}{Will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
 \describe{index}{(new: 2025/12/15) This will set the default of some object groups to \tsobj[key,no index]{index}. This won't load any index package, but just change some objects' default behaviour (see \ref{indexing} and \ref{obj-type-def})}
 \describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[option]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
@@ -418,6 +419,7 @@ This package aims at minimizing the number of commands, being the object kind (i
 \describe{listing~ colors}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
 \describe{load xtra dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
 \describe{TeX dialects}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
+\describe{infograb}{This will enable the document level, \LaTeX2e, aliases from the package \tsobj[pkg]{pckinfograb} \cite{pkginfograb}.}
 \begin{tsremark}
    In case of an unknown \tsobj[option]{label set}, an error will be risen, and all known sets will be listed in the log file and terminal.
 \end{tsremark}
@@ -453,37 +455,37 @@ The many items will be grabbed as \textbf{\tsmeta{index prefix}\tsmeta{item}@\ts
 \subsubsection{Format Keys}\label{format-keys}
 Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[arg]{format-groups,obj-types} (see \ref{format-custom}):
 \begin{describelist*}{keys}
-  \describe {meta} {sets base format to typeset between angles,}
-  \describe {xmeta} {sets base format to typeset *verbatim* between angles,}
-  \describe {verb} {sets base format to typeset *verbatim*,}
-  \describe {xverb} {sets base format to typeset *verbatim*, no spaces,}
-  \describe {code} {sets base format to typeset *verbatim*, no spaces, replacing a TF by \underline{TF},}
-  \describe {nofmt} {in case of a redefinition, removes the base formatting. Note that, it only makes sense if applied at the same level, meaning, if the format was originally defined at group formatting level, it only can be removed at this level.}
-  \describe {format} {sets the base format. Possible values: \tsobj[values,or]{meta,xmeta,verb,xverb,code,nofmt,none}, as above.}
+  \describe {meta} {Sets base format to typeset between angles.}
+  \describe {xmeta} {Sets base format to typeset *verbatim* between angles.}
+  \describe {verb} {Sets base format to typeset *verbatim*.}
+  \describe {xverb} {Sets base format to typeset *verbatim*, no spaces.}
+  \describe {code} {Sets base format to typeset *verbatim*, no spaces, replacing a TF by \underline{TF}.}
+  \describe {nofmt} {In case of a redefinition, removes the base formatting. Note that, it only makes sense if applied at the same level, meaning, if the format was originally defined at group formatting level, it only can be removed at this level.}
+  \describe {format} {Sets the base format. Possible values: \tsobj[values,or]{meta,xmeta,verb,xverb,code,nofmt,none}, as above.}
   \begin{tsremark}
-    The \tsobj[key]{format} key is just an alternative way of setting the base formatting. \tsobj[value]{none} is just an alias to \tsobj[key]{nofmt}.
+    The \tsobj[key]{format} Key is just an alternative way of setting the base formatting. \tsobj[value]{none} is just an alias to \tsobj[key]{nofmt}.
   \end{tsremark}
-  \describe {slshape} {to use a slanted font shape,}
-  \describe {itshape} {to use an italic font shape,}
-  \describe {noshape} {in case of a redefinition, removes the base shape. Note that, it only makes sense if applied at the same level, meaning, if shape was originally defined at group formatting level,  it only can be removed at this level.}
-  \describe {shape} {sets the font shape. Possible values: \tsobj[value,or]{itshape,italic,slshape,slanted,noshape,none}, as above}
+  \describe {slshape} {To use a slanted font shape.}
+  \describe {itshape} {To use an italic font shape.}
+  \describe {noshape} {In case of a redefinition, removes the base shape. Note that, it only makes sense if applied at the same level, meaning, if shape was originally defined at group formatting level,  it only can be removed at this level.}
+  \describe {shape} {Sets the font shape. Possible values: \tsobj[value,or]{itshape,italic,slshape,slanted,noshape,none}, as above.}
   \begin{tsremark}
-    The \tsobj[key]{shape} key is just an alternative way of setting the font shape. \tsobj[value]{none} is just an alias to \tsobj[value]{noshape}.
+    The \tsobj[key]{shape} Key is just an alternative way of setting the font shape. \tsobj[value]{none} is just an alias to \tsobj[value]{noshape}.
   \end{tsremark}
-  \describe {shape preadj}{adds a (thin) space before each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid},}
-  \describe {shape posadj}{adds a (thin) space after each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid},}
+  \describe {shape preadj}{Adds a (thin) space before each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid}.}
+  \describe {shape posadj}{Adds a (thin) space after each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid}.}
   \begin{tsremark}
     These are meant for the case in which the italic or slanted shapes of the used font renders a character too close to a upright character. 
   \end{tsremark}
   
-  \describe {lbracket}  {sets the left bracket (when using \tsobj{\tsargs}), see \ref{ts-commands},}
-  \describe {rbracket}  {sets the right bracket (when using \tsobj{\tsargs}), see \ref{ts-commands},}
-  \describe {color}   {sets the text color. \textbf{NB:} color's name as understood by \tsobj[pkg]{xcolor} package,}
-  \describe {font} {defaults to \tsobj[code,no index]{\ttfamily}. Sets font family,}
-  \describe {fsize} {defaults to \tsobj[code,no index]{\small}. Sets font size,}
-  \describe {no index} {to NOT include the items in the default index,}
-  \describe {index} {to include the items in the default index,}
-  \describe {index group} {(defaults to `blank') sets the `index group' for those items (see \ref{indexing}).}
+  \describe {lbracket}  {Sets the left bracket (when using \tsobj{\tsargs}), see \ref{ts-commands}.}
+  \describe {rbracket}  {Sets the right bracket (when using \tsobj{\tsargs}), see \ref{ts-commands}.}
+  \describe {color}   {Sets the text color. \textbf{NB:} color's name as understood by \tsobj[pkg]{xcolor} package.}
+  \describe {font} {Defaults to \tsobj[code,no index]{\ttfamily}. Sets font family.}
+  \describe {fsize} {Defaults to \tsobj[code,no index]{\small}. Sets font size.}
+  \describe {no index} {To NOT include the items in the default index.}
+  \describe {index} {To include the items in the default index.}
+  \describe {index group} {Sets the `index group' for those items (see \ref{indexing}).}
 \end{describelist*}
 
 \subsubsection{Format Groups}\label{format-group}
@@ -589,7 +591,7 @@ This allows to customize the default colors used by the many object types and fo
   \describe{pack}{(default: green) Sets the pack base color}
   \describe{brightness}{(default: 1) Sets the mixing proportion between each base color and black.}
   \describe{default}{Sets all the above to their default value}
-  \describe{scheme}{(no default) selects a pre-set color scheme. see below} 
+  \describe{scheme}{(no default) Selects a pre-set color scheme. see below} 
 \end{describelist*}
 
 \begin{codedescribe}[code,new=2025/12/14]{\newcolorscheme}
@@ -701,7 +703,7 @@ The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
   If the items don't fit in the margin, the \tsobj[marg]{csv-list} will advance towards the text window, reducing the horizontal space of the \tsobj[env]{codesyntax} block. This can be changed with the \tsobj[key]{force margin}, in which case the  \tsobj[marg]{csv-list} will always be at the margin, growing leftwards (might end outside the page).
 \end{tsremark}
 \begin{tsremark}
-With the \tsobj[option]{strict} package option
+With the \tsobj[option]{strict} package option,
 an error will be raised if used inside another \tsobj[env]{codedescribe} environment. Otherwise a warning will be raised. (it's safe to do so, but it doesn't make much sense).
 \end{tsremark}
 
@@ -748,10 +750,10 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 This sets a \tsobj[env]{description} like `list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the margin. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
 \tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}, it can be any object from \ref{obj-types} (or \ref{format-custom}) and the following keys:
 \begin{describelist*}{key}
-  \describe {no index} {to NOT include {item names} in the default index}
-  \describe {index} {to include {item names} in the default index}
-  \describe {index group} {(defaults to `blank') sets the \tsobj[meta]{index group} for those items (see \ref{indexing}).}
-  \describe {index prefix} {(defaults to `blank') sets the \tsobj[meta]{index prefix} for those items (see \ref{indexing}).}  
+  \describe {no index} {To NOT include {item names} in the default index.}
+  \describe {index} {To include {item names} in the default index.}
+  \describe {index group} {Sets the \tsobj[meta]{index group} for those items (see \ref{indexing}).}
+  \describe {index prefix} {Sets the \tsobj[meta]{index prefix} for those items (see \ref{indexing}).}  
 \end{describelist*}
 \end{codedescribe}
 
@@ -791,10 +793,10 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
   \describe{bnf or}{To produce a bnf style or list, like \tsobj[option,bnf or,no index]{abc,xdh,htf,hrf}.}
   \describe{meta or}{To produce a bnf style or list between angles, like \tsobj[option,meta or,no index]{abc,xdh,htf,hrf}.}
   \describe{par or}{To produce a bnf style or list between parentheses, like \tsobj[option,par or,no index]{abc,xdh,htf,hrf}.}
-  \describe {no index} {to NOT include the items in the default index}
-  \describe {index} {to include the items in the default index}
-  \describe {index group} {(defaults to `blank') sets the \tsobj[meta]{index group} for those items (see \ref{indexing}).}
-  \describe {index prefix} {(defaults to `blank') sets the \tsobj[meta]{index prefix} for those items (see \ref{indexing}).}  
+  \describe {no index} {To NOT include the items in the default index.}
+  \describe {index} {To include the items in the default index.}
+  \describe {index group} {Sets the \tsobj[meta]{index group} for those items (see \ref{indexing}).}
+  \describe {index prefix} {Sets the \tsobj[meta]{index prefix} for those items (see \ref{indexing}).}  
 \end{describelist*}
 \begin{tsremark}
   If \tsobj[key,sep={and/or}]{shape preadj,shape posadj} are set (see \ref{format-keys}, a (thin) space will be added before and/or after  each term of \tsobj[marg]{csv-list}.
@@ -900,7 +902,7 @@ This is the \tsobj[env,no index]{abstract} environment from the \tsobj[pkg]{arti
 \tsmacro{\typesetdate}{}
 \tsmacro{\tsdate}{}
 \end{codesyntax}
-This provides the current date (in Month Year, format).
+This provides the current date (in Month Year format).
 \end{codedescribe}
 
 
