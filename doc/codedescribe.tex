@@ -45,6 +45,9 @@
 %\usepackage{xindex}
 %\makeindex
 
+%\defgroupfmt{code}{color=red,font=\sffamily}
+%
+%\defgroupfmt{code}{color=brown,font=\ttfamily}
 
 \RequirePackage[hidelinks,hypertexnames=false]{hyperref}
 \begin{document}
@@ -413,7 +416,7 @@ This package aims at minimizing the number of commands, being the object kind (i
 \describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[option]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
-\describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, TeX sometimes thinks they are too wide, when they are not. This just sets \tsobj[code,no index]{\hfuzz}.}
+\describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, \TeX{} sometimes thinks they are too wide, when they are not. This just sets \tsobj[code,no index]{\hfuzz} to the given value.}
 \describe{describe keys}{(defaults to \tsobj[value]{group}) This sets the way the keys \tsobj[key]{new,update,note} are listed in a \tsobj[env]{codedescribe} environment, see \ref{desc-env}. Possible values are \tsobj[value,or]{group,as is, in sequence}. By default keys are grouped together, with \tsobj[value,or]{as is, in sequence} keys will respect the used sequence. }
 \describe{colors}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many format groups/objects (see \ref{format-keys}). \tsobj[option]{black} will defaults all \tsobj{\tsobj} colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 \describe{listing~ colors}{This will be passed over to \tsobj[pkg]{codelisting} package (if loaded). See \ref{codelist.pack-options}. }
@@ -483,9 +486,15 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
   \describe {color}   {Sets the text color. \textbf{NB:} color's name as understood by \tsobj[pkg]{xcolor} package.}
   \describe {font} {Defaults to \tsobj[code,no index]{\ttfamily}. Sets font family.}
   \describe {fsize} {Defaults to \tsobj[code,no index]{\small}. Sets font size.}
+  \begin{tsremark}
+    \tsobj[key]{font,fsize} shall receive a single command that absorbs no tokens.
+  \end{tsremark}
   \describe {no index} {To NOT include the items in the default index.}
   \describe {index} {To include the items in the default index.}
   \describe {index group} {Sets the `index group' for those items (see \ref{indexing}).}
+  \begin{tsremark}[\color{red}Important:]
+    Except for \tsobj[key]{font,fsize} all other keys will expand the assigned value at definition time!
+  \end{tsremark}
 \end{describelist*}
 
 \subsubsection{Format Groups}\label{format-group}
@@ -493,15 +502,15 @@ Using \tsobj{\defgroupfmt} (see \ref{format-custom}) one can (re-)define custom 
 \begin{describelist*}{keys}
   \describe {meta} {which sets \tsobj[keys]{meta,color}}
   \describe {verb} {which sets \tsobj[keys]{color}}
-  \describe {oarg} {which sets \tsobj[keys]{meta,color}}
   \describe {code} {which sets \tsobj[keys]{code,color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{command(s)}'')}
+  \describe {oarg} {which sets \tsobj[keys]{meta,color}}
   \describe {syntax} {which sets \tsobj[keys]{color}}
-  \describe {keys} {which sets \tsobj[keys]{slshape,color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{key(s)}'')}
-  \describe {values} {which sets \tsobj[keys]{slshape,color}}
-  \describe {option} {which sets \tsobj[keys]{color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{option(s)}'')}
-  \describe {defaultval} {which sets \tsobj[keys]{color}}
   \describe {env}  {which sets \tsobj[keys]{slshape,color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{environment(s)}'')}
   \describe {pkg}  {which sets \tsobj[keys]{slshape,color}}
+  \describe {option} {which sets \tsobj[keys]{color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{option(s)}'')}
+  \describe {keys} {which sets \tsobj[keys]{slshape,color,index} (\tsobj[keys]{index group} = ``\tsobj[value]{key(s)}'')}
+  \describe {values} {which sets \tsobj[keys]{slshape,color}}
+  \describe {defaultval} {which sets \tsobj[keys]{color}}
 \end{describelist*}
 \begin{tsremark}
 \tsobj[keys]{color} was used in the list above just as a `reminder' that a color is defined/associated with the given group, it can be changed with \tsobj{\defgroupfmt}.
@@ -835,7 +844,7 @@ These are just short-cuts for\par \tsobj[code,no index]{\tsobj [code] {macro-lis
 \tsmacro{\typesetverb}[obj-type]{verbatim text}
 \tsmacro{\tsverb}[obj-type]{verbatim text}
 \end{codesyntax}
- Typesets \tsobj[marg]{verbatim text} as is (verbatim...). \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator by \tsobj{\tsobj}.
+ Typesets \tsobj[marg]{verbatim text} as is. \tsobj[oarg]{obj-type} defines the used format. The difference with \tsverb{\tsobj[verb]{something}} is that \tsmeta{verbatim text} can contain commas (which, otherwise, would be interpreted as a list separator by \tsobj{\tsobj}.
 \begin{tsremark}
 This is meant for short expressions, and not multi-line, complex code (one is better of, then, using \ref{codelist}).  \tsobj[meta]{verbatim text} must be balanced ! %otherwise, some low level \TeX\ errors might  pop out.
 \end{tsremark}
@@ -870,7 +879,7 @@ Typesets a small note at the margin.
 \subsection{Auxiliary Commands and Environment}\label{aux-commands}
 In case the Document Class being used redefines the \tsobj[code,no index]{\maketitle} command and/or \tsobj[env,no index]{abstract} environment, alternatives are provided (based on the article class).
 
-\begin{codedescribe}[code]{\typesettitle,\tstitle}
+\begin{codedescribe}[code,index group=Test]{\typesettitle,\tstitle}
 \begin{codesyntax}
 \tsmacro{\typesettitle}{title-keys}
 \tsmacro{\tstitle}{title-keys}
@@ -888,7 +897,7 @@ This is based on the \tsobj[code,no index]{\maketitle} from the \tsobj[pkg]{arti
 \end{tsremark}
 
 
-\begin{codedescribe}[env]{tsabstract}
+\begin{codedescribe}[env,index group=Test]{tsabstract}
 \begin{codesyntax}
 \tsmacro{\begin{tsabstract}}{}
 \ldots
@@ -897,7 +906,7 @@ This is based on the \tsobj[code,no index]{\maketitle} from the \tsobj[pkg]{arti
 This is the \tsobj[env,no index]{abstract} environment from the \tsobj[pkg]{article} class.
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2023/05/16]{\typesetdate,\tsdate}
+\begin{codedescribe}[code,new=2023/05/16,index group=Test]{\typesetdate,\tsdate}
 \begin{codesyntax}
 \tsmacro{\typesetdate}{}
 \tsmacro{\tsdate}{}
@@ -942,7 +951,6 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
 \printbibliography
 
 %\printindex
-
 
 \end{document}
 

@@ -349,7 +349,7 @@
 \cs_new_protected:Npn \__codedesc_set_colors:n #1
   {
     \__codecmm_color_set:ne {c__codedesc_none_color}       { \l__codedesc_scheme_error_tl  ! \fp_eval:n{ 45 + 15 * #1 } ! black ! 100 }
-  	\__codecmm_color_set:ne {c__codedesc_verb_color}       { \l__codedesc_scheme_verb_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
+  	\__codecmm_color_set:ne {c__codedesc_verb_color}       { \l__codedesc_scheme_verb_tl   ! \fp_eval:n{ 35 * #1 }      ! black ! 100 }
   	\__codecmm_color_set:ne {c__codedesc_marg_color}       { \l__codedesc_scheme_args_tl   ! \fp_eval:n{ 45 + 15 * #1 } ! black ! 100 }
   	\__codecmm_color_set:ne {c__codedesc_oarg_color}       { \l__codedesc_scheme_args_tl   ! \fp_eval:n{ 65 + 15 * #1 } ! black ! 100 }
   
@@ -376,7 +376,7 @@
         {brighter}
           { \__codedesc_set_colors:n {2} }
         {darker}
-          { \__codedesc_set_colors:n {0.65} }
+          { \__codedesc_set_colors:n {0.70} }
       } %% fail-safe: default
       { \__codedesc_set_colors:n {1} }
   }
@@ -430,19 +430,6 @@
     scheme  .choice: ,
     scheme / default
       .meta:n = default ,
-%    scheme / test
-%      .code:n =
-%        {
-%          \tl_set:Nn \l__codedesc_scheme_error_tl    {red}
-%          \tl_set:Nn \l__codedesc_scheme_verb_tl     {blue}
-%          \tl_set:Nn \l__codedesc_scheme_args_tl     {brown}
-%          \tl_set:Nn \l__codedesc_scheme_code_tl     {pink}
-%          \tl_set:Nn \l__codedesc_scheme_keys_tl     {teal}
-%          \tl_set:Nn \l__codedesc_scheme_values_tl   {magenta}
-%          \tl_set:Nn \l__codedesc_scheme_env_tl      {yellow}
-%          \tl_set:Nn \l__codedesc_scheme_pack_tl     {green}
-%          \tl_set:Nn \l__codedesc_scheme_bright_tl   {1.8}
-%        }  
   }
 
 
@@ -665,17 +652,20 @@
       \keys_set:nn { codedesc / grp_scratch } {#1}
       \keys_set:nn { codedesc / scratch_def } {#2}
       
-      \tl_set_eq:NN     \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpfmt_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpshape_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpcolor_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmplbracket_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmprbracket_tl      
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpshapepreadj_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpshapeposadj_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpindxgrp_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpindx_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpfont_tl
-      \tl_put_right:NV  \l__codedesc_keyconstruct_tmpa_tl \l__codedesc_tmpfsize_tl
+      \tl_set:Ne \l__codedesc_keyconstruct_tmpa_tl
+        {
+          \l__codedesc_tmpfmt_tl
+          \l__codedesc_tmpshape_tl
+          \l__codedesc_tmpcolor_tl
+          \l__codedesc_tmplbracket_tl
+          \l__codedesc_tmprbracket_tl      
+          \l__codedesc_tmpshapepreadj_tl
+          \l__codedesc_tmpshapeposadj_tl
+          \l__codedesc_tmpindxgrp_tl
+          \l__codedesc_tmpindx_tl
+          \exp_not:o \l__codedesc_tmpfont_tl
+          \exp_not:o \l__codedesc_tmpfsize_tl
+        }
 
       \keys_precompile:nVN { codedesc / scratch_def }  
         \l__codedesc_keyconstruct_tmpa_tl
@@ -920,9 +910,18 @@
   index~ group .usage:n = general ,
   index~ group .value_required:n = true ,
   index~ group .code:n = { 
-    \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+    \tl_if_empty:nTF { #1 }
       {
-        \tl_set:Nn \l__codedesc_indexgrp_tl { #1 ! } 
+        \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+          {
+            \tl_clear:N \l__codedesc_indexgrp_tl
+          }
+      }
+      {
+        \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl 
+          {
+            \tl_set:Nn \l__codedesc_indexgrp_tl { #1 ! } 
+          }
       }
   } ,
 
@@ -1049,7 +1048,16 @@
     
     index~ group .usage:n = general ,
     index~ group .value_required:n = true ,
-    index~ group .tl_set:N  = \l__codedesc_indexgrp_tl ,
+    index~ group .code: n = 
+      { 
+        \tl_if_empty:nTF { #1 }
+          {
+            \tl_clear:N \l__codedesc_indexgrp_tl
+          }
+          {
+            \tl_set:Nn \l__codedesc_indexgrp_tl { #1 ! } 
+          }
+      } ,
      
     index~ prefix .usage:n = general ,
     index~ prefix .value_required:n = true ,
@@ -1515,16 +1523,7 @@
       { }
 
     \index{\l__codedesc_indexprefix_tl \l__codedesc_tmpa_tl @ \l__codedesc_indexgrp_tl \l__codedesc_tmpb_tl}
-%    \__codedescribe_index:eV 
-%      \l__codedesc_tmpa_tl 
-%      \l__codedesc_tmpb_tl 
   }
-
-%\cs_new_protected:Npn \__codedescribe_index:nn #1#2
-%  {
-%    \index{\l__codedesc_indexprefix_tl #1 @ \l__codedesc_indexgrp_tl #2}
-%  }
-%\cs_generate_variant:Nn \__codedescribe_index:nn { VV , eV }
 
 
 \NewDocumentEnvironment {codedescribe}{O{code}m}
