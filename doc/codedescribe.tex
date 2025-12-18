@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.20} {2025/12/17}
+%% This is version {1.21-pre} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -41,6 +41,10 @@
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
 
+
+%\ExplSyntaxOn
+%\benchmark_tic:
+%\ExplSyntaxOff
 
 %\usepackage{xindex}
 %\makeindex
@@ -722,12 +726,12 @@ an error will be raised if used inside another \tsobj[env]{codedescribe} environ
 \ldots
 \tsmacro{\end{codesyntax}}{}
 \end{codesyntax}
-The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line. The content will be formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[syntax]{syntax}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom})
+The \tsobj[env]{codesyntax} environment sets the fontsize and activates \tsmacro{\obeylines,\obeyspaces}{}, so one can list macros/cmds/keys use, one per line. The content will be formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[syntax]{syntax}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom}). For a \emph{verbatim} alternative, see \tsobj[env]{codesyntax*} below.
 \end{codedescribe}
 
 \begin{tsremark}
-\tsobj[env]{codesyntax} environment shall appear only once, inside of a \tsobj[env]{codedescribe} environment. 
- Take note, as well, this is not a verbatim environment!
+\tsobj[env,sep=and/or]{codesyntax,codesyntax*} environments shall appear only once, inside of a \tsobj[env]{codedescribe} environment. 
+ Remember,  this is not a verbatim environment!
 \end{tsremark}
 \begin{tsremark}
 With the \tsobj[option]{strict} package option
@@ -748,6 +752,32 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 \end{codestore}  
 
 \tscode*[codedesc,codeprefix={}]{demoD}
+
+
+
+
+\begin{codedescribe}[env,new=2025/12/18]{codesyntax*}
+\begin{codesyntax}
+\tsmacro{\begin{codesyntax*}}[code-keys]{}
+\ldots
+\tsmacro{\end{codesyntax*}}{}
+\end{codesyntax}
+The \tsobj[env]{codesyntax*} is a true \emph{verbatim} environment (also derived from \tsobj[pkg]{listings} package, see \cite{listings}). \tsobj[oarg]{code-keys} can be any valid code key from \ref{code-keys}, and syntax highlight will be applied (see \ref{codelist}). The background color will always be white, whilst line numbering will be suppressed. For a non \emph{verbatim} alternative, see \tsobj[env]{codesyntax} above.
+\end{codedescribe}
+
+\begin{tsremark}
+If \tsobj[option]{nolisting} package option is set, this environment won't be defined.
+\end{tsremark}
+\begin{tsremark}
+\tsobj[env,sep=and/or]{codesyntax,codesyntax*} environments shall appear only once, inside of a \tsobj[env]{codedescribe} environment. 
+\end{tsremark}
+\begin{tsremark}
+With the \tsobj[option]{strict} package option
+an error will be raised if used outside a \tsobj[env]{codedescribe} environment, or more than once inside. Otherwise a warning will be raised.
+\end{tsremark}
+
+
+
 
 \begin{codedescribe}[env]{describelist,describelist*}
   \begin{codesyntax}
@@ -873,7 +903,7 @@ Typesets a small note at the margin.
     This is an example. 
   \end{tsremark}
  \end{codestore}
- \tsdemo[codedesc,codeprefix={},resultprefix={}]{demo.remark}
+ \tsdemo[codedesc,codeprefix={},resultprefix={},keywd4=Sample]{demo.remark}
 \end{codedescribe}
 
 \subsection{Auxiliary Commands and Environment}\label{aux-commands}
@@ -951,6 +981,20 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
 \printbibliography
 
 %\printindex
+
+%\ExplSyntaxOn
+%\benchmark_toc:
+%\ExplSyntaxOff
+
+%\begin{codedescribe}[code,new=2023/05/16,index group=Test]{\typesetdate,\tsdate}
+%\begin{codesyntax*}[texcs4=tsmacro]
+%\tsmacro{\typesetdate}{}
+%\tsmacro{\tsdate}{}
+%\end{codesyntax*}
+%This provides the current date (in Month Year format).
+%\end{codedescribe}
+
+
 
 \end{document}
 

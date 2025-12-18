@@ -94,6 +94,11 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
+* Version 1.21 (next)
+    - fixing [#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
+    - add codesyntax* environment (verbatim alternative, [#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
+    - adjusted (optimized) the (re)definition of `vertimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
+
 * Version 1.20 (this)
     - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
     - new command to copy/duplicate a group format.

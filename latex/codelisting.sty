@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.20} {2025/12/17}
+%% This is version {1.21-pre} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -35,7 +35,7 @@
      name        = {codelisting} ,
      prefix      = {codelist} ,
      date        = {2025/12/17} ,
-     version     = {1.20} ,
+     version     = {1.21-pre} ,
      description = {LaTeX Code Listing}
   }
 %%%%%%%
@@ -555,12 +555,12 @@
   commentstyle  .default:n =  \__codecmm_color_select:n{ c__codelist_comment_color } ,
 
   bckgndcolor   .usage:n   =   general,
-  bckgndcolor   .code:n    =  { \tl_set:Nn \l__codelist_bckgndcolor_tl {#1} },
-  bckgndcolor   .default:n =  \__codecmm_color_select:n{ c__codelist_bckgnd_color } ,
+  bckgndcolor   .code:n    =  { \tl_set:Nn \l__codelist_bckgndcolor_tl { \__codecmm_color_select:n {#1} } },
+  bckgndcolor   .default:n =  c__codelist_bckgnd_color ,
 
   rulecolor     .usage:n   =   general,
-  rulecolor     .code:n    =  { \tl_set:Nn \l__codelist_rulecolor_tl {#1} },
-  rulecolor     .default:n =  \__codecmm_color_select:n{ c__codelist_rule_color } ,
+  rulecolor     .code:n    =  { \tl_set:Nn \l__codelist_rulecolor_tl { \__codecmm_color_select:n {#1} } },
+  rulecolor     .default:n =  c__codelist_rule_color ,
 
   firstnumber       .usage:n   =   general,
   firstnumber       .code:n    =  { \tl_set:Nn \l__codelist_firstnumber_tl {#1} },
@@ -580,11 +580,11 @@
 
 	codeprefix    .usage:n   =   general,
 	codeprefix    .code:n    =  { \tl_set:Nn \l__codelist_codeprefix_tl {#1} },
-  codeprefix    .default:n =  \LaTeX\ Code:,
+  codeprefix    .default:n =  \LaTeX{} Code:,
 
 	resultprefix  .usage:n   =   general,
 	resultprefix  .code:n    =  { \tl_set:Nn \l__codelist_resultprefix_tl {#1} },
-  resultprefix  .default:n =  \LaTeX\ Result:,
+  resultprefix  .default:n =  \LaTeX{} Result:,
 
   ruleht        .usage:n   =   general,
   ruleht        .code:n    =  { \tl_set:Nn \l__codelist_ruleheight_tl {#1} },
@@ -755,9 +755,8 @@
 
 %%%%%%%%%
 %%%
-%%% yep, the <verbatimsc> environment gets redefined 
-%%% each and every time (to change the 'listings' defaults/highlights !
-%%%
+%%% yep, redefining <verbatimsc> environment from scontents
+%%% to change the 'listings' defaults/highlights !
 %%%
 %%%%%%%%%
 
@@ -765,45 +764,31 @@
 \cs_undefine:c{verbatimsc@@}
 \cs_undefine:c{verbatimsc@}
 \cs_undefine:c{endverbatimsc}
-\lstnewenvironment{verbatimsc}{\lstset{style=codestyle}}{}
 
-%%%%%%
-%%% This one can't be protected
-%%%%%%
-\cs_new:Npn \__codelist_set_verbsc:n #1
+\lstnewenvironment{verbatimsc}
   {
-      \cs_undefine:c{verbatimsc}
-      \cs_undefine:c{verbatimsc@@}
-      \cs_undefine:c{verbatimsc@}
-      \cs_undefine:c{endverbatimsc}
-      
-  		\__codelist_set_options:n{#1}
-
-      \lstnewenvironment{verbatimsc}
-        {
-          \exp_args:Ne \lstset
-            {
-              style         =     \l__codelist_basestyle_tl,
-              alsoletter    =     {\l__codelist_alsoletter_tl},
-              alsoother     =     {\l__codelist_alsoother_tl},
-              moretexcs     =     {\l__codelist_texcsA_tl},
-              moretexcs     =[2]  {\l__codelist_texcsB_tl},
-              moretexcs     =[3]  {\l__codelist_texcsC_tl},
-              moretexcs     =[4]  {\l__codelist_texcsD_tl},
-        		  morekeywords  =     {\l__codelist_keywdA_tl},
-              morekeywords  =[2]  {\l__codelist_keywdB_tl},
-              morekeywords  =[3]  {\l__codelist_keywdC_tl},
-              morekeywords  =[4]  {\l__codelist_keywdD_tl},
-        		  emph          =     {\l__codelist_emphA_tl}, 
-              emph          =[2]  {\l__codelist_emphB_tl}, 
-              emph          =[3]  {\l__codelist_emphC_tl},
-              emph          =[4]  {\l__codelist_emphD_tl},
-        	    numbers       =     \l__codelist_numbers_tl,
-              firstnumber   =     \l__codelist_firstnumber_tl,
-            }
-        }
-        {}
+    \exp_args:Ne \lstset
+      {
+        style         =     \l__codelist_basestyle_tl,
+        alsoletter    =     {\l__codelist_alsoletter_tl},
+        alsoother     =     {\l__codelist_alsoother_tl},
+        moretexcs     =     {\l__codelist_texcsA_tl},
+        moretexcs     =[2]  {\l__codelist_texcsB_tl},
+        moretexcs     =[3]  {\l__codelist_texcsC_tl},
+        moretexcs     =[4]  {\l__codelist_texcsD_tl},
+  		  morekeywords  =     {\l__codelist_keywdA_tl},
+        morekeywords  =[2]  {\l__codelist_keywdB_tl},
+        morekeywords  =[3]  {\l__codelist_keywdC_tl},
+        morekeywords  =[4]  {\l__codelist_keywdD_tl},
+  		  emph          =     {\l__codelist_emphA_tl}, 
+        emph          =[2]  {\l__codelist_emphB_tl}, 
+        emph          =[3]  {\l__codelist_emphC_tl},
+        emph          =[4]  {\l__codelist_emphD_tl},
+  	    numbers       =     \l__codelist_numbers_tl,
+        firstnumber   =     \l__codelist_firstnumber_tl,
+      }
   }
+  {}
 
 
 \NewDocumentCommand \setcodekeys {m}
@@ -836,7 +821,7 @@
         \cs_set:Npn \__codelist_rule_out: {\__codecmm_rule:n {\l__codelist_ruleheight_tl}}
       }
   
-      \__codelist_set_verbsc:n {#2}
+      \__codelist_set_options:n {#2}
       \tl_if_blank:VTF \l__codelist_codeprefix_tl
         {
           \vcoffin_set:Nnn \__codelist_code_label_coffin {\l__codelist_width_dim}

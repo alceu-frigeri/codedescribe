@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.20} {2025/12/17}
+%% This is version {1.21-pre} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -35,7 +35,7 @@
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
      date        = {2025/12/17} ,
-     version     = {1.20} ,
+     version     = {1.21-pre} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -707,10 +707,21 @@
   {
     \tl_if_blank:nTF {#3}
       {
-        \keys_define:ne { codedesc / format } 
+        \cs_if_exist:cTF { __codedesc_grpfmt_ #1_objfmt : }
           { 
-            #1 .code:n = 
-              \exp_not:c { __codedesc_grpfmt_ #2 : } 
+            \keys_define:ne { codedesc / format } %% redefine it, regardless, group might have changed.
+              { 
+                #1 .code:n = 
+                  \exp_not:c { __codedesc_grpfmt_ #2 : } 
+                  \exp_not:c { __codedesc_grpfmt_ #1_objfmt : } 
+              }
+          }
+          {
+            \keys_define:ne { codedesc / format } %% redefine it, regardless, group might have changed.
+              { 
+                #1 .code:n = 
+                  \exp_not:c { __codedesc_grpfmt_ #2 : } 
+              }
           }
       }
       {
@@ -723,6 +734,7 @@
           }
       }
   }
+
 
 
 
@@ -1751,6 +1763,71 @@
 
     \bool_set_false:N \l__codedesc_codesyntax_activ_bool    
   }
+
+
+\bool_if:NTF \l__codedesc_loadlisting_bool
+  {
+    \lstnewenvironment{codesyntax*}[1][]
+      {
+        \bool_if:NTF \l__codedesc_codedescribe_activ_bool
+          {
+            \bool_if:NT \g__codedesc_syntax_bool
+              {
+                \msg_warning:nnn {codedesc} {syntax dup}
+                      {syntax:02}
+              }
+          }
+          {
+            \msg_warning:nnnxx {codedesc} {out of scope}
+                  {syntax:03}{codesyntax~ env}{codedescribe~ env}
+          }
+          
+        \bool_set_true:N \l__codedesc_codesyntax_activ_bool
+        
+        \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
+        \__codelist_set_options:n {#1,bckgndcolor=white,numbers=none}
+        \exp_args:Ne \lstset
+          {
+            style         =     \l__codelist_basestyle_tl,
+            alsoletter    =     {\l__codelist_alsoletter_tl},
+            alsoother     =     {\l__codelist_alsoother_tl},
+            moretexcs     =     {\l__codelist_texcsA_tl},
+            moretexcs     =[2]  {\l__codelist_texcsB_tl},
+            moretexcs     =[3]  {\l__codelist_texcsC_tl},
+            moretexcs     =[4]  {\l__codelist_texcsD_tl},
+      		  morekeywords  =     {\l__codelist_keywdA_tl},
+            morekeywords  =[2]  {\l__codelist_keywdB_tl},
+            morekeywords  =[3]  {\l__codelist_keywdC_tl},
+            morekeywords  =[4]  {\l__codelist_keywdD_tl},
+      		  emph          =     {\l__codelist_emphA_tl}, 
+            emph          =[2]  {\l__codelist_emphB_tl}, 
+            emph          =[3]  {\l__codelist_emphC_tl},
+            emph          =[4]  {\l__codelist_emphD_tl},
+      	    numbers       =     \l__codelist_numbers_tl,
+            firstnumber   =     \l__codelist_firstnumber_tl,
+          }
+        \skip_vertical:n {0.5ex}
+      }
+      {
+        \skip_vertical:n {1ex}~\__codecmm_color_select:n {white} .  %% Yep, a single white dot
+        \vcoffin_gset_end:
+        
+        \bool_gset_true:N \g__codedesc_syntax_bool
+        \bool_set_false:N \l__codedesc_codesyntax_activ_bool      
+      }
+  }
+  {}
+
+
+
+
+
+
+
+
+
+
+
 
 
     %%%%%%%
