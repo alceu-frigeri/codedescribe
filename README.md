@@ -45,9 +45,9 @@ at [the github page](http://github.com/alceu-frigeri/codedescribe)
 
 For bug reports and enhacement suggestions, the preferred way is to use
 [the project's issue page](https://github.com/alceu-frigeri/codedescribe/issues).
-Please be ready to provide an example code showing the bug, if any.
 
-Please do not use the issue page for generic help on how to use the package.
+For help on how to use the package, suggestions, use
+[the project's discussion page](https://github.com/alceu-frigeri/codedescribe/discussions).
 
 * git: https://github.com/alceu-frigeri/codedescribe
 
@@ -97,7 +97,9 @@ The Current Maintainer of this work is Alceu Frigeri
 * Version 1.21 (next)
     - fixing [#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
     - add codesyntax* environment (verbatim alternative, [#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
-    - adjusted (optimized) the (re)definition of `vertimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
+    - adjusted (optimized) the (re)definition of `verbatimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
+    - added another key (index fmt) (related to [#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
+    - added a series of index generating auxiliary commands
 
 * Version 1.20 (this)
     - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
