@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.21-pre2} {2025/12/17}
+%% This is version {1.21-pre3} {2025/12/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -35,7 +35,7 @@
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
      date        = {2025/12/17} ,
-     version     = {1.21-pre2} ,
+     version     = {1.21-pre3} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -175,6 +175,14 @@
 \bool_new:N \l__codedesc_normal_margin_bool
 \bool_set_true:N \l__codedesc_normal_margin_bool
 
+%%%%%%%%
+%%%
+%%% {{level}{actual}{encap}{quote}}
+%%%
+%%%%%%%%
+\tl_new:N \l__codedesc_index_specs_tl 
+\tl_set:Nn \l__codedesc_index_specs_tl {{!}{@}{|}{"}}
+
 \keys_define:nn { codedescribe }
   {
     nolisting .usage:n    = load ,
@@ -188,6 +196,11 @@
     index .usage:n    = load ,
   	index .bool_set:N = \l__codedesc_indexdefault_bool ,
     index .default:n  = {true} ,
+    
+    index~ specs .usage:n = load ,
+    index~ specs .value_required:n = true ,
+    index~ specs .tl_set:N = \l__codedesc_index_specs_tl ,
+    index~ specs .default:n = {{!}{@}{|}{"}} ,
     
     describe~ keys .usage:n  = load ,
     describe~ keys .value_required:n = true ,
@@ -252,6 +265,7 @@
 
 \bool_if:NT \l__codedesc_infograb_aliases_bool
   { \pkginfograb_set_aliases: }
+
 
 
 \msg_new:nnnn {codedesc} {key choice}
@@ -1054,62 +1068,84 @@
   }
   {}
   
+
+
+
+%%%%%%%%
+%%%
+%%% {level}{actual}{encap}{quote}{rest/nothing}
+%%% normally (makeindex default) this is
+%%% {!}{@}{|}{"}
+%%%
+%%%%%%%%
+
+\cs_new_protected:Npn \__codedesc_grab_index_specs:nnnnw #1#2#3#4#5 \q_stop
+  {
+%    \tl_show:n {<<grab>>~(#1)~(#2)~(#3)~(#4)}
+    
+    \cs_new_protected:Npn \__codedesc_idxfmt_raw:nnn ##1##2##3
+      { 
+        \index{##3}
+      }
+      
+    \cs_new_protected:Npn \__codedesc_idxfmt_rawat:nnn ##1##2##3
+      { 
+        \tl_if_empty:nTF {##2}
+          {
+            \index{##1 ##3 #2 ##3}
+          }
+          {
+            \index{##1 ##3 #2 ##2 #1 ##3}
+          }
+      }
+      
+    \cs_new_protected:Npn \__codedesc_idxfmt_csraw:nnn ##1##2##3
+      { 
+        \str_set:Nn \l__codedesc_tmpa_tl {##3}
+        \regex_replace_once:NnNTF \c__codedesc_slash_regex {\\string\\} \l__codedesc_tmpa_tl
+          { 
+            \index{\l__codedesc_tmpa_tl}
+          }
+          { \index{##3} }
+      }
+      
+    \cs_new_protected:Npn \__codedesc_idxfmt_csrawat:nnn ##1##2##3
+      { 
+        \str_set:Nn \l__codedesc_tmpa_tl {##3}
+        \str_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
+        \regex_replace_once:NnNTF \c__codedesc_slash_regex {} \l__codedesc_tmpa_tl
+          { 
+            \regex_replace_once:NnN \c__codedesc_slash_regex {\\string\\} \l__codedesc_tmpb_tl
+            \tl_if_empty:nTF {##2}
+              {
+                \index{##1 \l__codedesc_tmpa_tl #2 \l__codedesc_tmpb_tl}
+              }
+              {
+                \index{##1 \l__codedesc_tmpa_tl #2 ##2 #1 \l__codedesc_tmpb_tl}
+              }
+          }
+          { 
+            \tl_if_empty:nTF {##2}
+              {
+                \index{##1 ##3 #2 ##3}
+              }
+              {
+                \index{##1 ##3 #2 ##2 #1 ##3}
+              }
+          }
+      }
+    
+  }
+
+\exp_last_unbraced:NV \__codedesc_grab_index_specs:nnnnw \l__codedesc_index_specs_tl \q_stop
+
+
+
   
 \regex_const:Nn \c__codedesc_slash_regex {^\\}
 \regex_const:Nn \c__codedesc_ast_regex {\*}
 \regex_const:Nn \c__codedesc_endspc_regex {[\ ]+$}
 
-\cs_new_protected:Npn \__codedesc_idxfmt_raw:nnn #1#2#3
-  { 
-    \index{#3}
-  }
-  
-\cs_new_protected:Npn \__codedesc_idxfmt_rawat:nnn #1#2#3
-  { 
-    \tl_if_empty:nTF {#2}
-      {
-        \index{#1 #3 @ #3}
-      }
-      {
-        \index{#1 #3 @ #2 ! #3}
-      }
-  }
-  
-\cs_new_protected:Npn \__codedesc_idxfmt_csraw:nnn #1#2#3
-  { 
-    \str_set:Nn \l__codedesc_tmpa_tl {#3}
-    \regex_replace_once:NnNTF \c__codedesc_slash_regex {\\string\\} \l__codedesc_tmpa_tl
-      { 
-        \index{\l__codedesc_tmpa_tl}
-      }
-      { \index{#3} }
-  }
-  
-\cs_new_protected:Npn \__codedesc_idxfmt_csrawat:nnn #1#2#3
-  { 
-    \str_set:Nn \l__codedesc_tmpa_tl {#3}
-    \str_set_eq:NN \l__codedesc_tmpb_tl \l__codedesc_tmpa_tl
-    \regex_replace_once:NnNTF \c__codedesc_slash_regex {} \l__codedesc_tmpa_tl
-      { 
-        \regex_replace_once:NnN \c__codedesc_slash_regex {\\string\\} \l__codedesc_tmpb_tl
-        \tl_if_empty:nTF {#2}
-          {
-            \index{#1 \l__codedesc_tmpa_tl @ \l__codedesc_tmpb_tl}
-          }
-          {
-            \index{#1 \l__codedesc_tmpa_tl @ #2 ! \l__codedesc_tmpb_tl}
-          }
-      }
-      { 
-        \tl_if_empty:nTF {#2}
-          {
-            \index{#1 #3 @ #3}
-          }
-          {
-            \index{#1 #3 @ #2 ! #3}
-          }
-      }
-  }
   
 
 \cs_new_protected:Npn \__codedesc_index:n 
