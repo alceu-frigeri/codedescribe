@@ -94,7 +94,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
-* Version 1.21 (next)
+* Version 1.21 (this)
     - fixing [#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
     - add codesyntax* environment (verbatim alternative, [#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
     - adjusted (optimized) the (re)definition of `verbatimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
@@ -102,7 +102,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - added a series of index generating auxiliary commands
     - whole index coding dependent of the global package option index (reducing the overhead when it isn't needed)
 
-* Version 1.20 (this)
+* Version 1.20
     - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
     - new command to copy/duplicate a group format.
     - new setup to help making an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)

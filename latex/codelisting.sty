@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.21-pre3} {2025/12/17}
+%% This is version {1.21} {2025/12/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/12/17} ,
-     version     = {1.21-pre3} ,
+     date        = {2025/12/22} ,
+     version     = {1.21} ,
      description = {LaTeX Code Listing}
   }
 %%%%%%%
@@ -73,20 +73,12 @@
           } 
       },
     TeX~ dialects  .value_required:n = true,
-    
-        
+ 
     colors .usage:n = load ,
     colors .choices:nn =
       { default , black , brighter , darker }
       { \tl_set_eq:NN \l__codelist_colors_bright_tl \l_keys_choice_tl } ,
-    colors .value_required:n = true ,
-
-    listing~ colors .usage:n = load ,
-    listing~ colors .choices:nn =
-      { default , black , brighter , darker }
-      { \tl_set_eq:NN \l__codelist_colors_bright_tl \l_keys_choice_tl } ,
-    listing~ colors .value_required:n = true ,
-    
+    colors .value_required:n = true ,    
   }
 \ProcessKeyOptions [codelisting ]
 
@@ -281,70 +273,53 @@
 \cs_generate_variant:Nn   \__codelist_set_color_brightness:n {V}
 
 
-%\__codelist_set_colors:n {1}
-
-
-
 \keys_define:nn { codelist / color scheme } 
   {
     bckgnd   .usage:n              = general ,
     bckgnd   .tl_set:N             = \l__codelist_scheme_bckgnd_tl ,
     bckgnd   .default:n            = black ,
 
-    string    .usage:n              = general ,
-    string    .tl_set:N             = \l__codelist_scheme_string_tl ,
-    string    .default:n            = teal ,
+    string    .usage:n             = general ,
+    string    .tl_set:N            = \l__codelist_scheme_string_tl ,
+    string    .default:n           = teal ,
   
-    comment    .usage:n              = general ,
-    comment    .tl_set:N             = \l__codelist_scheme_comment_tl ,
-    comment    .default:n            = green ,
+    comment   .usage:n             = general ,
+    comment   .tl_set:N            = \l__codelist_scheme_comment_tl ,
+    comment   .default:n           = green ,
     
-    texcs    .usage:n              = general ,
-    texcs    .tl_set:N             = \l__codelist_scheme_texcs_tl ,
-    texcs    .default:n            = blue ,
+    texcs     .usage:n             = general ,
+    texcs     .tl_set:N            = \l__codelist_scheme_texcs_tl ,
+    texcs     .default:n           = blue ,
     
-    keywd    .usage:n              = general ,
-    keywd    .tl_set:N             = \l__codelist_scheme_keywd_tl ,
-    keywd    .default:n            = cyan ,
+    keywd     .usage:n             = general ,
+    keywd     .tl_set:N            = \l__codelist_scheme_keywd_tl ,
+    keywd     .default:n           = cyan ,
     
-    emph  .usage:n              = general ,
-    emph  .tl_set:N             = \l__codelist_scheme_emph_tl ,
-    emph  .default:n            = red ,
+    emph      .usage:n             = general ,
+    emph      .tl_set:N            = \l__codelist_scheme_emph_tl ,
+    emph      .default:n           = red ,
       
-    rule     .usage:n              = general ,
-    rule     .tl_set:N             = \l__codelist_scheme_rule_tl ,
-    rule     .default:n            = black ,
+    rule      .usage:n             = general ,
+    rule      .tl_set:N            = \l__codelist_scheme_rule_tl ,
+    rule      .default:n           = black ,
 
-    number    .usage:n              = general ,
-    number    .tl_set:N             = \l__codelist_scheme_number_tl ,
-    number    .default:n            = black ,
+    number    .usage:n             = general ,
+    number    .tl_set:N            = \l__codelist_scheme_number_tl ,
+    number    .default:n           = black ,
     
-    brightness  .usage:n          = general ,
-    brightness  .tl_set:N         = \l__codelist_scheme_bright_tl ,
-    brightness  .default:n        = 1 ,
+    brightness  .usage:n           = general ,
+    brightness  .tl_set:N          = \l__codelist_scheme_bright_tl ,
+    brightness  .default:n         = 1 ,
     
-    default     .usage:n           = general ,
-    default     .value_forbidden:n = true ,
-    default     .meta:n            = 
+    default   .usage:n             = general ,
+    default   .value_forbidden:n   = true ,
+    default   .meta:n              = 
       { bckgnd , string , comment , texcs , keywd , emph , rule , number , brightness } ,
     
-    scheme  .usage:n              = general ,
-    scheme  .choice: ,
+    scheme    .usage:n             = general ,
+    scheme    .choice: ,
     scheme / default
       .meta:n = default ,
-%    scheme / test
-%      .code:n =
-%        {
-%          \tl_set:Nn \l__codelist_scheme_bckgnd_tl    {red}
-%          \tl_set:Nn \l__codelist_scheme_string_tl    {blue}
-%          \tl_set:Nn \l__codelist_scheme_comment_tl   {brown}
-%          \tl_set:Nn \l__codelist_scheme_texcs_tl     {pink}
-%          \tl_set:Nn \l__codelist_scheme_keywd_tl     {teal}
-%          \tl_set:Nn \l__codelist_scheme_emph_tl      {magenta}
-%          \tl_set:Nn \l__codelist_scheme_rule_tl      {yellow}
-%          \tl_set:Nn \l__codelist_scheme_number_tl    {green}
-%          \tl_set:Nn \l__codelist_scheme_bright_tl    {1.8}
-%        }  
   }
 
 
@@ -354,8 +329,9 @@
     \__codelist_set_colors:n \l__codelist_scheme_bright_tl    
   }
 
-\keys_set:nn { codelist / color scheme } {default}
-%\__codelist_set_colors:n {1}
+\keys_set:nn { codelist / color scheme } 
+  {default}
+
 \__codelist_set_color_brightness:n \l__codelist_colors_bright_tl
 
 
@@ -742,12 +718,20 @@
 %%%
 \keys_define:nn { scontents / scontents}
   {
-  	st.meta:nn          = { scontents } { store-env = {#1} },
-    st.value_required:n = true,
-  	store-at.meta:nn          = { scontents } { store-env = {#1} },
-    store-at.value_required:n = true,
-    unknown . undefine: ,
-    unknown . code:n = { \keys_set:ne {scontents}{ store-env = {\l_keys_key_str}} }
+  	st          .meta:nn          = 
+      { scontents } 
+      { store-env = {#1} } ,
+    st          .value_required:n = true ,
+  	store-at    .meta:nn          = 
+      { scontents } 
+      { store-env = {#1} } ,
+    store-at    .value_required:n = true,
+    unknown     .undefine: ,
+    unknown     .code:n           = 
+      { 
+        \keys_set:ne {scontents}
+          { store-env = {\l_keys_key_str} } 
+      }
  }
 
 \newenvsc{codestore}
