@@ -101,7 +101,7 @@
     %%%%%%%
 \msg_new:nnnn {codedesc} {locale-err}
   {
-    (ID:#1)~label~set~(#2)~not~defined! ~valid~ones:~#3
+    (#1)~label~set~(#2)~not~defined! ~valid~ones:~#3
   }
   {
     You~tried~to~use~a~non~defined~label~set:#2.
@@ -190,8 +190,7 @@
 
 
 \bool_new:N       \l__codedesc_descnotes_inseq_bool
-\bool_new:N       \l__codedesc_normal_margin_bool
-\bool_set_true:N  \l__codedesc_normal_margin_bool
+\bool_new:N       \l__codedesc_force_margin_bool
 
 
 \keys_define:nn { codedescribe }
@@ -267,7 +266,7 @@
 
 \msg_new:nnnn {codedesc} {key choice}
   {
-    (ID:#1)~Choice~'#2'~not~defined!~Possible~values:~ #3
+    (#1)~Choice~'#2'~not~defined!~Possible~values:~ #3
   }
   {
     You~tried~to~select~a~non~defined~value:#2.
@@ -277,7 +276,7 @@
 
 \msg_new:nnnn {codedesc} {format-err}
   {
-    (ID:#1)~Format~Key~(#2)~not~defined!
+    (#1)~Format~Key~(#2)~not~defined!
   }
   {
     You~tried~to~use~a~non~defined~format~key:#2.
@@ -286,7 +285,7 @@
 
 \msg_new:nnnn {codedesc} {group-err}
   {
-    (ID:#1)~Format~group~(#2)~not~defined!
+    (#1)~Format~group~(#2)~not~defined!
   }
   {
     You~tried~to~use~a~non~defined~format~group:#2.
@@ -295,7 +294,7 @@
 
 \msg_new:nnnn {codedesc} {object-err}
   {
-    (ID:#1)~Objetc~Type~(#2)~not~defined!
+    (#1)~Objetc~Type~(#2)~not~defined!
   }
   {
     You~tried~to~use~a~non~defined~object~type:#2.
@@ -304,7 +303,7 @@
 
 \msg_new:nnnn {codedesc} {nested-env}
   {
-    (ID:#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\}. ~Better~ not.
+    (#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\}. ~Better~ not.
   }
   {
     You~tried~to~begin~\{#2\}~inside~of~\{#3\}.~ Better~ not.
@@ -313,7 +312,7 @@
 
 \msg_new:nnnn {codedesc} {out of scope}
   {
-    (ID:#1)~You~tried~to~use~\{#2\}~outside~of~\{#3\} 
+    (#1)~You~tried~to~use~\{#2\}~outside~of~\{#3\} 
   }
   {
     You~tried~to~use~\{#2\}~outside~of~\{#3\}.
@@ -323,17 +322,17 @@
 
 \msg_new:nnnn {codedesc} {syntax dup}
   {
-    (ID:#1)~You~declared~the~codesyntax~env~ multiple~times
+    (#1)~You~declared~the~codesyntax~env~ multiple~times
   }
   {
-    (ID:#1)~You~declared~the~codesyntax~env~multiple~times.
+    (#1)~You~declared~the~codesyntax~env~multiple~times.
     Only~ the~ last~ one~ will~ prevail.
     ~Error~Code~ ID:<#1>.
   }
 
 \msg_new:nnnn {codedesc} {deprecated env}
   {
-    (ID:#1)~The~ environment~#2~is~ deprecated~ use~ #3 ~ instead
+    (#1)~The~ environment~#2~is~ deprecated~ use~ #3 ~ instead
   }
   {
     You~tried~to~use~a~deprecated~ environment:#2.
@@ -343,7 +342,7 @@
 
 \msg_new:nnnn {codedesc} {preamble only}
   {
-    (ID:#1)~The~ command~#2~can~ only~be~ used~in~the~preable
+    (#1)~The~ command~#2~can~ only~be~ used~in~the~preamble
   }
   {
     You~tried~to~use, ~in ~ the~ document~ body,
@@ -351,6 +350,23 @@
     ~Error~Code~ ID:<#1>.
   }
 
+\msg_new:nnnn {codedesc} {undefined cs}
+  {
+    (#1)~command~#2~doesn't ~ exist,~ and~ will~ be~ ignored
+  }
+  {
+    The~ provided~ command~ (~#2~)~isn't~ defined~ and ~ will~ be ~ ignored.
+    ~Error~Code~ ID:<#1>.
+  }
+
+\msg_new:nnnn {codedesc} {cs warning}
+  {
+    (#1)~command~#2~doesn't ~ exist~ yet. This~ might~be~an~error
+  }
+  {
+    The~ provided~ command~ (~#2~)~isn't~ defined~ and ~ will~ be ~ ignored.
+    ~Error~Code~ ID:<#1>.
+  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -450,7 +466,7 @@
 \cs_new_protected:Npn \__codedesc_set_color_scheme:n #1
   {
     \keys_set:nn { codedesc / color scheme } {#1}
-    \__codedesc_set_colors:n \l__codedesc_scheme_bright_tl    
+    \__codedesc_set_colors:n \l__codedesc_scheme_bright_tl
   }
 
 \keys_set:nn { codedesc / color scheme } {default}
@@ -468,21 +484,22 @@
 %%% makeindex especifiers
 %%%
 %%%%%%%%
-%%% {{level}{actual}{encap}{quote}}
+%%% { {level} {actual} {encap} {quote} }
 \tl_new:N \l__codedesc_index_specs_tl 
-\tl_set:Nn \l__codedesc_index_specs_tl {{!}{@}{|}{"}}
-%%% {{arg_open}{arg_close}{range_open}{range_close}}
+\tl_set:Nn \l__codedesc_index_specs_tl { {!} {@} {|} {"} }
+%%% { {arg_open} {arg_close} {range_open} {range_close} }
 \tl_new:N \l__codedesc_index_oc_specs_tl 
 \tl_set:Nn \l__codedesc_index_oc_specs_tl { {\{} {\}} {(} {)} }
-%%% {{escape}{page_compositor}{keyword}}
+%%% { {escape} {page_compositor} {keyword} }
 \tl_new:N \l__codedesc_index_others_specs_tl 
-\tl_set:Nn \l__codedesc_index_others_specs_tl {{\\}{-}{\indexentry}}
+\tl_set:Nn \l__codedesc_index_others_specs_tl { {\\} {-} {\indexentry} }
 
 %%
 %% This has a :wn because \index might have (or not) a conditional parameter.
 %% And it has to be delayed because the index package(s) might/will change it...
 %%
-\AtBeginDocument
+%\AtBeginDocument
+\AddToHook {begindocument}
   { \cs_set_eq:NN \__codedesc_index_cmd:wn \index }
 
 \keys_define:nn { codedesc / index }
@@ -491,8 +508,18 @@
     index~ cmd .value_required:n = true ,
     index~ cmd .code:n = 
       { 
-        \AtBeginDocument
-          { \cs_set_eq:NN \__codedesc_index_cmd:wn #1 }
+        \AddToHook {begindocument}
+          { 
+            \cs_if_exist:NTF #1
+              {
+                \cs_set_eq:NN \__codedesc_index_cmd:wn #1 
+              }
+              {
+                \msg_error:nnnn {codedesc} {undefined cs}
+                  {idx01} {#1}
+              }
+          }
+%        \AtBeginDocument
       } , %% It's delayed past the preamble, to be sure #1 is defined (by other package(s))
     
     index~ specs .usage:n = preamble ,
@@ -563,12 +590,30 @@
     font            .usage:n            = general ,
     font            .value_required:n   = true ,
     font            .code:n             = 
-      { \tl_set:Nn \l__codedesc_deftmp_font_tl { font = #1 , } },
+      { 
+        \cs_if_exist:NTF #1
+          {
+            \tl_set:Nn \l__codedesc_deftmp_font_tl { font = #1 , } 
+          }
+          {
+            \msg_error:nnnn {codedesc} {undefined cs}
+              {font01} {#1}
+          }
+      },
     
     fsize           .usage:n            = general ,
     fsize           .value_required:n   = true ,
     fsize           .code:n             = 
-      { \tl_set:Nn \l__codedesc_deftmp_fsize_tl { fsize = #1 , } } ,
+      { 
+        \cs_if_exist:NTF #1
+          {
+            \tl_set:Nn \l__codedesc_deftmp_fsize_tl { fsize = #1 , } 
+          }
+          {
+            \msg_error:nnnn {codedesc} {undefined cs}
+              {fsize01} {#1}
+          }
+      } ,
   
     meta            .usage:n            = general ,
     meta            .value_forbidden:n  = true ,
@@ -737,7 +782,12 @@
         index~ fmt      .usage:n            = general ,
         index~ fmt      .value_required:n   = true ,
         index~ fmt      .code:n             = 
-          { \tl_set:Nn \l__codedesc_deftmp_indxfmt_tl { index~ fmt = #1 , } },
+          { 
+            \tl_set:Nn \l__codedesc_deftmp_indxfmt_tl { index~ fmt = #1 , }               
+            \cs_if_exist:NTF #1
+              { }
+              { \msg_warning:nnnn {codedesc} {cs warning} {idxfmt01} {#1} }
+          },
       }
   }
   { % silently ignore them... if index not used
@@ -964,75 +1014,60 @@
    
   shape~ preadj .usage:n = general , 
   shape~ preadj .value_required:n = true ,
-  shape~ preadj .choices:nn = 
-    { very~ thin , thin , mid }
-    { 
-      \str_case:enTF \l_keys_choice_str
-        {
-          {very~ thin}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_preadj: 
-                 { \skip_horizontal:N \l__codecmm_verythin_skip } 
-              }               
-            }
-          {thin}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_preadj: 
-                 { \skip_horizontal:N \l__codecmm_thin_skip } 
-              }               
-            }
-          {mid}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_preadj: 
-                 { \skip_horizontal:N \l__codecmm_midthin_skip } 
-              }               
-            }
-        }
-        {}{}
+  shape~ preadj .choice: ,
+  shape~ preadj / very ~ thin .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_preadj: 
+         { \skip_horizontal:N \l__codecmm_verythin_skip } 
+      }               
+    } ,
+  shape~ preadj / thin .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_preadj: 
+         { \skip_horizontal:N \l__codecmm_thin_skip } 
+      }               
     } , 
+  shape~ preadj / mid .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_preadj: 
+         { \skip_horizontal:N \l__codecmm_midthin_skip } 
+      } 
+    } ,
 
   shape~ posadj .usage:n = general , 
   shape~ posadj .value_required:n = true ,
-  shape~ posadj .choices:nn = 
-    { very~ thin , thin , mid }
-    { 
-      \str_case:enTF \l_keys_choice_str
-        {
-          {very ~ thin}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_posadj: 
-                 { \skip_horizontal:N \l__codecmm_verythin_skip } 
-              }               
-            }
-          {thin}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_posadj: 
-                 { \skip_horizontal:N \l__codecmm_thin_skip } 
-              }               
-            }
-          {mid}
-            {
-              \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
-              {
-               \cs_set:Npn \__codedesc_shape_posadj: 
-                 { \skip_horizontal:N \l__codecmm_midthin_skip } 
-              }               
-            }
-        }
-        {}{}
+  shape~ posadj .choice: ,
+  shape~ posadj / very ~ thin .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_posadj: 
+         { \skip_horizontal:N \l__codecmm_verythin_skip } 
+      }               
+    } ,
+  shape~ posadj / thin .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_posadj: 
+         { \skip_horizontal:N \l__codecmm_thin_skip } 
+      }               
     } , 
-
-  
+  shape~ posadj / mid .code:n =
+    {
+      \tl_put_right:Nn \l__codedesc_deftmp_makefmt_tl 
+      {
+       \cs_set:Npn \__codedesc_shape_posadj: 
+         { \skip_horizontal:N \l__codecmm_midthin_skip } 
+      } 
+    } ,
+        
   index .usage:n = general ,
   index .value_forbidden:n = true ,
   index .code:n = { 
@@ -1124,7 +1159,6 @@
   } ,
 }
 
- 
 
     %%%%%%%
     %%% group/object formats pre-set
@@ -1182,16 +1216,7 @@
 \__codedesc_object_define:nnn   {pack}      {pkg}     {}
 
 
-\bool_if:NTF \l__codedesc_index_set_bool
-  {
-      
-    \__codedesc_group_define:nn {code}    {index, index~ fmt=\__codedesc_idxfmt_csraw:nnnn}
-    \__codedesc_group_define:nn {keys}    {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
-    \__codedesc_group_define:nn {option}  {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
-    \__codedesc_group_define:nn {env}     {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
-  }
-  {}
-  
+
 
 
 
@@ -1207,6 +1232,7 @@
   {
     \str_set:Nn #1 {#2}
     \regex_replace_all:NnN \c__codedesc_under_regex {{\\_}} #1
+    \str_remove_all:Nn #1 {~}
   }
 
 
@@ -1275,9 +1301,26 @@
 \__codedesc_index_setcmds:
 
 
+%%%%%%%%
+%%%  This has to be 'here' so it won't generate a warning
+%%%
+%%%
+%%%%%%%%
+\bool_if:NTF \l__codedesc_index_set_bool
+  {      
+    \__codedesc_group_define:nn {code}    {index, index~ fmt=\__codedesc_idxfmt_csraw:nnnn}
+    \__codedesc_group_define:nn {keys}    {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
+    \__codedesc_group_define:nn {option}  {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
+    \__codedesc_group_define:nn {env}     {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
+  }
+  {}
+
+
+
+
 \bool_if:NTF \l__codedesc_index_set_bool
   {
-    \cs_new_protected:Npn \__codedesc_cond_index:n #1
+    \cs_new_protected:Npn \__codedesc_index_if_set:n #1
       {
         \bool_if:NTF \l__codedesc_index_bool
           { \__codedesc_index:n {#1} }
@@ -1285,7 +1328,7 @@
       }
   }
   {
-    \cs_set_eq:NN \__codedesc_cond_index:n \use_none:n
+    \cs_set_eq:NN \__codedesc_index_if_set:n \use_none:n
   }
 
 
@@ -1456,8 +1499,8 @@
     force~ margin .usage:n  = general ,
     force~ margin .code:n   =
       {
-        \bool_set_false:N 
-          \l__codedesc_normal_margin_bool
+        \bool_set_true:N 
+          \l__codedesc_force_margin_bool
       } ,
       
     TF            .usage:n  = general ,
@@ -1878,39 +1921,21 @@
     \__codedesc_object_define:nnn {#1} {#2} {#3}
   }
 
-
-
+  
+%%%%%%%
 %%%
-%%% Not very elegant, but ... if 'no index'... no test needed.
+%%%  It will always consume two tokens after it
+%%%  If index set, it will be a true TF conditional
+%%%  otherwise, it will execute the 2nd argument
 %%%
-\bool_if:NTF \l__codedesc_index_set_bool
+%%%%%%%
+\bool_if:NTF  \l__codedesc_index_set_bool
   {
-    \cs_new:Npn \__codedesc_cindex_typeset:
-      {
-        \bool_if:NTF \l__codedesc_index_bool
-          {
-            \seq_map_inline:Nn \l__codedesc_tmpa_seq
-              { 
-                \__codedesc_index:n {##1} 
-                 \__codedesc_typeset:n {##1} \l__codedesc_exp_tl \\ 
-              }
-          }
-          {
-            \seq_map_inline:Nn \l__codedesc_tmpa_seq 
-              { 
-                \__codedesc_typeset:n {##1} \l__codedesc_exp_tl \\ 
-              } 
-          }            
-      }
+    \cs_new_protected:Npn \__codedesc_index_if_set:TF
+      { \bool_if:NTF \l__codedesc_index_bool }
   }
   {
-    \cs_new:Npn \__codedesc_cindex_typeset:
-      {
-        \seq_map_inline:Nn \l__codedesc_tmpa_seq 
-          { 
-            \__codedesc_typeset:n {##1} \l__codedesc_exp_tl \\ 
-          } 
-      }
+    \cs_new_eq:NN \__codedesc_index_if_set:TF \use_ii:nn
   }
 
 
@@ -1982,17 +2007,32 @@
               }
           }
           {}
+          
         %% ARGH !
         %% making a global copy of it (not reentrant friendly)
         %% codedescribe shouldn't be nested... but...
         %%
-        \bool_gset_eq:NN \g__codedesc_normal_margin_bool \l__codedesc_normal_margin_bool
+        \bool_gset_eq:NN \g__codedesc_force_margin_bool \l__codedesc_force_margin_bool
 
        
         \begin{tabular}{@{} l @{} }
           \__codecmm_hline:nnnn {\__codedesc_rulecolor:}{0.5ex}{2}{0.25ex}
-                                            
-          \__codedesc_cindex_typeset:  
+          
+          \__codedesc_index_if_set:TF
+            {
+              \seq_map_inline:Nn \l__codedesc_tmpa_seq
+                { 
+                  \__codedesc_index:n {##1} 
+                   \__codedesc_typeset:n {##1} \l__codedesc_exp_tl \\ 
+                }
+            }
+            {
+              \seq_map_inline:Nn \l__codedesc_tmpa_seq 
+                { 
+                  \__codedesc_typeset:n {##1} \l__codedesc_exp_tl \\ 
+                } 
+            }            
+          
             
           \bool_if:NTF \l__codedesc_descnotes_bool
             {
@@ -2036,14 +2076,14 @@
 
     \dim_compare:nNnTF \l__codedesc_margin_wd_dim > \marginparwidth
       {
-        \bool_if:NTF \g__codedesc_normal_margin_bool
-          {
-            \bool_set_true:N \l__codedesc_longblock_bool
-            \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codecmm_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }
-          }
+        \bool_if:NTF \g__codedesc_force_margin_bool
           { %% well, user's choice...
             \bool_set_false:N \l__codedesc_longblock_bool
             \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codecmm_textcolwidth_dim}        
+          }
+          {
+            \bool_set_true:N \l__codedesc_longblock_bool
+            \dim_set:Nn \l__codedesc_syntax_wd_dim {\l__codecmm_textcolwidth_dim - (\l__codedesc_margin_wd_dim - \marginparwidth) }
           }
       }
       {
@@ -2296,7 +2336,7 @@
     \hcoffin_set:Nn \l__codedesc_tmpb_coffin 
       { 
         \l__codedesc_metafmt_describe_set_tl
-        \__codedesc_cond_index:n {#1}
+        \__codedesc_index_if_set:n {#1}
         \__codedesc_metafmt: %V \l__codedesc_listkind_tl 
         \l__codedesc_ragged_tl 
         \__codedesc_typeset:n {#1}
@@ -2316,7 +2356,7 @@
           { \l__codedesc_describelabel_wd_dim } 
           { 
             \l__codedesc_metafmt_describe_set_tl
-            \__codedesc_cond_index:n {#1}
+            \__codedesc_index_if_set:n {#1}
             \__codedesc_metafmt: %V \l__codedesc_listkind_tl
             \noindent\l__codedesc_ragged_tl \__codedesc_typeset:n {#1}
           }          
@@ -2359,7 +2399,6 @@
   {
     \__codedesc_meta:n {#1}
   }
-
 \cs_new_eq:NN \typesetmeta  \tsmeta 
 
 
@@ -2367,7 +2406,6 @@
   { 
     \__codedesc_args_typeset:nnnn {#1} {\l__codedesc_Lbracket_tl} {#2} {\l__codedesc_Rbracket_tl}
   }
-  
 \cs_new_eq:NN \typesetargs  \tsargs 
 
 

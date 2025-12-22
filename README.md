@@ -100,7 +100,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - adjusted (optimized) the (re)definition of `verbatimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
     - added  keys `index fmt` and `index specs` (related to [#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
     - added a series of index generating auxiliary commands
-    - whole index coding dependent of the global package option index (reducing the overhead when it isn't needed)
+    - whole index coding depend on global package option index (reducing the overhead when it isn't needed)
 
 * Version 1.20
     - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))

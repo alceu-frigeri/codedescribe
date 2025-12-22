@@ -6,6 +6,7 @@
 % !PDFTeXify ext =  --enable-etex  --enable-write18
 % !PDFLaTeX ext  =  --enable-etex  --enable-write18
 % !BIB program = biber
+% !IND exe = xindex.exe
 %%%==============================================================================
 %% Copyright 2023-present by Alceu Frigeri
 %%
@@ -78,7 +79,7 @@
   
 \begin{typesetabstract}
 
-This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl3,scontents,listing,xpeekahead,pifont,xcolor}. A minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key,no index]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
+This package is designed to be as class independent as possible, depending only on \tsobj[pkg]{expl,scontents,listing,xpeekahead,pifont,xcolor}. A minimal set of macros/commands/environments is defined: most/all defined commands have an ``object type'' as a \tsobj[key,no index]{keyval} parameter, allowing for an easy expansion mechanism (instead of the usual ``one set of macros/environments'' for each object type).
 
 No assumption is made about page layout (besides ``having a margin paragraph''),  or underlying macros, so it should be possible to use this with any/most document classes.
 
@@ -89,7 +90,7 @@ No assumption is made about page layout (besides ``having a margin paragraph''),
 \section{Introduction}
 
 
-This package aims at documenting both document level (i.e. final user)  and package/class level commands. It's fully implemented using \tsobj[pkg]{expl3}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. 
+This package aims at documenting both document level (i.e. final user)  and package/class level commands. It's fully implemented using \tsobj[pkg]{expl}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. 
 The package \tsobj[pkg]{pifont} (see \cite{pifont}) is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable. 
 \tsobj[pkg]{xcolor} (see \cite{xcolor}) is needed to switch colors, and \tsobj[pkg]{xpeekahead} (see \cite{xpeekahead}) for spacing fine tuning. The package \tsobj[pkg]{infograb} (see \cite{pkginfograb}) is also loaded, for package's documentation only (including  package's version tracking).
  
@@ -142,7 +143,7 @@ For example:
 
 \newpage
 \subsection{In Memory Code Storage}
-Thanks to \tsobj[pkg]{scontents}, it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl3} sequence variable.
+Thanks to \tsobj[pkg]{scontents}, it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl} sequence variable.
 
 
 \begin{codestore}[store-colon]
@@ -354,7 +355,7 @@ for some extra emphasis sets.
 \end{codesyntax}
 These allow to redefine what a letter or other are (they correspond to the \tsobj[key,no index]{alsoletter,alsoother} keys from \tsobj[pkg]{listings}). The default value for the \tsobj[key]{letter} includes (sans the comma) \tsobj[verb]{ @ : _ } , whilst \tsobj[key]{other}'s default value is an empty list.
 \begin{tsremark}
-  You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of an \tsobj[pkg]{expl3} function.
+  You might want to consider setting \tsobj[key]{letter} to just \tsverb[key]{letter={@,_}} so you don't have to list all variants, but just the base name of an \tsobj[pkg]{expl} function.
 \end{tsremark}
 \end{codedescribe}
 
@@ -483,7 +484,7 @@ The other two commands, \tsobj[code,no index]{\indexfmtrawat,\indexfmtcsrawat}, 
 When defining an Object Type (see \ref{obj-type-def}) only \tsobj[meta]{group,name} can be preset. \tsobj[meta]{prefix} can only be set when calling \tsobj[code,no index]{\tsobj} or using the \tsobj[env,no index,or]{codedescribe,describelist} environments.
 \end{tsremark}
 \begin{tsremark}
-Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg,or]{imakeidx,splitidx}, which allows more than one index file. Don't use/set \tsobj[key]{index name}, if you aren't using a multi-index aware package.
+Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg,or]{imakeidx,splitindex}, which allows multiple indexes. Don't use/set \tsobj[key]{index name}, if you aren't using a multi-index aware package.
 \end{tsremark}
 %\begin{tsremark}[\color{red}Important:]
 %  These are defined if and only if the option \tsobj[option]{index} is set, see \ref{codedesc.pack-options}.
@@ -505,6 +506,9 @@ Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg
 \begin{tsremark}
   This can only be used in the document preamble. It will raise an error, if used after \tsobj[code,no index]{\begin{document}} .
 \end{tsremark}
+%\begin{tsremark}
+%  \tsobj[key,no index]{index cmd} assignment will be delayed until \tsobj[code,no index]{\begin{document}}. It will be ignored, and raise an error, if the given command doesn't exist.
+%\end{tsremark}
 
 \subsection{Object Type keys}\label{obj-type-def}
 
@@ -1020,7 +1024,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
   \describe{[l3pgfsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{pgf} and related packages, including signatures. }
   \describe{[l3bibtexsign]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{bibtex,biblatex} and related packages, including signatures.}
 \begin{tsremark}
-  The underscore `\_' and colon `:' have to be defined as letters (\tsverb[key]{letter = { _ , : }}, see \ref{code-keys}). Take note that those dialects are quite large, due the many signatures variants.
+  The underscore `\_' and colon `:' have to be defined as letters (\tsverb[key]{letter = { _ , : }}, see \ref{code-keys}). Take note that these dialects are quite large, due the many signatures variants.
 \end{tsremark}  
   \describe{[l3kernel]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} packages, without signatures. }
   \describe{[l3exp]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{l3kernel} experimental packages, without signatures. }
@@ -1028,7 +1032,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
   \describe{[l3pgf]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{pgf} and related packages, without signatures. }
   \describe{[l3bibtex]TeX} {Most/all \tsobj[pkg]{expl} keys found in the \tsobj[pkg,comma]{bibtex,biblatex} and related packages, without signatures.}
 \begin{tsremark}
-  The underscore `\_' has  to be defined as letter (\tsverb[key]{letter = { _ }}, but not the colon `:', see \ref{code-keys}). Those are more compact versions of the previous ones.
+  The underscore `\_' has  to be defined as letter (\tsverb[key]{letter = { _ }}, but not the colon `:', see \ref{code-keys}). These are more compact versions of the previous ones.
 \end{tsremark}  
   \describe{[kernel]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{kernel} packages. }
   \describe{[xpacks]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{x*} packages, like \tsobj[pkg,comma]{xkeyval,xpatch,xcolor} etc. }
@@ -1039,7 +1043,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
   \describe{[babel]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{babel} and related packages.}
   \describe{[hyperref]TeX} {Most/all document level keys found in the \tsobj[pkg,comma]{hyperref} and related packages.}
 \begin{tsremark}
-  Those are usual document level, \LaTeXe, commands. In particular none of them includes any `@' symbol.
+  These are usual document level, \LaTeXe, commands. In particular none of them includes any `@' symbol.
 \end{tsremark}  
 \end{describelist}
 
