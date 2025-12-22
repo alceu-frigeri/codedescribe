@@ -98,7 +98,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - fixing [#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
     - add codesyntax* environment (verbatim alternative, [#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
     - adjusted (optimized) the (re)definition of `verbatimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
-    - added  keys `index fmt` and `index specs` (related to [#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
+    - extended index generating support, keys and \indexcodesetup (related to [#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
     - added a series of index generating auxiliary commands
     - whole index coding depend on global package option index (reducing the overhead when it isn't needed)
 
