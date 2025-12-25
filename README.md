@@ -94,43 +94,53 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 ## Change log
-* Version 1.21 (this)
-    - fixing [#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
-    - add `codesyntax*` environment (verbatim alternative, [#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
-    - adjusted (optimized) the (re)definition of `verbatimsc` environment [#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
-    - extended index generating support, keys and `\indexcodesetup` (related to [#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
-    - added a series of index generating auxiliary commands
-    - whole index coding depends on global package option index (reducing the overhead when it isn't needed)
+* Version 1.22 (this)
+  - documentation typos.
+  - \setnewcodekey deprecated in favour of \newcodekey.
+  - \selectlabelset deprecated in favour of \setcodelabels
+  - fixing readme markdown compatibility issues between github and ctan...
+  - new auxiliary command \indexgenkey and related keys `index gen group` and `index gen prefix`
+  
+
+* Version 1.21
+  - fixing [\#26](https://github.com/alceu-frigeri/codedescribe/issues/26), long standing hidden bug.
+  - add `codesyntax*` environment (verbatim alternative, [\#27](https://github.com/alceu-frigeri/codedescribe/issues/27))
+  - adjusted (optimized) the (re)definition of `verbatimsc` environment [\#28](https://github.com/alceu-frigeri/codedescribe/issues/28)
+  - extended index generating support, keys and `\indexcodesetup` (related to [\#25](https://github.com/alceu-frigeri/codedescribe/issues/25))
+  - added a series of index generating auxiliary commands
+  - whole index coding depends on global package option index (reducing the overhead when it isn't needed)
 
 * Version 1.20
-    - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment (addressing [#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and [#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
-    - new command to copy/duplicate a group format.
-    - new setup to help making an index [#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
-    - new commands for color customization (both codedescribe and codelisting as well)
-    - added a listings' key, firstnumber (codelisting, \tscode and related)
-    - codedescribe package options regarding changes above.
-    - documentation review.
+  - new format keys to adjust spacing in \tsobj and margin block placement in `codedescribe` environment 
+    (addressing [\#23](https://github.com/alceu-frigeri/codedescribe/issues/23) and 
+    [\#24](https://github.com/alceu-frigeri/codedescribe/issues/24))
+  - new command to copy/duplicate a group format.
+  - new setup to help making an index [\#25](https://github.com/alceu-frigeri/codedescribe/issues/25)
+  - new commands for color customization (both codedescribe and codelisting as well)
+  - added a listings' key, firstnumber (codelisting, \tscode and related)
+  - codedescribe package options regarding changes above.
+  - documentation review.
     
 * Version 1.19
-    - codesyntax new optional parameter, addressing [#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
-    - new format keys (font and fsize), addressing [#22](https://github.com/alceu-frigeri/codedescribe/issues/22)
-    - code demo logic reworked,  addressing [#20](https://github.com/alceu-frigeri/codedescribe/issues/20)
-    - new auxiliary package codecmm, to hold those few commands shared between codedescribe and codelisting making them independent from each other.
+  - codesyntax new optional parameter, addressing [\#21](https://github.com/alceu-frigeri/codedescribe/issues/21) 
+  - new format keys (font and fsize), addressing [\#22](https://github.com/alceu-frigeri/codedescribe/issues/22)
+  - code demo logic reworked,  addressing [\#20](https://github.com/alceu-frigeri/codedescribe/issues/20)
+  - new auxiliary package codecmm, to hold those few commands shared between codedescribe and codelisting making them independent from each other.
     
 * Version 1.18
-    - new commands and package option for label sets ('locale') 
-      - addressing [#17](https://github.com/alceu-frigeri/codedescribe/issues/17) 
-    - partially addressing [#18](https://github.com/alceu-frigeri/codedescribe/issues/18) in the documentation
-    - new package option to suppress some annoying bad boxes warnings.
+  - new commands and package option for label sets ('locale') 
+  - addressing [\#17](https://github.com/alceu-frigeri/codedescribe/issues/17) 
+  - partially addressing [\#18](https://github.com/alceu-frigeri/codedescribe/issues/18) in the documentation
+  - new package option to suppress some annoying bad boxes warnings.
 
 * Version 1.17
-    - using ```\pkginfograbProvidesExplPackage```
-    - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
-    - New package options to set which TeX dialect(s) to be used. 
-    - New code key: `lststyle` to use a listings' user defined style, instead of the provided one.
+  - using ```\pkginfograbProvidesExplPackage```
+  - New auxiliary package codelstlang.sty (defines a series of listings TeX dialects). 
+  - New package options to set which TeX dialect(s) to be used. 
+  - New code key: `lststyle` to use a listings' user defined style, instead of the provided one.
 
 * Version 1.16b 
-  - fixing [#15](https://github.com/alceu-frigeri/codedescribe/issues/15) (codesyntax snafu, introduced by last update)
+  - fixing [\#15](https://github.com/alceu-frigeri/codedescribe/issues/15) (codesyntax snafu, introduced by last update)
 
 * Version 1.16a
   - code cleanup (better following expl3 convention) and a bit of optimization.
@@ -144,10 +154,10 @@ The Current Maintainer of this work is Alceu Frigeri
 * Version 1.15
   - pre-compiling regex
   - removing llongblock bool ...
-  - [#14](https://github.com/alceu-frigeri/codedescribe/issues/14) (typo... in code)
+  - [\#14](https://github.com/alceu-frigeri/codedescribe/issues/14) (typo... in code)
 
 * Version 1.14 
-  - footnote work around for hyperref (addressing issue [#13](https://github.com/alceu-frigeri/codedescribe/issues/13))
+  - footnote work around for hyperref (addressing issue [\#13](https://github.com/alceu-frigeri/codedescribe/issues/13))
   - documentation.
 
 
@@ -170,53 +180,58 @@ The Current Maintainer of this work is Alceu Frigeri
   - documentation (specially due to kernel changes regarding key handlers).
 
 * Version 1.10
-  - fixing [#10](https://github.com/alceu-frigeri/codedescribe/issues/10) (hopefully for good) by implementing [env-peekahead](https://tex.stackexchange.com/questions/745593/peek-ahead-in-expl3) and [skip-spacing](https://tex.stackexchange.com/questions/745692/inter-coffins-spacing)
+  - fixing [\#10](https://github.com/alceu-frigeri/codedescribe/issues/10) (hopefully for good) by implementing 
+    [env-peekahead](https://tex.stackexchange.com/questions/745593/peek-ahead-in-expl3) and 
+    [skip-spacing](https://tex.stackexchange.com/questions/745692/inter-coffins-spacing)
   - environments code cleanup.
   - spacing fine tuning
   - deprecating tsremark* (should't exist!)
-  - implementing [#11](https://github.com/alceu-frigeri/codedescribe/issues/11)
+  - implementing [\#11](https://github.com/alceu-frigeri/codedescribe/issues/11)
 
 * Version 1.9
-    - added two keys (letter and other) to Code Keys (see manual)
-    - setting, by default, _:@ as letters (for expl3) [#9](https://github.com/alceu-frigeri/codedescribe/issues/9)
-    - added a few option keys to further customize \tsobj (bnf style lists, see manual)
-    - documentation review (typos, clarity).
-    - code cleanup.
+  - added two keys (letter and other) to Code Keys (see manual)
+  - setting, by default, _:@ as letters (for expl3) [\#9](https://github.com/alceu-frigeri/codedescribe/issues/9)
+  - added a few option keys to further customize \tsobj (bnf style lists, see manual)
+  - documentation review (typos, clarity).
+  - code cleanup.
 
 * Version 1.8
-    - fixes
-      [#6](https://github.com/alceu-frigeri/codedescribe/issues/6), [#7](https://github.com/alceu-frigeri/codedescribe/issues/7) and
-      [#8](https://github.com/alceu-frigeri/codedescribe/issues/7).
-    - Added an (optional) index parameter to the code display/demo commands.
-    - New command: \tsmergedcode, \tsexec and \setnewcodekey (see documentation).
+  - fixes
+    [\#6](https://github.com/alceu-frigeri/codedescribe/issues/6), [\#7](https://github.com/alceu-frigeri/codedescribe/issues/7) and
+    [\#8](https://github.com/alceu-frigeri/codedescribe/issues/7).
+  - Added an (optional) index parameter to the code display/demo commands.
+  - New command: \tsmergedcode, \tsexec and \setnewcodekey (see documentation).
 
 
 * Version 1.7
-    - fixing  [#4](https://github.com/alceu-frigeri/codedescribe/issues/4) (hopefully) for good and working on [#5](https://github.com/alceu-frigeri/codedescribe/issues/5). Added an environment <tsremark*> (see documentation). 
+  - fixing  [\#4](https://github.com/alceu-frigeri/codedescribe/issues/4) (hopefully) for good and 
+  - working on [\#5](https://github.com/alceu-frigeri/codedescribe/issues/5). 
+  - Added an environment <tsremark*> (see documentation). 
 
 * Version 1.6
-    - fixing issue [#3](https://github.com/alceu-frigeri/codedescribe/issues/3) (long standing (hidden) bug. \tsresult now fully respects optional keys.
+  - fixing issue [\#3](https://github.com/alceu-frigeri/codedescribe/issues/3) (long standing (hidden) bug. 
+    \tsresult now fully respects optional keys.
 
 * Version 1.5b 
-    - fixing issue [#2](https://github.com/alceu-frigeri/codedescribe/issues/2) (reverting `codesyntax` bug introduced by v1.5). 
+  - fixing issue [\#2](https://github.com/alceu-frigeri/codedescribe/issues/2) (reverting `codesyntax` bug introduced by v1.5). 
 
 * Version 1.5
-    - fixing issue [#1](https://github.com/alceu-frigeri/codedescribe/issues/1) (misalignment when missing a `codesyntax` inner environment). 
+  - fixing issue [\#1](https://github.com/alceu-frigeri/codedescribe/issues/1) (misalignment when missing a `codesyntax` inner environment). 
 
 * Version 1.4
-    - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
+  - The 'new', 'update' and 'info' keys can, now, be used multiple times when declaring a codedescribe environment. (see documentation).
 
 * Version 1.3
-    - Added \tsresult, a command to just show the result of a stored code (codelisting specific).
+  - Added \tsresult, a command to just show the result of a stored code (codelisting specific).
 
 
 * Version 1.2
-    - Added format key: basicstyle
+  - Added format key: basicstyle
     
 * Version 1.1
-    - Added two commands to allow <obj-types> customization 
-    - requiring (now) pifont for EXP/rEXP <format-keys>
-    - Added a date command (auxiliary command)
+  - Added two commands to allow <obj-types> customization 
+  - requiring (now) pifont for EXP/rEXP <format-keys>
+  - Added a date command (auxiliary command)
 
 * Version 1.0 
-    - Initial release by CTAN
+  - Initial release by CTAN

@@ -21,7 +21,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.21} {2025/12/22}
+%% This is version {1.22} {2025/12/26}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -43,6 +43,7 @@
 \addbibresource{codedescribe.bib}
 
 
+
 %\ExplSyntaxOn
 %\benchmark_tic:
 %\ExplSyntaxOff
@@ -57,7 +58,7 @@
 \RequirePackage[hidelinks,hypertexnames=false]{hyperref}
 \begin{document}
 
-\setnewcodekey{codedesc}{
+\newcodekey{codedesc}{
   texcs={printindex},
   texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
   emph={lbracket,rbracket,stmeta},
@@ -90,9 +91,9 @@ No assumption is made about page layout (besides ``having a margin paragraph''),
 \section{Introduction}
 
 
-This package aims at documenting both document level (i.e. final user)  and package/class level commands. It's fully implemented using \tsobj[pkg]{expl}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. 
+This package aims at documenting both document level and package/class level commands. It's fully implemented using \tsobj[pkg]{expl}, requiring just an up to date kernel. \tsobj[pkg]{scontents,listing} packages (see \cite{SCONTENTS} and \cite{listings}) are used to typeset code snippets. 
 The package \tsobj[pkg]{pifont} (see \cite{pifont}) is needed just to typeset those (open)stars, in case one wants to mark a command as (restricted) expandable. 
-\tsobj[pkg]{xcolor} (see \cite{xcolor}) is needed to switch colors, and \tsobj[pkg]{xpeekahead} (see \cite{xpeekahead}) for spacing fine tuning. The package \tsobj[pkg]{infograb} (see \cite{pkginfograb}) is also loaded, for package's documentation only (including  package's version tracking).
+\tsobj[pkg]{xcolor} (see \cite{xcolor}) is needed to switch colors, and \tsobj[pkg]{xpeekahead} (see \cite{xpeekahead}) for spacing fine tuning. The package \tsobj[pkg]{infograb} (see \cite{pkginfograb}) is loaded for package's documentation only.
  
 
 No other package/class is needed, and it should be possible to use these packages with most classes\footnote{If, by chance, a class with compatibility issues is found, just open an issue at \url{https://github.com/alceu-frigeri/codedescribe/issues} to see what can be done}, which allows to demonstrate document commands with any desired layout.
@@ -101,7 +102,7 @@ Generating an index is supported (since version 1.20, see \ref{indexing} and \re
 
 \tsobj[pkg]{codelisting} defines a few macros to display and demonstrate \LaTeX{} code (using \tsobj[pkg]{listings} and \tsobj[pkg]{scontents}), \tsobj[pkg]{codedescribe} defines a series of macros to display/enumerate macros and environments (somewhat resembling the \tsobj[pkg]{doc3} style), and \tsobj[pkg]{codelstlang} defines a series of \tsobj[pkg]{listings} \TeX{} dialects.
 
-All packages (\tsobj[pkg]{codedescribe,codelisting,codelstlang,codedescsets}) share the same version, currently: \PkgInfo{codedescribe}{version}. Those packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
+These packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
 
 \subsection{Single versus Multi-column Classes}
 This package ``can'' be used with multi-column classes, given that the \tsobj[code,no index]{\linewidth,\columnsep} are defined appropriately. \tsobj[code,no index]{\linewidth} shall defaults to text/column real width, whilst \tsobj[code,no index]{\columnsep}, if needed (2 or more columns) shall be greater than \tsobj[code,no index,sep = plus]{\marginparwidth,\marginparsep}.
@@ -114,6 +115,7 @@ It loads: \tsobj[pkg]{listings,scontents,xpeekahead},  defines an environment: \
 \subsection{Package Options}\label{codelist.pack-options}
 The following options can also be set via \tsobj[pkg]{codedescribe} options, see \ref{codedesc.pack-options}.
 \begin{describelist}{option}
+\describe{strict}{Package Warnings will be reported as Package Errors.}
 \describe{colors}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many listings' elements (used by \tsobj[code,no index]{\tscode,\tsdemo}). \tsobj[option]{black} will defaults all colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 %\describe{colors}{This is just an alias for \tsobj[option]{listing colors}}
 \describe{load xtra dialects}{(defaults to false) If set, it will load the auxiliary package \tsobj[pkg]{codelstlang} (see \ref{lstlang.pack}), which just defines a series of \tsobj[pkg]{listings} TeX dialects. }
@@ -125,6 +127,11 @@ Besides those, one can use (if the \tsobj[option]{load xtra dialects} is set):
 \begin{tsremark}
   \tsobj[option]{TeX dialects} is a comma separated list of the dialect's name, without the base language (internally it will be converted to \tsverb[key]{[dialect]TeX}).
 \end{tsremark}
+%\begin{tsremark}
+%  If the package \tsobj[pkg]{fancyvrb} is detected at load time, the \tsobj[pkg]{listings} interface for it will be automatically activated.
+%\end{tsremark}
+
+
 \end{describelist}
 For example:
 \begin{codestore}[demo.dialect]
@@ -141,7 +148,7 @@ For example:
 \tscode*[codeprefix=~,codedesc]{demo.dialect}
 
 
-\newpage
+%\newpage
 \subsection{In Memory Code Storage}
 Thanks to \tsobj[pkg]{scontents}, it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl} sequence variable.
 
@@ -270,8 +277,10 @@ This allows to customize the default colors used by \tsobj[code,no index]{\tscod
   \describe{rule}{(default: gray) Sets the rule (unused by now) base color. Note this is mixed with white, not black as the others. }
   \describe{number}{(default: gray) Sets the (small line) numbers base color. Note this is mixed with white, not black as the others. }
   \describe{brightness}{(default: 1) Sets the mixing proportion between each base color and black.}
-  \describe{default}{Sets all the above to their default value}
-  \describe{scheme}{Selects a pre-set color scheme. see below} 
+%  \describe{default}{Sets all the above to their default value}
+%  \describe{scheme}{Selects a pre-set color scheme. see below} 
+  \describe{scheme}{(Defaults to \tsobj[key]{scheme}=\tsobj[value]{default}) Selects a pre-set color scheme, see below, the default scheme sets all of the above to their default value.} 
+  
 \end{describelist*}
 
 \begin{codedescribe}[code,new=2025/12/14]{\newlistcolorscheme}
@@ -297,12 +306,15 @@ All \tsobj[code]{\tscode,\tsdemo} commands create a local group  in which the \t
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2025/05/01]{\setnewcodekey}
+\begin{codedescribe}[code,new=2025/05/01,update=2025/12/23]{\newcodekey}
 	\begin{codesyntax}%
-		\tsmacro{\setnewcodekey}{new-key,code-keys}
+		\tsmacro{\newcodekey}{new-key,code-keys}
 	\end{codesyntax}
 This will define a new key \tsobj[marg]{new-key}, which can be used with \tsobj{\tscode,\tsmergedcode,\tsdemo,\tsresult}. \tsobj[marg]{code-keys} can be any of the following ones, including other \tsobj[marg]{new-key}s. Be careful not to create a definition loop.
 \end{codedescribe}
+\begin{tsremark}
+  The old \tsobj{\setnewcodekey} is (now) an alias to this, and will raise a warning if called (deprecation).
+\end{tsremark}
 
 \begin{codedescribe}[key,new={2025/11/12}]{lststyle}
 \begin{codesyntax}% Also
@@ -363,7 +375,7 @@ These allow to redefine what a letter or other are (they correspond to the \tsob
 \begin{codesyntax} %
 	\tsobj[key]{numbers,numberstyle,firstnumber}
 \end{codesyntax}
-\tsobj[key]{numbers} possible values are \tsobj[value]{none} (default) and \tsobj[value]{left} (to add tinny numbers to the left of the listing). With \tsobj[key]{numberstyle} one can redefine the numbering style. \tsobj[key]{firstnumber} sets the numbering start, it can be any number, \tsobj[value,or]{last,auto}. It defaults to \tsobj[value]{last} (see \cite{listings} for details). 
+\tsobj[key]{numbers} possible values are \tsobj[value]{none} (package's default) and \tsobj[value]{left} (key default value, to add tinny numbers to the left of the listing). With \tsobj[key]{numberstyle} one can redefine the numbering style. \tsobj[key]{firstnumber} sets the numbering start, it can be any number, \tsobj[value,or]{last,auto}. It defaults to \tsobj[value]{last} (see \cite{listings} for details). 
 \end{codedescribe}
 
 \begin{codedescribe}[key]{stringstyle,commentstyle}
@@ -417,11 +429,12 @@ This package aims at minimizing the number of commands, being the object kind (i
 
 \begin{describelist}{key}
 \describe{nolisting}{Will suppress the \tsobj[pkg]{codelisting} package load. In case it isn't needed or another listing package will be used.}
+%\describe{fancyverb}{This will also load the package \tsobj[pkg]{fancyverb}.}
 \describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[option]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
-\describe{strict}{Package Warnings will be reported as Package Errors.}
+\describe{strict}{Package Warnings will be reported as Package Errors. This will be passed over to \tsobj[pkg]{codelisting} as well (if loaded).}
 \describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, \TeX{} sometimes thinks they are too wide, when they are not. This just sets \tsobj[code,no index]{\hfuzz} to the given value.}
-\describe{describe keys}{(defaults to \tsobj[value]{group}) This sets the way the keys \tsobj[key]{new,update,note} are listed in a \tsobj[env]{codedescribe} environment, see \ref{desc-env}. Possible values are \tsobj[value,or]{group,as is, in sequence}. By default keys are grouped together, with \tsobj[value,or]{as is, in sequence} keys will respect the used sequence. }
+\describe{describe keys}{(defaults to \tsobj[value]{grouped}) This sets the way the keys \tsobj[key]{new,update,note} are listed in a \tsobj[env]{codedescribe} environment, see \ref{desc-env}. Possible values are \tsobj[value,or]{grouped,as is}. By default keys are grouped together, with \tsobj[value,or]{as is} keys will respect the used sequence. }
 
 \describe{index}{(new: 2025/12/15) This will enable the many \tsobj[key]{index} keys and set the default of some object groups to \tsobj[key,no index]{index}. This \textbf{won't load} any index package, but just change some objects' default behaviour (see \ref{indexing} and \ref{obj-type-def}). If not set, all \tsobj[key]{index} keys will be silently ignored.}
 
@@ -434,9 +447,12 @@ This package aims at minimizing the number of commands, being the object kind (i
 \begin{tsremark}
    In case of an unknown \tsobj[option]{label set}, an error will be risen, and all known sets will be listed in the log file and terminal.
 \end{tsremark}
-\begin{tsremark}
-  The option \tsobj[option]{colors} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
-\end{tsremark}
+%\begin{tsremark}
+%  The option \tsobj[option]{colors} doesn't affect \tsobj[pkg]{codelisting} / \tsobj[pkg]{listings} colors.
+%\end{tsremark}
+%\begin{tsremark}
+%  If the package \tsobj[pkg]{fancyvrb} is detected at load time, the \tsobj[pkg]{listings} interface (if loaded) for it will be automatically activated.
+%\end{tsremark}
 
 \end{describelist}
 
@@ -471,18 +487,19 @@ This package offers four such auxiliary commands, for some common cases.
 \end{codesyntax}
 \tsobj[marg]{item} is the item (from \tsobj{\tsobj} or \tsobj[env,or]{codedescribe,describelist}) to be indexed. \tsobj[marg]{group} corresponds to the key \tsobj[key]{index group}. \tsobj[marg]{prefix} corresponds to the key \tsobj[key]{index prefix}. Finally, \tsobj[marg]{name} (which corresponds to the key \tsobj[key]{index name}) if not empty, will be enclosed in brackets, for instance, \tsverb[code]{\tsobj[index name={some},code]{\cmd}} will result in (with everything at its default value) \tsverb[code]{\indexfmtcsrawat{[some]}{}{}{\cmd}}. This allows to avoid testing the first parameter value, and use it `as is': If the \tsobj[key]{index name} isn't set, \tsobj[marg]{name} will be empty.
 
+\end{codedescribe}
 \tsobj[code,no index]{\indexfmtraw{name}{prefix}{group}{item}} will ignore the 2nd and 3rd parameters, being equivalent to \tsobj[code,no index]{\index{item}} (or \tsobj[code,no index]{\index[name]{item}}).
 
 \tsobj[code,no index]{\indexfmtcsraw{name}{prefix}{group}{\cmd}} will also ignore the 2nd and 3rd parameters, being equivalent to \tsobj[code,no index]{\index{\string\cmd}} (or \tsobj[code,no index]{\index[name]{\string\cmd}}). The primitive \tsobj{\string} will precede the \tsobj[marg]{item} (if it is a command).
 
 The other two commands, \tsobj[code,no index]{\indexfmtrawat,\indexfmtcsrawat},  will create index entries as \textbf{\tsmeta{prefix}\tsmeta{item}@\tsmeta{group}!\tsmeta{item}}. The backslash, if any, is removed from the first \tsmeta{item} (preceding the @) in \tsobj[code,no index]{\indexfmtcsrawat}.
-\end{codedescribe}
+
 \begin{tsremark}
   The actual characters specifiers can be changed with the command \tsobj{\indexcodesetup}.
 \end{tsremark}
-\begin{tsremark}
-When defining an Object Type (see \ref{obj-type-def}) only \tsobj[meta]{group,name} can be preset. \tsobj[meta]{prefix} can only be set when calling \tsobj[code,no index]{\tsobj} or using the \tsobj[env,no index,or]{codedescribe,describelist} environments.
-\end{tsremark}
+%\begin{tsremark}
+%When defining an Object Type (see \ref{obj-type-def}) only \tsobj[meta]{group,name} can be preset. \tsobj[meta]{prefix} can only be set when calling \tsobj[code,no index]{\tsobj} or using the \tsobj[env,no index,or]{codedescribe,describelist} environments.
+%\end{tsremark}
 \begin{tsremark}
 Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg,or]{imakeidx,splitindex}, which allows multiple indexes. Don't use/set \tsobj[key]{index name}, if you aren't using a multi-index aware package.
 \end{tsremark}
@@ -491,17 +508,28 @@ Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg
 %\end{tsremark}
 
 
+\begin{codedescribe}[code,new=2025/12/23]{\indexgenkey}
+  \begin{codesyntax}
+    \tsmacro{\indexgenkey}{tl-var,terms-list}
+  \end{codesyntax}
+  This auxiliary command will construct part of an index key from \tsobj[marg]{terms-list}. All terms from \tsobj[marg]{terms-list} will be concatenate using a \emph{level} separator (normally a \emph{\textbf{!}}) and the result assigned to \tsobj[marg]{tl-var}.  The actual \emph{level} character being used can be changed with \tsobj{\indexcodesetup}. For example, \tsobj[code,no index]{\indexgenkey{\partkey}{a,b,c}} will result in \tsobj[code,no index]{\partkey} having \tsobj[value]{a!b!c}, or \tsobj[code,no index]{\indexgenkey{\partkey}{a,b,c,{}}} will result in \tsobj[code,no index]{\partkey} having \tsobj[value]{a!b!c!}.
+\end{codedescribe}
+\begin{tsremark}
+  \tsobj[marg]{terms-list} will be fully expanded before being processed.
+\end{tsremark}
+
+
 \begin{codedescribe}[code,new=2025/12/21]{\indexcodesetup}
   \begin{codesyntax}
-    \tsmacro{\indexcodesetup}{index-keys}
+    \tsmacro{\indexcodesetup}{index-specs}
   \end{codesyntax}
-  This customize some aspects of the index code. \tsobj[marg]{index-keys} can be any combination of
+  This customize some aspects of the index code. \tsobj[marg]{index-specs} can be any combination of
 \end{codedescribe}
 \begin{describelist*}{keys}
   \describe{index cmd}{In case the index package being used defines a distinct index command. This set's the actual index command, defaults to \tsobj[code,no index]{\index},  used by the provided auxiliary index commands (see above). The given command must adhere to the same syntax of the original \tsobj[code,no index]{\index} command (see \cite{makeindex}). }
-\describe{index specs}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} character specifiers. This expects a set of 4 parameters (from \tsobj[pkg]{makefile}: \tsobj[key]{level, actual, encap, quote}). Its default is \tsobj[key]{index specs} = \tsverb[value]{{{!}{@}{|}{"}}}}
-\describe{index specs oc}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} open/close character specifiers. It expects a set of 4 parameters (from \tsobj[pkg]{makefile}: \tsobj[key]{arg open, arg close, range open, range close}). Its default is \tsobj[key]{index specs oc} =  \tsverb[value]{ {{\{}{\}}{(}{)}} }. This isn't used, and is just a place holder in case further customization (indexes) is needed. }
-\describe{index specs others}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} others  specifiers. It expects a set of 3 parameters (from \tsobj[pkg]{makefile}: \tsobj[key]{escape, page compositor, index command}). Its default is \tsobj[key]{index specs others} = \tsverb[value]{{{\\}{-}{\indexentry}}}. This isn't used, and is just a place holder in case further customization (indexes) is needed. }
+\describe{index specs}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} character specifiers. This expects a set of 4 parameters (from \tsobj[pkg]{makeindex}: \tsobj[key]{level, actual, encap, quote}). Its default is \tsobj[key]{index specs} = \tsverb[value]{{{!}{@}{|}{"}}}}
+\describe{index specs oc}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} open/close character specifiers. It expects a set of 4 parameters (from \tsobj[pkg]{makeindex}: \tsobj[key]{arg open, arg close, range open, range close}). Its default is \tsobj[key]{index specs oc} =  \tsverb[value]{ {{\{}{\}}{(}{)}} }. This isn't used, and is just a place holder in case further customization (indexes) is needed. }
+\describe{index specs others}{This allows to change \tsobj[pkg]{makeindex} \cite{makeindex} others  specifiers. It expects a set of 3 parameters (from \tsobj[pkg]{makeindex}: \tsobj[key]{escape, page compositor, index command}). Its default is \tsobj[key]{index specs others} = \tsverb[value]{{{\\}{-}{\indexentry}}}. This isn't used, and is just a place holder in case further customization (indexes) is needed. }
 \end{describelist*}
 \begin{tsremark}
   This can only be used in the document preamble. It will raise an error, if used after \tsobj[code,no index]{\begin{document}} .
@@ -510,9 +538,22 @@ Of course, \tsobj[marg]{name} is useful only in case of packages like \tsobj[pkg
 %  \tsobj[key,no index]{index cmd} assignment will be delayed until \tsobj[code,no index]{\begin{document}}. It will be ignored, and raise an error, if the given command doesn't exist.
 %\end{tsremark}
 
+
+\subsubsection{Index Keys}\label{index keys}
+When defining object types (see \ref{obj-types}) or typesetting (see \ref{desc-env} and \ref{ts-commands}) the following keys can be used:
+\begin{describelist*}{key}
+  \describe {no index} {To NOT include the items in the default index.}
+  \describe {index} {To include the items in the default index.}
+  \describe {index name} {Sets  \tsobj[meta]{name} for those items.}
+  \describe {index group} {Sets \tsobj[meta]{group} for those items.}
+  \describe {index prefix} {Sets \tsobj[meta]{prefix} for those items.}  
+  \describe {index gen group} {Sets \tsobj[meta]{group}, using \tsobj{\indexgenkey}, for those items.}
+  \describe {index gen prefix} {Sets \tsobj[meta]{prefix}, using \tsobj{\indexgenkey}, for those items.}  
+\end{describelist*}
+
 \subsection{Object Type keys}\label{obj-type-def}
 
-\tsobj[arg]{obj-types} defines the applied format, which is defined in terms of \tsobj[arg]{format-groups}. Both define the formatting function, font shape, bracketing, etc. to be applied. When using a \tsobj[arg]{obj-type}, first the associated \tsobj[arg]{format-group} is applied, then the particular (if any) object format is applied.
+\tsobj[arg]{obj-types} defines the applied format: font shape, bracketing, etc. to be applied. When using an \tsobj[arg]{obj-type}, first the associated \tsobj[arg]{format-group} is applied, then the particular (if any) object format is applied.
 
 \subsubsection{Format Keys}\label{format-keys}
 Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[arg]{format-groups,obj-types} (see \ref{format-custom}):
@@ -521,7 +562,7 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
   \describe {xmeta} {Sets base format to typeset *verbatim* between angles.}
   \describe {verb} {Sets base format to typeset *verbatim*.}
   \describe {xverb} {Sets base format to typeset *verbatim*, no spaces.}
-  \describe {code} {Sets base format to typeset *verbatim*, no spaces, replacing a TF by \underline{TF}.}
+  \describe {code} {Sets base format to typeset *verbatim*, no spaces, replacing a TF by {\slshape\underline{TF}}.}
   \describe {nofmt} {In case of a redefinition, removes the base formatting. Note that, it only makes sense if applied at the same level, meaning, if the format was originally defined at group formatting level, it only can be removed at this level.}
   \describe {format} {Sets the base format. Possible values: \tsobj[values,or]{meta,xmeta,verb,xverb,code,nofmt,none}, as above.}
   \begin{tsremark}
@@ -537,7 +578,7 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
   \describe {shape preadj}{Adds a (thin) space before each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid}.}
   \describe {shape posadj}{Adds a (thin) space after each term in \tsobj{\tsobj}, see \ref{ts-commands}. Possible values: \tsobj[values,or]{none,very thin, thin, mid}.}
   \begin{tsremark}
-    These are meant for the case in which the italic or slanted shapes of the used font renders a character too close to a upright character. 
+    These are meant for the case in which the italic or slanted shapes of the used font renders a character too close to an upright character. 
   \end{tsremark}
   
   \describe {lbracket}  {Sets the left bracket (when using \tsobj{\tsargs}), see \ref{ts-commands}.}
@@ -548,17 +589,25 @@ Those are the primitive \tsobj[arg]{format-keys} used when (re)defining  \tsobj[
   \begin{tsremark}
     \tsobj[key]{font,fsize} shall receive a single command that absorbs no tokens.
   \end{tsremark}
-  \describe {no index} {To NOT include the items in the default index.}
-  \describe {index} {To include the items in the default index.}
-  \describe {index name} {This will set the index (file) name (see \ref{indexing}). }  
-  \describe {index group} {Sets the `group' for those items (see \ref{indexing}).}
-  \describe {index fmt} {Sets the index generating command (see \ref{indexing}) which shall absorb 4 parameters, like \tsobj[code,no index]{\usercmd{name}{prefix}{group}{item}}.  \tsobj[marg]{prefix} will come from the key \tsobj[key]{index prefix}, \tsobj[marg]{group} from the key \tsobj[key]{index group} and \tsobj[marg]{item} will be the item to be indexed. \tsobj[marg]{name} will come from the key \tsobj[key]{index name} (if not empty,  \tsobj[marg]{name} will be between brackets). 
-  
-  For instance, having \tsobj[key]{index fmt} = \tsverb[value]{\usercmd}, \tsverb[code]{\tsobj[index name=iname, index prefix=pre, index group=grp]{\some}} will result in
-  \tsverb[code]{\usercmd {[iname]} {pre}{grp}{\some}} being called/executed.
-  }
+%  \describe {no index} {To NOT include the items in the default index.}
+%  \describe {index} {To include the items in the default index.}
+%  \describe {index name} {This will set the index (file) name (see \ref{indexing}). }  
+%  \describe {index group} {Sets the `group' for those items (see \ref{indexing}).}
+  \describe {index fmt} {Sets the index generating command (see \ref{indexing}). }
+  \begin{tsremark}
+    Besides \tsobj[key]{index fmt} the other index keys (see \ref{index keys}) can also be used.
+  \end{tsremark}
   \begin{tsremark}[\color{red}Important:]
-    Except for \tsobj[key]{font,fsize,index fmt} all other keys will be expanded at definition time!
+    Except for \tsobj[key]{font,fsize,index fmt} all other keys will be expanded at definition time, including the others \tsobj[key,no index]{index} keys.
+  \end{tsremark}
+  \begin{tsremark}
+   The \tsobj[key]{index fmt}  command shall absorb 4 parameters, like \tsmacro{\usercmd{name}}{prefix,group,item}.  \tsobj[marg]{prefix} will come from the key \tsobj[key]{index prefix}, \tsobj[marg]{group} from the key \tsobj[key]{index group} and \tsobj[marg]{item} will be the item to be indexed. \tsobj[marg]{name} will come from the key \tsobj[key]{index name} (if not empty,  \tsobj[marg]{name} will be between brackets). 
+  
+  For instance, having \tsobj[key]{index fmt} = \tsverb[code,no index]{\usercmd}, 
+  \tsobj[code,no index]{\tsobj} 
+  \tsverb[oarg]{[index name=iname, index prefix=pre, index group=grp]}
+  \tsverb[marg]{{\some}} will result in the execution of 
+  \tsverb[code]{\usercmd {[iname]} {pre}{grp}{\some}}.
   \end{tsremark}
 \end{describelist*}
 
@@ -657,15 +706,15 @@ This allows to customize the default colors used by the many object types and fo
 \begin{describelist*}{keys}
   \describe{error}{(default: red) Sets the error base color }
   \describe{verb}{(default: black) Sets the verb base color}
-  \describe{args}{(default: gray) Sets the args base color}
+  \describe{args}{(default: white) Sets the args base color}
   \describe{code}{(default: blue) Sets the code base color}
   \describe{keys}{(default: teal) Sets the keys base color}
   \describe{values}{(default: green) Sets the values base color}
   \describe{env}{(default: green) Sets the env base color}
   \describe{pack}{(default: green) Sets the pack base color}
   \describe{brightness}{(default: 1) Sets the mixing proportion between each base color and black.}
-  \describe{default}{Sets all the above to their default value}
-  \describe{scheme}{(no default) Selects a pre-set color scheme. see below} 
+%  \describe{default}{Sets all the above to their default value}
+  \describe{scheme}{(Defaults to \tsobj[key]{scheme}=\tsobj[value]{default}) Selects a pre-set color scheme, see below, the default scheme sets all of the above to their default value.} 
 \end{describelist*}
 
 \begin{codedescribe}[code,new=2025/12/14]{\newcolorscheme}
@@ -682,15 +731,13 @@ This creates/defines a \tsobj[marg]{new-scheme} (\tsobj[marg]{color-key-list} as
 The following commands allows to customize the many `labels' in use, in particular the auxiliary package \tsobj[pkg]{codedescsets} holds a few locale sets, the user is invited to submit translations for a specific case/language via a PR (Push Request) at \url{https://github.com/alceu-frigeri/codedescribe}
 
 
-\begin{codedescribe}[code,new=2025/11/22]{\setcodelabels,\newlabelset,\selectlabelset}\label{labelset}
+\begin{codedescribe}[code,new=2025/11/22]{\setcodelabels}\label{labelset}
 \begin{codesyntax} %
 	\tsmacro{\setcodelabels}{labels-list}
-	\tsmacro{\newlabelset}{lang,labels-list}
-	\tsmacro{\selectlabelset}{lang}
+%	\tsmacro{\newlabelset}{lang,labels-list}
+%	\tsmacro{\selectlabelset}{lang}
 \end{codesyntax}
 \tsobj{\setcodelabels} allows to change the many `labels' used (like `updated' in the \tsobj[env]{codedescribe} environment). See below for a complete list of possible labels.%, it can be used at any time, allowing to change those labels mid text.
-
-\tsobj{\newlabelset} will create a label's set (named as \tsobj[marg]{lang}) for later use, while \tsobj{\selectlabelset} will select (activate) the given set. All those commands can be used at any time.
 \end{codedescribe}
 
 The \tsobj[marg]{labels-list} can be any combination of:
@@ -701,18 +748,33 @@ The \tsobj[marg]{labels-list} can be any combination of:
   \describe{and}{It set's the `and' label used by \tsobj{\tsobj} (hint: last item separator).}
   \describe{or}{It set's the `or' label used by \tsobj{\tsobj} (hint: last item separator).}
   \describe{months}{It set's the month list used by \tsobj{\tsdate}, see \ref{aux-commands}. NB.: it expects a list of names starting at `January' and ending at `December'.}
+  \describe{label set}{Selects a given set. No default. see below.}
 \end{describelist*}
-\begin{tsremark}
-  \tsobj{\newlabelset} is used in the  auxiliary package \tsobj[pkg]{codedescsets} to pre-define some sets, which can then be used as a package option, see \ref{codedesc.pack-options}.
-\end{tsremark}
 
 \begin{tsremark}
   The given \tsobj[marg]{labels-list} doesn't need to be complete, though, only the given labels will be changed.
 \end{tsremark}
+\begin{tsremark}
+  The old \tsobj[code,no index]{\selectlabelset{lang}} is (now) an alias to \tsverb{\setcodelabels {label set=lang}}, and will raise a warning if called (deprecation).
+\end{tsremark}
 
+
+
+\begin{codedescribe}[code,new=2025/11/22]{\newlabelset}
+\begin{codesyntax} %
+	\tsmacro{\newlabelset}{lang,labels-list}
+\end{codesyntax}
+This creates/defines a new label's set (named as \tsobj[marg]{lang}), \tsobj[marg]{labels-list} as above, which can be later used as 
+\tsverb[code,no index]{\setcodelabels {label set=lang}}
+\end{codedescribe}
+\begin{tsremark}
+  \tsobj{\newlabelset} is used in the  auxiliary package \tsobj[pkg]{codedescsets} to pre-define some sets, which can then be used as a package option, see \ref{codedesc.pack-options}.
+\end{tsremark}
 \begin{tsremark}
   \tsobj{\newlabelset} can be used to redefine a given set, though, if doing so, one has to provide all labels. The old (if any) definitions will be erased. No warnings given.
 \end{tsremark}
+
+
 
 
 For example, this sets a new label set for German. In fact, since this is defined in the package \tsobj[pkg]{codedescsets} this label set can be used when loading this package, see \ref{codedesc.pack-options}.
@@ -746,12 +808,15 @@ For example, this sets a new label set for German. In fact, since this is define
 \ldots
 \tsmacro{\end{codedescribe}}{}
 \end{codesyntax}
-This is the main environment to describe \tsobj[env,comma,no index]{Commands, Variables, Environments, etc.} \tsobj[marg]{csv-list} items will be listed  in the left margin. The \tsobj[env]{codesyntax} will be attached to it's right, and the rest of the text will be below them, with the usual text width.   The optional \tsobj[oarg]{obj-keys} defaults to just \tsobj[key]{code}, it can be any object type as defined at \ref{obj-types} (and \ref{format-custom}), besides the following:
+This is the main environment to describe \tsobj[env,comma,no index]{Commands, Variables, Environments, etc.} \tsobj[marg]{csv-list} items will be listed  in the left margin. The \tsobj[env]{codesyntax} will be attached to it's right, and the rest of the text will be below them, with the usual text width.   The optional \tsobj[oarg]{obj-keys} defaults to just \tsobj[key]{code}, it can be any object type as defined at \ref{obj-types} (and \ref{format-custom}), index keys (see \ref{index keys}) or the following:
 \end{codedescribe}
 \begin{describelist*}{key}
   \describe{new}{To add a \emph{new} line.}
   \describe{update}{To add an \emph{updated} line.}
   \describe{note}{To add a \emph{NB} line.}
+  \describe {keys seq} {Possible values are \tsobj[value,or]{grouped,as is}. By default the keys \tsobj[key]{new,update,note} are grouped together, first all \tsobj[key,no index]{new} keys, then all \tsobj[key,no index]{update} keys and lastly all \tsobj[key,no index]{note} keys. With \tsobj[value,or]{as is} keys will respect the used sequence. The default can be changed with the package option \tsobj[option,no index]{describe keys}, see \ref{codedesc.pack-options}.}
+%  \describe {as is} {The keys \tsobj[key]{new,update,note} will be listed in the sequence they appear.}
+%  \describe {in sequence} {This is an alias to \tsobj[key]{as is}.}
   \describe{rulecolor}{For instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will suppress the rules.}
   \describe{EXP}{A star \ding{72} will be added to all items, signaling the commands are fully expandable.}
   \describe{rEXP}{A hollow star \ding{73} will be added to all items, signaling the commands are restricted expandable.}
@@ -763,21 +828,18 @@ This is the main environment to describe \tsobj[env,comma,no index]{Commands, Va
     The keys \tsobj[key]{TF,noTF,pTF,nopTF} are just `sugar syntax' (to reduce a few keyboard strokes). They only make sense when documenting \tsobj[pkg]{expl} commands. In the case of \tsobj[key]{noTF,nopTF} the base name is also listed, otherwise it isn't. The \tsobj[key]{pTF,nopTF} also implies \tsobj[key]{EXP} since the predicate variants must be expandable.
   \end{tsremark}
   \describe {force margin} {If set, \tsobj[meta]{csv-list} items will be listed in the margin, regardless of their width.}
-  \describe {no index} {To NOT include the items in the default index}
-  \describe {index} {To include the items in the default index}
-  \describe {index name} {Sets  \tsobj[meta]{name} for those items (see \ref{indexing}).}
-  \describe {index group} {Sets  \tsobj[meta]{group} for those items (see \ref{indexing}).}
-  \describe {index prefix} {Sets  \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
+%  \describe {index group} {Sets  \tsobj[meta]{group} for those items (see \ref{indexing}).}
+%  \describe {index prefix} {Sets  \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
 \end{describelist*}
 \begin{tsremark}
 The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
 \end{tsremark}
-\begin{tsremark}
-  If using one of these keys the user must also provide an object type. \tsobj[key]{code} is the solely default IF nothing else is provided.
-\end{tsremark}
-\begin{tsremark}
-  The default behaviour, when using \tsobj[key,no index,or]{new,update,note}, is that they will be grouped, first all \tsobj[key,no index]{new} keys, then all \tsobj[key,no index]{update} keys and lastly all \tsobj[key,no index]{note} keys. This can be changed with the package option \tsobj[option]{describe keys} (see \ref{codedesc.pack-options}). If set to \tsobj[value,or]{as is, in sequence}, those keys will be listed in the order of appearance.
-\end{tsremark}
+%\begin{tsremark}
+%  If using one of these keys the user must also provide an object type. \tsobj[key]{code} is the solely default IF nothing else is provided.
+%\end{tsremark}
+%\begin{tsremark}
+%  The default behaviour, when using \tsobj[key,no index,or]{new,update,note}, is that they will be grouped, first all \tsobj[key,no index]{new} keys, then all \tsobj[key,no index]{update} keys and lastly all \tsobj[key,no index]{note} keys. This can be changed with the package option \tsobj[option]{describe keys} (see \ref{codedesc.pack-options}). If set to \tsobj[value,or]{as is, in sequence}, those keys will be listed in the order of appearance.
+%\end{tsremark}
 \begin{tsremark}[\color{red} Attention:]
   The \tsobj[env]{codedescribe} environment `acts' as a single block! That assures the margin block, the \tsobj[env]{codesyntax} environment (block) and the following text (inside the \tsobj[env]{codedescribe} environment) will always stay in the same page.
 \end{tsremark}
@@ -831,7 +893,7 @@ For example, the code for  \tsobj[env]{codedescribe} (previous entry) is:
 \ldots
 \tsmacro{\end{codesyntax*}}{}
 \end{codesyntax}
-The \tsobj[env]{codesyntax*} is a true \emph{verbatim} environment (also derived from \tsobj[pkg]{listings} package, see \cite{listings}). \tsobj[oarg]{code-keys} can be any valid code key from \ref{code-keys}, and syntax highlight will be applied (see \ref{codelist}). The background color will always be white, whilst line numbering will be suppressed. For a non \emph{verbatim} alternative, see \tsobj[env]{codesyntax} above.
+The \tsobj[env]{codesyntax*} is a true \emph{verbatim} environment (derived from \tsobj[pkg]{listings} package, see \cite{listings}). \tsobj[oarg]{code-keys} can be any valid code key from \ref{code-keys}, and syntax highlight will be applied (see \ref{codelist}). The background color will always be white, whilst line numbering will be suppressed. For a non \emph{verbatim} alternative, see \tsobj[env]{codesyntax} above.
 \end{codedescribe}
 
 \begin{tsremark}
@@ -856,14 +918,14 @@ an error will be raised if used outside a \tsobj[env]{codedescribe} environment,
 \tsmacro{\end{describelist}}{}
   \end{codesyntax}
 This sets a \tsobj[env]{description} like `list'. In the non-star version the \tsobj[marg]{items-name} will be typeset on the margin. In the star version, \tsobj[marg]{item-description} will be indented by \tsobj[oarg]{item-indent} (defaults to: 20mm).
-\tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}, it can be any object from \ref{obj-types} (or \ref{format-custom}) and the following keys:
-\begin{describelist*}{key}
-  \describe {no index} {To NOT include {item names} in the default index.}
-  \describe {index} {To include {item names} in the default index.}
-  \describe {index name} {Sets  \tsobj[meta]{name} for those items (see \ref{indexing}).}  
-  \describe {index group} {Sets  \tsobj[meta]{group} for those items (see \ref{indexing}).}
-  \describe {index prefix} {Sets  \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
-\end{describelist*}
+\tsobj[marg]{obj-type} defines the object-type format used to typeset \tsobj[marg]{item-name}, it can be any object from \ref{obj-types} (or \ref{format-custom}) and index keys (\ref{index keys}):
+%\begin{describelist*}{key}
+%  \describe {no index} {To NOT include {item names} in the default index.}
+%  \describe {index} {To include {item names} in the default index.}
+%  \describe {index name} {Sets  \tsobj[meta]{name} for those items (see \ref{indexing}).}  
+%  \describe {index group} {Sets  \tsobj[meta]{group} for those items (see \ref{indexing}).}
+%  \describe {index prefix} {Sets  \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
+%\end{describelist*}
 \end{codedescribe}
 
 
@@ -891,7 +953,7 @@ An error will be raised (undefined control sequence) if called outside of a \tso
 \tsmacro{\typesetobj}[obj-type]{csv-list}
 \tsmacro{\tsobj}[obj-type]{csv-list}
 \end{codesyntax}
-This is the main typesetting command, each term of \tsobj[marg]{csv-list} will be separated by a comma and formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[key]{code}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom}) and the following keys:
+This is the main typesetting command, each term of \tsobj[marg]{csv-list} will be separated by a comma and formatted as defined by \tsobj[oarg]{obj-type} (defaults to \tsobj[key]{code}). \tsobj[oarg]{obj-type} can be any object from \ref{obj-types} (or \ref{format-custom}), index keys (see \ref{index keys}) and the following keys:
 \end{codedescribe}
 
 \begin{describelist*}{key}
@@ -902,11 +964,11 @@ This is the main typesetting command, each term of \tsobj[marg]{csv-list} will b
   \describe{bnf or}{To produce a bnf style or list, like \tsobj[option,bnf or,no index]{abc,xdh,htf,hrf}.}
   \describe{meta or}{To produce a bnf style or list between angles, like \tsobj[option,meta or,no index]{abc,xdh,htf,hrf}.}
   \describe{par or}{To produce a bnf style or list between parentheses, like \tsobj[option,par or,no index]{abc,xdh,htf,hrf}.}
-  \describe {no index} {To NOT include the items in the default index.}
-  \describe {index} {To include the items in the default index.}
-  \describe {index name} {Sets  \tsobj[meta]{name} for those items (see \ref{indexing}).}
-  \describe {index group} {Sets \tsobj[meta]{group} for those items (see \ref{indexing}).}
-  \describe {index prefix} {Sets \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
+%  \describe {no index} {To NOT include the items in the default index.}
+%  \describe {index} {To include the items in the default index.}
+%  \describe {index name} {Sets  \tsobj[meta]{name} for those items (see \ref{indexing}).}
+%  \describe {index group} {Sets \tsobj[meta]{group} for those items (see \ref{indexing}).}
+%  \describe {index prefix} {Sets \tsobj[meta]{prefix} for those items (see \ref{indexing}).}  
 \end{describelist*}
 \begin{tsremark}
   If \tsobj[key,sep={and/or}]{shape preadj,shape posadj} are set (see \ref{format-keys}, a (thin) space will be added before and/or after  each term of \tsobj[marg]{csv-list}.
@@ -1055,6 +1117,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
 %\ExplSyntaxOn
 %\benchmark_toc:
 %\ExplSyntaxOff
+
 
 
 \end{document}
