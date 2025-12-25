@@ -65,7 +65,8 @@ This work has the LPPL maintenance status *maintained*.
 The Current Maintainer of this work is Alceu Frigeri
 
 -------------
-## This work consists of the files
+
+### This work consists of the files
 
 * codelisting.sty
     - set of macros to typeset and demonstrate LaTeX code
@@ -93,7 +94,8 @@ The Current Maintainer of this work is Alceu Frigeri
     - documentation in PDF format
 
 -------------
-## Change log
+
+### Change log
 * Version 1.22 (this)
   - documentation typos.
   - \setnewcodekey deprecated in favour of \newcodekey.
