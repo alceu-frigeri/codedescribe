@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.22} {2025/12/26}
+%% This is version {1.23-pre01} {2025/12/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/12/26} ,
-     version     = {1.22} ,
+     date        = {2025/12/29} ,
+     version     = {1.23-pre01} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -2346,12 +2346,6 @@
 
 
 
-%%%%%%%%%%%%%%
-%%%
-%%% Remember to keep this consistent with 
-%%% \lstnewenvironment{verbatimsc} in codelisting
-%%%
-%%%%%%%%%%%%%%
 \bool_if:NTF \l__codedesc_pckopt_loadlisting_bool
   {
     \lstnewenvironment{codesyntax*}[1][]
@@ -2373,26 +2367,15 @@
         
         \vcoffin_gset:Nnw \l__codedesc_syntax_coffin {\l__codedesc_syntax_wd_dim}
         \__codelist_set_options:n {#1,bckgndcolor=white,numbers=none}
-        \exp_args:Ne \lstset
-          {
-            style         =     \l__codelist_basestyle_tl,
-            alsoletter    =     {\l__codelist_alsoletter_tl},
-            alsoother     =     {\l__codelist_alsoother_tl},
-            moretexcs     =     {\l__codelist_texcsA_tl},
-            moretexcs     =[2]  {\l__codelist_texcsB_tl},
-            moretexcs     =[3]  {\l__codelist_texcsC_tl},
-            moretexcs     =[4]  {\l__codelist_texcsD_tl},
-      		  morekeywords  =     {\l__codelist_keywdA_tl},
-            morekeywords  =[2]  {\l__codelist_keywdB_tl},
-            morekeywords  =[3]  {\l__codelist_keywdC_tl},
-            morekeywords  =[4]  {\l__codelist_keywdD_tl},
-      		  emph          =     {\l__codelist_emphA_tl}, 
-            emph          =[2]  {\l__codelist_emphB_tl}, 
-            emph          =[3]  {\l__codelist_emphC_tl},
-            emph          =[4]  {\l__codelist_emphD_tl},
-      	    numbers       =     \l__codelist_numbers_tl,
-            firstnumber   =     \l__codelist_firstnumber_tl,
-          }
+        
+    %%%%%%%%%%%%%%
+    %%%
+    %%% keeping this consistent with 
+    %%% \lstnewenvironment{verbatimsc} in codelisting
+    %%%
+    %%%%%%%%%%%%%%
+        \__codelist_lstset:        
+
         \skip_vertical:n {0.5ex}
       }
       {
@@ -2658,6 +2641,143 @@
   {
     \end{tsremark}
   }
+
+
+%%%%%%%%
+%%%
+%%% Implementing active token 'short cut'
+%%% To be sure it might be a command and not some random string
+%%% no spaces or anything else allowed but:
+%%%
+%%% !:[    or !:{    ==> \tsobj
+%%% !::[   or !::{   ==> \tsargs
+%%% !![    or !!{    ==> \tsverb
+%%% !!:[    or !!:{  ==> \tsmeta
+%%%
+%%%%%%%%
+
+\cs_new:Npn \__codedesc_peek_arg:Nn #1#2
+  {
+    \peek_charcode:NTF [
+      { #1 }
+      {
+        \peek_catcode:NTF \c_group_begin_token
+          { #1 }
+          { \__codedesc_exc_hack: #2 }
+      }
+  }
+  
+\cs_new:Npn \__codedesc_exc_shortcut:
+  {
+    \peek_charcode_remove:NTF : 
+      {
+        \peek_charcode_remove:NTF :
+          {
+            \__codedesc_peek_arg:Nn \tsargs{::}
+          }
+          {
+            \__codedesc_peek_arg:Nn \tsobj{:}
+          }
+      }
+      {
+        \peek_charcode_remove:NTF !
+          {
+            \peek_charcode_remove:NTF :
+              {
+%%%                \__codedesc_peek_arg:Nn \tsmeta {\__codedesc_exc_hack: :}
+%                \peek_catcode:NTF \c_group_begin_token
+%                  { \tsmeta }
+%                  { \__codedesc_exc_hack: \__codedesc_exc_hack: : }
+                  
+                \peek_charcode_remove:NTF :
+                  {
+                    \peek_catcode:NTF \c_group_begin_token
+                      { \tsmarginnote }
+                      { \__codedesc_exc_hack: \__codedesc_exc_hack: :: }
+                  }
+                  {
+                    \peek_catcode:NTF \c_group_begin_token
+                      { \tsmeta }
+                      { \__codedesc_exc_hack: \__codedesc_exc_hack: : }
+                  }
+
+              }
+              {
+                \__codedesc_peek_arg:Nn \tsverb {\__codedesc_exc_hack:}
+              }
+          }
+          {
+            \__codedesc_exc_hack:
+          }
+      }
+  }
+
+\bool_new:N \l__codedesc_exc_was_activ_bool
+\bool_new:N \l__codedesc_tsOn_bool
+\cs_new:Npn \tsOn
+  {
+    \bool_if:NF \l__codedesc_tsOn_bool
+      {
+        \cs_set:Npn \__codedesc_exc_hack: {!}
+
+        \int_compare:nNnTF { \char_value_catcode:n { `! } } = { 13 }
+          {
+            \bool_set_true:N \l__codedesc_exc_was_activ_bool
+          }
+          {
+            \bool_set_false:N \l__codedesc_exc_was_activ_bool  %% might not be needed
+            \char_set_catcode_active:N !
+          }
+          
+       \tl_set_rescan:Nnn \l__codedesc_tmpx_tl {} {!}
+
+       \exp_args:NV \cs_if_eq:NNF \l__codedesc_tmpx_tl \__codedesc_exc_shortcut:
+          { %% some other definition
+            \exp_last_unbraced:NNV 
+              \cs_set_eq:NN \__codedesc_prev_exc: \l__codedesc_tmpx_tl
+            \bool_if:NT \l__codedesc_exc_was_activ_bool
+              {
+                \cs_if_exist:NT \__codedesc_prev_exc:
+                  { 
+                    \cs_set_eq:NN \__codedesc_exc_hack: \__codedesc_prev_exc: 
+                  }
+              }
+          }
+        \char_set_active_eq:NN ! \__codedesc_exc_shortcut:
+        \bool_set_true:N \l__codedesc_tsOn_bool
+      }
+  }
+  
+\cs_new_protected:Npn \tsOff
+  {
+    \bool_if:NT \l__codedesc_tsOn_bool
+      {
+        %% getting out
+        \cs_if_exist:NT \__codedesc_prev_exc:
+          {
+            %% restoring whatever definition was there
+            \char_set_active_eq:NN ! \__codedesc_prev_exc:
+          }
+        \bool_if:NTF \l__codedesc_exc_was_activ_bool
+          {
+            %% leaving it active in this case
+            \bool_set_false:N \l__codedesc_exc_was_activ_bool  %% might not be active next time
+          }
+          {
+            %% back as other
+            \char_set_catcode_other:N !
+          }
+        \bool_set_false:N \l__codedesc_tsOn_bool
+      }
+  }
+
+
+
+
+
+
+
+
 
 
 %%%% ARGH !!!!

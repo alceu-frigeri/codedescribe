@@ -96,6 +96,10 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ### Change log
+* Version 1.23 (next)
+  - codelist partial refaktor: code is more regular, systematic now, regarding listings.
+  - shortcuts: making `!` active, supporting `\tsobj`, `\tsargs`, `\tsverb`, `\tsmeta` and `\tsmarginnote`
+
 * Version 1.22 (this)
   - documentation typos.
   - \setnewcodekey deprecated in favour of \newcodekey.
