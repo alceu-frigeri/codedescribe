@@ -21,7 +21,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.23-pre01} {2025/12/29}
+%% This is version {1.23} {2025/12/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -63,11 +63,11 @@
 \newcodekey{codedesc}{
   texcs={printindex,ad,df},
 %  texcs={printindexB,adB,dfB},
-  texcs2={defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
+  texcs=[2]{defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
   texcs=[2]{printindexC,adC,dfC},
   emph={lbracket,rbracket,stmeta},
-  emph2={tscode,tsdemo,new,update,note,env,and,or,months,remark},
-  keywd2={oarg,arg,parg,xarg,meta,color},
+  emph=[2]{tscode,tsdemo,new,update,note,env,and,or,months,remark},
+  keywd=[2]{oarg,arg,parg,xarg,meta,color},
   keywd={codedescribe,codesyntax,codestore,tsremark},
   }
 
@@ -108,7 +108,7 @@ Generating an index is supported (since version 1.20, see \ref{indexing} and \re
 These packages are fairly stable, and given the \tsobj[meta]{obj-type} mechanism (see \ref{obj-type-def}) they can be easily extended without changing their interface.
 
 \subsection{Single versus Multi-column Classes}
-This package ``can'' be used with multi-column classes, given that the \tsobj[code,no index]{\linewidth,\columnsep} are defined appropriately. \tsobj[code,no index]{\linewidth} shall defaults to text/column real width, whilst \tsobj[code,no index]{\columnsep}, if needed (2 or more columns) shall be greater than \tsobj[code,no index,sep = plus]{\marginparwidth,\marginparsep}.
+This package ``can'' be used with multi-column classes, given that the \tsobj[code,no index]{\linewidth,\columnsep} are defined appropriately. \tsobj[code,no index]{\linewidth} shall defaults to text/column real width, whilst \tsobj[code,no index]{\columnsep}, if needed (2 or more columns), shall be greater than \tsobj[code,no index,sep = plus]{\marginparwidth,\marginparsep}.
 
 \newpage
 \section{codelisting Package}
@@ -119,6 +119,7 @@ It loads: \tsobj[pkg]{listings,scontents,xpeekahead},  defines an environment: \
 The following options can also be set via \tsobj[pkg]{codedescribe} package options, see \ref{codedesc.pack-options}.
 \begin{describelist}{option}
 \describe{strict}{Package Warnings will be reported as Package Errors.}
+\describe{suppress deprecated}{Suppress the messages associated with deprecated commands/keys.}
 \describe{colors}{Possible values: \tsobj[option]{black,default,brighter, darker}. This will adjust the initial color configuration for the many listings' elements (used by \tsobj[code,no index]{\tscode,\tsdemo}). \tsobj[option]{black} will defaults all colors to black.  \tsobj[option]{default, brighter, darker} are roughly the same color scheme. The \tsobj[option]{default} scheme is the one used in this document. With  \tsobj[option]{brighter} the colors are brighter than the default, and with \tsobj[option]{darker} the colors will be darker, but not black.}
 %\describe{colors}{This is just an alias for \tsobj[option]{listing colors}}
 \describe{load xtra dialects}{(defaults to false) If set, it will load the auxiliary package \tsobj[pkg]{codelstlang} (see \ref{lstlang.pack}), which just defines a series of \tsobj[pkg]{listings} TeX dialects. }
@@ -154,7 +155,7 @@ For example:
 
 %\newpage
 \subsection{In Memory Code Storage}
-Thanks to \tsobj[pkg]{scontents}, it's possible to store \LaTeX{} code snippets in a \tsobj[pkg]{expl} sequence variable.
+Thanks to \tsobj[pkg]{scontents}, it's possible to store \LaTeX{} code snippets in an \tsobj[pkg]{expl} sequence variable.
 
 
 \begin{codestore}[store-colon]
@@ -203,7 +204,7 @@ This environment is an alias to \tsobj[env,no index]{scontents} environment (fro
 
 
 \begin{codedescribe}[code,update=2024/01/06,update=2025/04/29]{\tscode*,\tsdemo*,\tsresult*}
-	\begin{codesyntax}%
+\begin{codesyntax}%
 		\tsmacro{\tscode*}[code-keys]{st-name}\tsargs[oarg]{index}
 		\tsmacro{\tsdemo*}[code-keys]{st-name}\tsargs[oarg]{index}
 		\tsmacro{\tsresult*}[code-keys]{st-name}\tsargs[oarg]{index}
@@ -442,7 +443,7 @@ Sets the base font style used when typesetting the `code demo', default being \t
 \newpage
 \section{codedescribe Package}
 
-This package aims at minimizing the number of commands, being the object kind (if a macro, or environment, or variable, or key ...) a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
+This package aims at minimizing the number of commands, being the object kind (if a command, environment, key etc.) a parameter, allowing for a simple extension mechanism: other object types can be easily introduced without having to change, or add commands.
 
 \subsection{Package Options}\label{codedesc.pack-options}
 
@@ -451,8 +452,10 @@ This package aims at minimizing the number of commands, being the object kind (i
 %\describe{fancyverb}{This will also load the package \tsobj[pkg]{fancyverb}.}
 \describe{label set}{(new: 2025/11/22) This allows to pre-select a label set, see \ref{labelset}. Currently, the possible values are \tsobj[option]{english,german,french}, the ones present in the auxiliary package \tsobj[pkg]{codedescsets}.}
 \describe{base skip}{Changes the base skip, all skips (used by the environments at \ref{desc-env}) are scaled up from this. It defaults to the font size at load time.}
-\describe{strict}{Package Warnings will be reported as Package Errors. This will be passed over to \tsobj[pkg]{codelisting} as well (if loaded).}
+\describe{strict}{Package Warnings will be reported as Package Errors. This will be passed over to \tsobj[pkg]{codelisting} as well.}
+\describe{suppress deprecated}{(new: 2025/12/30) Suppress the messages associated with deprecated commands/keys. This will be passed over to \tsobj[pkg]{codelisting} as well.}
 \describe{silence}{(new: 2025/11/22, defaults to 18.89999pt) This will suppress some annoying bad boxes warnings. Given the way environments at \ref{desc-env} are defined, with \tsobj[pkg]{expl} coffins, \TeX{} sometimes thinks they are too wide, when they are not. This just sets \tsobj[code,no index]{\hfuzz} to the given value.}
+
 \describe{describe keys}{(defaults to \tsobj[value]{grouped}) This sets the way the keys \tsobj[key]{new,update,note} are listed in a \tsobj[env]{codedescribe} environment, see \ref{desc-env}. Possible values are \tsobj[value,or]{grouped,as is}. By default keys are grouped together, with \tsobj[value,or]{as is} keys will respect the used sequence. }
 
 \describe{index}{(new: 2025/12/15) This will enable the many \tsobj[key]{index} keys and set the default of some object groups to \tsobj[key,no index]{index}. This \textbf{won't load} any index package, but just change some objects' default behaviour (see \ref{indexing} and \ref{obj-type-def}). If not set, all \tsobj[key]{index} keys will be silently ignored.}
@@ -1043,7 +1046,7 @@ Typesets a small note at the margin.
 
 
 \subsection{Shortcuts (experimental)}\label{activ-tokens}
-This is marked as experimental because the actual chosen short cuts might change, for instance, if it crashes with some other package. As of now, the current implementation tries to reduce any side effect, only kicking in if, and only if, one of the given patterns is found. Moreover, once deactivated any previous code is fully restored. 
+This is marked as experimental because the actual chosen short cuts might change, for instance, if it crashes badly with some other package. As of now, the current implementation tries to minimize any side effect, only kicking in if, and only if, one of the given patterns is found. Moreover, once deactivated, \tsobj{\tsOff}, any previous code is fully restored. 
 %lets see !:{\code,\cmd} !::[parg]{arg,arg2}
 \begin{codedescribe}[code]{\tsOn,\tsOff}
 \begin{codesyntax}
@@ -1052,7 +1055,10 @@ This is marked as experimental because the actual chosen short cuts might change
 \end{codesyntax}
   This will switch the `shortcuts' on and off  (active character, see below). Currently, only the character `!' is affected. \tsobj{\tsOn} preserves its status (if active or not, and related code, if any), so that \tsobj{\tsOff} can restore its full definition and status.
 \begin{tsremark}
-\tsobj{\tsOn} won't try to patch the current (if any) active definition of `!', but just save it (to be restored by \tsobj{\tsOff}), before setting its own code. Moreover, whilst active, if the use don't fit any of the given patterns, the previous active code (if any, and active) will be executed. Meaning, if `!' was already active (by other package) and it's used, but not according the following patterns, the previous, active, behaviour will be preserved.
+\tsobj{\tsOn} won't try to patch the current (if any) active definition of `!', but just save it (to be restored by \tsobj{\tsOff}), before setting its own code. Moreover, whilst active, if the use don't fit any of the given patterns (below), the previous active code (if any, and active) will be executed, or just `!' if it wasn't active.
+\end{tsremark}
+\begin{tsremark}
+  If `!' already had an associated code, a warning will be raised, showing the previous code.
 \end{tsremark}
 \end{codedescribe}
 
@@ -1067,10 +1073,10 @@ This is marked as experimental because the actual chosen short cuts might change
   Once active (\tsobj{\tsOn}), \tsobj{!:} is a shortcut for \tsobj{\tsobj}, including it's optional parameter. Same for \tsobj{!::} (\tsobj{\tsargs}), and the others.
 \end{codedescribe}
 \begin{tsremark}
-To reduce undesirable side effects, no space (or any other character besides the ones shown) is allowed between the first `!' and either the `[' or `\{', for instance \tsobj{!!:{some}} will typeset \tsmeta{some}, but  \tsverb{!! :{some}} or \tsverb{!!: {some}} or \tsverb{!!:some} won't (and the punctuation characters will work as before, active or not).
+To reduce undesirable side effects, no space (or any other character besides the ones shown) is allowed between the first `!' and either the `[' or `\{', for instance \tsobj{!!:{some}} will typeset \tsmeta{some}, but  not \tsverb{!! :{some}} or \tsverb{!!: {some}} or \tsverb{!!:some}.
 \end{tsremark}
 \begin{tsremark}
-  If none of these patterns are recognized it will either leave the `!' character or execute it previous (if any) code (if it was active).
+  If none of these patterns are recognized it will either leave the `!' character or execute its previous code (if it was active).
 \end{tsremark}
 
 
@@ -1112,7 +1118,7 @@ This is the \tsobj[env,no index]{abstract} environment from the \tsobj[pkg]{arti
 This provides the current date (in Month Year format).
 \end{codedescribe}
 
-
+\newpage
 \section{codelstlang Package}\label{lstlang.pack}
 This is an auxiliary package (which can be used on its own). It assumes the package \tsobj[pkg]{listings} was already loaded, and just defines the following \TeX{} dialects, all of them derived from \tsobj[pkg]{listings} \tsverb[key]{[LaTeX]TeX}:
 \begin{describelist}{key,no index}

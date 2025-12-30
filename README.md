@@ -96,11 +96,12 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ### Change log
-* Version 1.23 (next)
-  - codelist partial refaktor: code is more regular, systematic now, regarding listings.
+* Version 1.23 (this)
+  - codelist partial refaktor: code is more regular, systematic now, regarding listings. 
+    some keys got deprecated.
   - shortcuts: making `!` active, supporting `\tsobj`, `\tsargs`, `\tsverb`, `\tsmeta` and `\tsmarginnote`
 
-* Version 1.22 (this)
+* Version 1.22
   - documentation typos.
   - \setnewcodekey deprecated in favour of \newcodekey.
   - \selectlabelset deprecated in favour of \setcodelabels

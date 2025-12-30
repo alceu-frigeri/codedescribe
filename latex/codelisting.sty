@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.23-pre01} {2025/12/29}
+%% This is version {1.23} {2025/12/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codelisting} ,
      prefix      = {codelist} ,
-     date        = {2025/12/29} ,
-     version     = {1.23-pre01} ,
+     date        = {2025/12/30} ,
+     version     = {1.23} ,
      description = {LaTeX Code Listing}
   }
 %%%%%%%
@@ -93,8 +93,15 @@
     strict .usage:n = load ,
     strict .code:n  =
       {
-        \msg_redirect_module:nnn {codelist} { warning } { error }  
-      } 
+        \msg_redirect_module:nnn { codelist / warnings } { warning } { error }  
+      } ,
+
+    suppress~ deprecated .usage:n                 = load ,
+    suppress~ deprecated .code:n                  = 
+      { 
+        \msg_redirect_module:nnn { codelist / deprecated } { warning } { none }  
+      } ,
+      
   }
 \ProcessKeyOptions [codelisting ]
 
@@ -168,16 +175,16 @@
   }
 
 
-\msg_new:nnnn {codelist} {invalid key}
-  {
-    (#1)~Key (#2) ~not~defined!
-  }
-  {
-    You~tried~to~use~a~non~defined~key:#2.
-    ~Error~Code~ ID:<#1>.
-  }
+%\msg_new:nnnn {codelist} {invalid key}
+%  {
+%    (#1)~Key (#2) ~not~defined!
+%  }
+%  {
+%    You~tried~to~use~a~non~defined~key:#2.
+%    ~Error~Code~ ID:<#1>.
+%  }
 
-\msg_new:nnnn {codelist / deprecated}{command}
+\msg_new:nnnn { codelist / deprecated } {command}
   {
     (#1)~The~ command~#2~ is ~being~ deprecated~ use~ #3~ instead.
   }
@@ -187,7 +194,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codelist / deprecated}{key}
+\msg_new:nnnn { codelist / deprecated } {key}
   {
     (#1)~The~ keyword~#2~ is ~being~ deprecated~ use~ #3~ instead.
   }
@@ -204,7 +211,7 @@
 \dim_set:Nn\l__codelist_org_parindent_dim{\parindent}
 
 
-\msg_redirect_module:nnn {codelist / deprecated} {warning} {none}
+%%\msg_redirect_module:nnn { codelist / deprecated } {warning} {none}
 \cs_new_protected:Npn \__codelist_opt_put_right:nnwnw #1#2[#3]#4#5 \q_stop
   {
     \quark_if_nil:NTF {#4}
@@ -514,7 +521,7 @@
         set #1  #3      .value_required:n = true ,
         set #1  #3      .code:n    =  
           { 
-            \exp_not:N \msg_warning:nnnnn {codelist / deprecated}{key}
+            \exp_not:N \msg_warning:nnnnn { codelist / deprecated } {key}
               {key0 #3-A}{set #1  #3 }{set #1  = [ #3 ]{##1}}
     
             \exp_not:N \__codelist_opt_set:nNnn {#2} \exp_not:c {l__codelist_opt_ #1 _  #4 _clist}{ #3 }{##1}
@@ -524,7 +531,7 @@
          #1  #3         .value_required:n = true ,
          #1  #3         .code:n    =  
           { 
-            \exp_not:N \msg_warning:nnnnn {codelist / deprecated}{key}
+            \exp_not:N \msg_warning:nnnnn { codelist / deprecated } {key}
               {key0 #3-B}{ #1  #3 }{ #1  = [ #3 ]{##1}}
     
             \exp_not:N \__codelist_opt_put_right:nNnn {#2} \exp_not:c {l__codelist_opt_ #1 _  #4 _clist}{ #3 }{##1}
@@ -534,7 +541,7 @@
          #1  #3 style   .value_required:n = true ,
          #1  #3 style   .code:n    =  
           { 
-            \exp_not:N \msg_warning:nnnnn {codelist / deprecated}{key}
+            \exp_not:N \msg_warning:nnnnn { codelist / deprecated } {key}
               {key0 #3-C}{ #1  #3 style}{ #1 style = [ #3 ]{##1}}
     
             \exp_not:N \tl_set:Nn \exp_not:c {l__codelist_opt_ #1 style_ #4 _tl} {##1}
@@ -805,7 +812,7 @@
 
 \NewDocumentCommand \setnewcodekey {mm}
   {
-    \msg_warning:nnnnn {codelist / deprecated}{command} {codekey01}
+    \msg_warning:nnnnn { codelist / deprecated } {command} {codekey01}
       {\setnewcodekey} {\newcodekey}
     \newcodekey{#1}{#2}
   }

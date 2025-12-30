@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.23-pre01} {2025/12/29}
+%% This is version {1.23} {2025/12/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2025/12/29} ,
-     version     = {1.23-pre01} ,
+     date        = {2025/12/30} ,
+     version     = {1.23} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -64,11 +64,11 @@
     %%%%%%%
 \cs_set_eq:NN \__codedesc_note_fmt: \scriptsize
 
-\bool_new:N       \l__codedesc_pckopt_loadlisting_bool
-\bool_set_true:N  \l__codedesc_pckopt_loadlisting_bool
-\bool_new:N       \l__codedesc_pckopt_indexset_bool
+\bool_new:N       \l__codedesc_pkgopt_loadlisting_bool
+\bool_set_true:N  \l__codedesc_pkgopt_loadlisting_bool
+\bool_new:N       \l__codedesc_pkgopt_indexset_bool
 
-\tl_set:Nn        \l__codedesc_pckopt_colorsbright_tl {default}
+\tl_set:Nn        \l__codedesc_pkgopt_colorsbright_tl {default}
 
 %% instead of using kernel scratch variables.
 \tl_new:N         \l__codedesc_tmpa_tl
@@ -100,7 +100,7 @@
     %%%%%%%
     %%% This one comes first because can be called while loading.
     %%%%%%%
-\msg_new:nnnn {codedesc} {locale-err}
+\msg_new:nnnn { codedesc / errors } {locale-err}
   {
     (#1)~label~set~(#2)~not~defined! ~valid~ones:~#3
   }
@@ -145,7 +145,7 @@
     label~ set  .choice: ,
     label~ set / unknown .code:n = 
       {
-        \msg_error:nnnne {codedesc} {locale-err}
+        \msg_error:nnnne { codedesc / errors } {locale-err}
           {locale01} {#1} { \seq_use:Nn \l__codedesc_labelsets_seq {,~} } 
       } ,
 
@@ -184,7 +184,7 @@
 
 \NewDocumentCommand \selectlabelset {m}
   {
-    \msg_warning:nnnnnn {codedesc} {deprecated}
+    \msg_warning:nnnnnn { codedesc / deprecated } {deprecated}
       {label01} {command}{\selectlabelset}{\setcodelabels}
     \__codedesc_setlabels:n { label~ set = #1 }
   }
@@ -212,11 +212,11 @@
 \keys_define:nn { codedescribe }
   {
     nolisting .usage:n              = load ,
-  	nolisting .bool_set_inverse:N   = \l__codedesc_pckopt_loadlisting_bool ,
+  	nolisting .bool_set_inverse:N   = \l__codedesc_pkgopt_loadlisting_bool ,
     nolisting .default:n            = {true} ,
     
     no~ listing .usage:n            = load ,
-  	no~ listing .bool_set_inverse:N = \l__codedesc_pckopt_loadlisting_bool ,
+  	no~ listing .bool_set_inverse:N = \l__codedesc_pkgopt_loadlisting_bool ,
     no~ listing .default:n          = {true} ,
 
     codelisting .usage:n            = load ,
@@ -224,7 +224,7 @@
       { \PassOptionsToPackage{#1}{codelisting} } ,
     
     index .usage:n                  = load ,
-  	index .bool_set:N               = \l__codedesc_pckopt_indexset_bool ,
+  	index .bool_set:N               = \l__codedesc_pkgopt_indexset_bool ,
     index .default:n                = {true} ,
     
     describe~ keys .usage:n         = load ,
@@ -248,7 +248,7 @@
     colors .usage:n                 = load ,
     colors .choices:nn              =
       { default , black , brighter , darker }
-      { \tl_set_eq:NN \l__codedesc_pckopt_colorsbright_tl \l_keys_choice_tl } ,
+      { \tl_set_eq:NN \l__codedesc_pkgopt_colorsbright_tl \l_keys_choice_tl } ,
     colors .value_required:n        = true ,
 
     silence .usage:n                = load ,
@@ -259,8 +259,15 @@
     strict .usage:n                 = load ,
     strict .code:n                  = 
       { 
-        \msg_redirect_module:nnn {codedesc} { warning } { error }  
+        \msg_redirect_module:nnn { codedesc / warnings } { warning } { error }  
         \PassOptionsToPackage{strict}{codelisting}
+      } ,
+
+    suppress~ deprecated .usage:n                 = load ,
+    suppress~ deprecated .code:n                  = 
+      { 
+        \msg_redirect_module:nnn { codedesc / deprecated } { warning } { none }  
+        \PassOptionsToPackage{suppress~ deprecated}{codelisting}
       } ,
 
     info grab .usage:n              = load ,
@@ -269,7 +276,7 @@
   }
 \ProcessKeyOptions [ codedescribe ]
 
-\bool_if:NT \l__codedesc_pckopt_loadlisting_bool
+\bool_if:NT \l__codedesc_pkgopt_loadlisting_bool
   { \RequirePackage{codelisting} }
 
 
@@ -278,7 +285,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\msg_new:nnnn {codedesc} {key choice}
+\msg_new:nnnn { codedesc / errors } {key choice}
   {
     (#1)~Choice~'#2'~not~defined!~Possible~values:~ #3
   }
@@ -288,7 +295,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {format-err}
+\msg_new:nnnn { codedesc / errors } {format-err}
   {
     (#1)~Format~Key~(#2)~not~defined!
   }
@@ -297,7 +304,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {group-err}
+\msg_new:nnnn { codedesc / errors } {group-err}
   {
     (#1)~Format~group~(#2)~not~defined!
   }
@@ -306,7 +313,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {object-err}
+\msg_new:nnnn { codedesc / errors } {object-err}
   {
     (#1)~Objetc~Type~(#2)~not~defined!
   }
@@ -315,7 +322,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {nested-env}
+\msg_new:nnnn { codedesc / warnings } {nested-env}
   {
     (#1)~You~tried~to~nest~\{#2\}~inside~of~\{#3\}. ~Better~ not.
   }
@@ -324,7 +331,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {out of scope}
+\msg_new:nnnn { codedesc / warnings } {out of scope}
   {
     (#1)~You~tried~to~use~\{#2\}~outside~of~\{#3\} 
   }
@@ -334,7 +341,7 @@
   }
 
 
-\msg_new:nnnn {codedesc} {syntax dup}
+\msg_new:nnnn { codedesc / warnings } {syntax dup}
   {
     (#1)~You~declared~the~codesyntax~env~ multiple~times
   }
@@ -347,7 +354,7 @@
 %%%
 %%% #2 shall, normally, be {command} or {environment}
 %%%
-\msg_new:nnnn {codedesc} {deprecated}
+\msg_new:nnnn { codedesc / deprecated } {deprecated}
   {
     (#1)~The~ #2~ #3 ~is~ being~ deprecated~ use~ #4 ~ instead
   }
@@ -357,7 +364,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {deprecated env}
+\msg_new:nnnn { codedesc / deprecated } {deprecated env}
   {
     (#1)~The~ environment~#2~is~ being~ deprecated~ use~ #3 ~ instead
   }
@@ -367,7 +374,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {deprecated cs}
+\msg_new:nnnn { codedesc / deprecated } {deprecated cs}
   {
     (#1)~The~ command~#2~is~ being~ deprecated~ use~ #3 ~ instead
   }
@@ -378,7 +385,7 @@
   }
 
 
-\msg_new:nnnn {codedesc} {preamble only}
+\msg_new:nnnn { codedesc / errors } {preamble only}
   {
     (#1)~The~ command~#2~can~ only~be~ used~in~the~preamble
   }
@@ -388,7 +395,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {undefined cs}
+\msg_new:nnnn { codedesc / errors } {undefined cs}
   {
     (#1)~command~#2~doesn't ~ exist,~ and~ will~ be~ ignored
   }
@@ -397,7 +404,7 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn {codedesc} {cs warning}
+\msg_new:nnnn { codedesc / index } {cs warning}
   {
     (#1)~command~#2~doesn't ~ exist~ yet. This~ might~be~an~error
   }
@@ -405,6 +412,18 @@
     The~ provided~ command~ (~#2~)~isn't~ defined~ and ~ will~ be ~ ignored.
     ~Error~Code~ ID:<#1>.
   }
+
+\msg_new:nnnn { codedesc / shortcut } {pre defined}
+  {
+    (#1)~The~character~#2~had~this~definition:~ #3
+  }
+  {
+    Possible~ package~ conflict.~ 
+    The character~#2~ already~had~an~ active~ code:~#3.~~
+    And~ it~was:~#4
+    ~Error~Code~ ID:<#1>.
+  }
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -519,7 +538,7 @@
   { error , verb , args , code , keys , values , env , pack , brightness }
 
 \keys_set:nn { codedesc / color scheme } {scheme = default}
-\__codedesc_set_brightness:n \l__codedesc_pckopt_colorsbright_tl
+\__codedesc_set_brightness:n \l__codedesc_pkgopt_colorsbright_tl
 
 
 
@@ -564,7 +583,7 @@
                 \cs_set_eq:NN \__codedesc_index_cmd:wn #1 
               }
               {
-                \msg_error:nnnn {codedesc} {undefined cs}
+                \msg_error:nnnn { codedesc / errors } {undefined cs}
                   {idx01} {#1}
               }
           }
@@ -591,7 +610,7 @@
   {
     \__codedesc_if_document:TF
       {
-        \msg_error:nnnn  {codedesc} {preamble only}
+        \msg_error:nnnn  { codedesc / errors } {preamble only}
           {setup:01} {\indexcodesetup}
       }
       {
@@ -647,7 +666,7 @@
             \tl_set:Nn \l__codedesc_deftmp_font_tl { font = #1 , } 
           }
           {
-            \msg_error:nnnn {codedesc} {undefined cs}
+            \msg_error:nnnn { codedesc / errors } {undefined cs}
               {font01} {#1}
           }
       },
@@ -661,7 +680,7 @@
             \tl_set:Nn \l__codedesc_deftmp_fsize_tl { fsize = #1 , } 
           }
           {
-            \msg_error:nnnn {codedesc} {undefined cs}
+            \msg_error:nnnn { codedesc / errors } {undefined cs}
               {fsize01} {#1}
           }
       } ,
@@ -722,7 +741,7 @@
       .code:n = { \tl_clear:N \l__codedesc_deftmp_fmt_tl } ,
     format / unknown .code:n =
       {
-       \msg_error:nneee { codedesc } {key choice} {format02}{\l_keys_value_tl}{meta,~xmeta,~code,~verb,~xverb,~nofmt,~none}
+       \msg_error:nneee { codedesc / errors } {key choice} {format02}{\l_keys_value_tl}{meta,~xmeta,~code,~verb,~xverb,~nofmt,~none}
       },    
   
     slshape         .usage:n            = general ,
@@ -757,7 +776,7 @@
       .code:n = { \tl_set:Nn \l__codedesc_deftmp_shape_tl { slshape , } } ,
     shape / unknown .code:n =
       {
-       \msg_error:nneee { codedesc } {key choice} {shape02}{\l_keys_value_tl}{italic,~itshape,~slanted,~slshape,~noshape,~none}
+       \msg_error:nneee { codedesc / errors } {key choice} {shape02}{\l_keys_value_tl}{italic,~itshape,~slanted,~slshape,~noshape,~none}
       },    
       
     shape~ preadj   .usage:n            = general , 
@@ -801,12 +820,12 @@
       
   	unknown   .code:n = 
       {
-       \msg_error:nnxx { codedesc } {format-err} {format}{\l_keys_key_str}
+       \msg_error:nnxx { codedesc / errors } {format-err} {format}{\l_keys_key_str}
       },    
   }
 
 
-\bool_if:NTF \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF \l__codedesc_pkgopt_indexset_bool
   {
     \keys_define:nn { codedesc / scratch_def }
       {
@@ -858,7 +877,7 @@
             \tl_set:Nn \l__codedesc_deftmp_indxfmt_tl { index~ fmt = #1 , }               
             \cs_if_exist:NTF #1
               { }
-              { \msg_warning:nnnn {codedesc} {cs warning} {idxfmt01} {#1} }
+              { \msg_warning:nnnn { codedesc / index } {cs warning} {idxfmt01} {#1} }
           },
       }
   }
@@ -1422,7 +1441,7 @@
 %%%  This has to be 'here' so it won't generate a warning
 %%%
 %%%%%%%%
-\bool_if:NTF \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF \l__codedesc_pkgopt_indexset_bool
   {      
     \__codedesc_group_define:nn {code}    {index, index~ fmt=\__codedesc_idxfmt_csraw:nnnn}
     \__codedesc_group_define:nn {keys}    {index, index~ fmt=\__codedesc_idxfmt_raw:nnnn}
@@ -1434,7 +1453,7 @@
 
 
 
-\bool_if:NTF \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF \l__codedesc_pkgopt_indexset_bool
   {
     \cs_new_protected:Npn \__codedesc_index_if_set:n #1
       {
@@ -1473,11 +1492,11 @@
 	unknown.code:n                  = 
     {
      \cs_set:Npn \__codedesc_metacolor: { \__codecmm_color_select:n{c__codedesc_none_color} }
-     \msg_error:nnxx { codedesc } {object-err} {format}{\l_keys_key_str}
+     \msg_error:nnxx { codedesc / errors } {object-err} {format}{\l_keys_key_str}
     },    
 }
 
-\bool_if:NTF \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF \l__codedesc_pkgopt_indexset_bool
   {
     \keys_define:nn { codedesc / format }
       {
@@ -1689,7 +1708,7 @@
       {
         \cs_set:Npn \__codedesc_metacolor: 
           { \__codecmm_color_select:n{c__codedesc_none_color} }
-        \msg_error:nnxx { codedesc } {object-err} 
+        \msg_error:nnxx { codedesc / errors } {object-err} 
           {desc ~ format}{\l_keys_key_str}
       } ,    
   }
@@ -1759,7 +1778,7 @@
   	unknown.code:n          = 
       {
        \cs_set:Npn \__codedesc_metacolor: { \__codecmm_color_select:n{c__codedesc_none_color} }
-       \msg_error:nnxx { codedesc } {object-err} {list ~ format}{\l_keys_key_str}
+       \msg_error:nnxx { codedesc / errors } {object-err} {list ~ format}{\l_keys_key_str}
       } ,    
   }
 
@@ -2061,7 +2080,7 @@
 %%%  otherwise, it will execute the 2nd argument
 %%%
 %%%%%%%
-\bool_if:NTF  \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF  \l__codedesc_pkgopt_indexset_bool
   {
     \cs_new_protected:Npn \__codedesc_index_if_set:TF
       { \bool_if:NTF \l__codedesc_index_bool }
@@ -2079,7 +2098,7 @@
     
     \bool_if:NTF \l__codedesc_codedescribe_activ_bool
       {
-        \msg_warning:nnnxx {codedesc} {nested-env}
+        \msg_warning:nnnxx { codedesc / warnings } {nested-env}
           {syntax:01}{codedescribe~ env}{codedescribe~ env}      
       }
       {
@@ -2313,12 +2332,12 @@
       {
         \bool_if:NT \g__codedesc_syntax_bool
           {
-            \msg_warning:nnn {codedesc} {syntax dup}
+            \msg_warning:nnn { codedesc / warnings } {syntax dup}
                   {syntax:02}
           }
       }
       {
-        \msg_warning:nnnxx {codedesc} {out of scope}
+        \msg_warning:nnnxx { codedesc / warnings } {out of scope}
               {syntax:03}{codesyntax~ env}{codedescribe~ env}
       }
       
@@ -2346,7 +2365,7 @@
 
 
 
-\bool_if:NTF \l__codedesc_pckopt_loadlisting_bool
+\bool_if:NTF \l__codedesc_pkgopt_loadlisting_bool
   {
     \lstnewenvironment{codesyntax*}[1][]
       {
@@ -2354,12 +2373,12 @@
           {
             \bool_if:NT \g__codedesc_syntax_bool
               {
-                \msg_warning:nnn {codedesc} {syntax dup}
+                \msg_warning:nnn { codedesc / warnings } {syntax dup}
                       {syntax:02}
               }
           }
           {
-            \msg_warning:nnnxx {codedesc} {out of scope}
+            \msg_warning:nnnxx { codedesc / warnings } {out of scope}
                   {syntax:03}{codesyntax~ env}{codedescribe~ env}
           }
           
@@ -2548,7 +2567,7 @@
 \cs_new_eq:NN \typesetverb \tsverb 
 
 
-\bool_if:NTF \l__codedesc_pckopt_indexset_bool
+\bool_if:NTF \l__codedesc_pkgopt_indexset_bool
   {
     \NewDocumentCommand \tsobj {O{code}m} 
       {
@@ -2635,7 +2654,7 @@
 
 \NewDocumentEnvironment {tsremark*} {O{Note:}}
   {
-    \msg_warning:nnnnn {codedesc} {deprecated env} {remark*:01}{tsremark*}{tsremark}
+    \msg_warning:nnnnn { codedesc / deprecated } {deprecated env} {remark*:01}{tsremark*}{tsremark}
     \begin{tsremark}[#1]
   }
   {
@@ -2684,11 +2703,6 @@
           {
             \peek_charcode_remove:NTF :
               {
-%%%                \__codedesc_peek_arg:Nn \tsmeta {\__codedesc_exc_hack: :}
-%                \peek_catcode:NTF \c_group_begin_token
-%                  { \tsmeta }
-%                  { \__codedesc_exc_hack: \__codedesc_exc_hack: : }
-                  
                 \peek_charcode_remove:NTF :
                   {
                     \peek_catcode:NTF \c_group_begin_token
@@ -2714,7 +2728,16 @@
 
 \bool_new:N \l__codedesc_exc_was_activ_bool
 \bool_new:N \l__codedesc_tsOn_bool
-\cs_new:Npn \tsOn
+\cs_new_protected:Npn \__codedesc_get_code:nn #1#2
+  { \cs_set_eq:NN #1 #2 }
+  
+\cs_new_protected:Npn \__codedesc_exc_msg:n #1
+  {
+            \msg_warning:nnnnn { codedesc / shortcut } {pre defined}
+              {active01}{!}{#1}
+    
+  }  
+\cs_new_protected:Npn \tsOn
   {
     \bool_if:NF \l__codedesc_tsOn_bool
       {
@@ -2728,21 +2751,22 @@
             \bool_set_false:N \l__codedesc_exc_was_activ_bool  %% might not be needed
             \char_set_catcode_active:N !
           }
-          
-       \tl_set_rescan:Nnn \l__codedesc_tmpx_tl {} {!}
 
-       \exp_args:NV \cs_if_eq:NNF \l__codedesc_tmpx_tl \__codedesc_exc_shortcut:
+       \exp_args:NNNo \exp_args:NNo \__codedesc_get_code:nn \__codedesc_prev_exc: { \char_generate:nn { `! } { 13 } }
+
+       \cs_if_eq:NNF \__codedesc_prev_exc: \__codedesc_exc_shortcut:
           { %% some other definition
-            \exp_last_unbraced:NNV 
-              \cs_set_eq:NN \__codedesc_prev_exc: \l__codedesc_tmpx_tl
-            \bool_if:NT \l__codedesc_exc_was_activ_bool
+            \cs_if_exist:NT \__codedesc_prev_exc:
               {
-                \cs_if_exist:NT \__codedesc_prev_exc:
-                  { 
+                \exp_args:No \__codedesc_exc_msg:n {\token_to_meaning:N \__codedesc_prev_exc:}
+                \bool_if:NT \l__codedesc_exc_was_activ_bool
+                  {
                     \cs_set_eq:NN \__codedesc_exc_hack: \__codedesc_prev_exc: 
                   }
               }
+            
           }
+
         \char_set_active_eq:NN ! \__codedesc_exc_shortcut:
         \bool_set_true:N \l__codedesc_tsOn_bool
       }
