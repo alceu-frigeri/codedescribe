@@ -690,7 +690,7 @@ In the first two cases, they will always be handle  ``as is''. The third case de
 \begin{describelist*}{keys}
   \describe{variants}
     {%
-      (defaults to \tsobj[value]{none}) This will set how the 3rd case is processed. Possible values are:
+      (new 2026/02/12) Defaults to \tsobj[value]{none}. This will set how the 3rd case is processed. Possible values are:
       \begin{describelist*}{value}
         \describe{none}{The items (in a \tsobj[marg]{csv-list}) will be handled ``as is'' (no further special treatment). That's the default behaviour.}
         \describe{list}{A first entry will be generate with $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{base-signature} then for each \tsobj[marg]{sig-item} in \tsobj[marg]{variants-list} an entry $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{sig-item} will be generated. For example, 
@@ -1103,7 +1103,7 @@ This is marked as experimental because the actual chosen short cuts might change
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2025/12/29,note=active char]{!:,!::,!!,!!:,!!::,!!?}
+\begin{codedescribe}[code,new=2025/12/29,note=active char,update=2026/02/12]{!:,!::,!!,!!:,!!::,!!?}
 \begin{codesyntax}
 \tsverb[code]{!:}\tsverb[marg]{[obj-type]{csv-list}} $\leftrightarrow$ \tsobj{\tsobj}
 \tsverb[code]{!::}\tsverb[marg]{[obj-type]{csv-list}} $\leftrightarrow$ \tsobj{\tsargs}
