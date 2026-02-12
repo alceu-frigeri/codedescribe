@@ -3,8 +3,8 @@
 % !Mode:: "TeX:EN"
 % Default Compile engines:
 % !TEX program = pdflatex
-% !PDFTeXify ext =  --enable-etex  --enable-write18
-% !PDFLaTeX ext  =  --enable-etex  --enable-write18
+% !PDFTeXify ext =  --enable-etex  --enable-write18 
+% !PDFLaTeX ext  =  --enable-etex  --enable-write18  
 % !BIB program = biber
 % !IND exe = xindex.exe
 %%%==============================================================================
@@ -21,7 +21,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.23} {2025/12/30}
+%% This is version {1.24} {2026/02/12}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -37,12 +37,12 @@
 %    bibtex, babel, hyperref},colors=brighter},index,silence,]{codedescribe}
 %\usepackage[strict,infograb,silence,colors=darker,listing colors=darker]{codedescribe}
 \usepackage[strict,infograb,silence]{codedescribe}
-\usepackage{enumitem}
+\RequirePackage[inline]{enumitem}
+\SetEnumitemKey{midsep}
+    {parsep=0ex,itemsep=0.4ex}
 
 \RequirePackage[backend=biber]{biblatex}
 \addbibresource{codedescribe.bib}
-
-
 
 %\ExplSyntaxOn
 %\benchmark_tic:
@@ -61,10 +61,8 @@
 %\tsOn
 
 \newcodekey{codedesc}{
-  texcs={printindex,ad,df},
-%  texcs={printindexB,adB,dfB},
+  texcs={printindex},
   texcs=[2]{defgroupfmt,defobjectfmt,tsmacro,tsobj,setcodelabels,newlabelset,selectlabelset},
-  texcs=[2]{printindexC,adC,dfC},
   emph={lbracket,rbracket,stmeta},
   emph=[2]{tscode,tsdemo,new,update,note,env,and,or,months,remark},
   keywd=[2]{oarg,arg,parg,xarg,meta,color},
@@ -281,8 +279,6 @@ This allows to customize the default colors used by \tsobj[code,no index]{\tscod
   \describe{rule}{(default: gray) Sets the rule (unused by now) base color. Note this is mixed with white, not black as the others. }
   \describe{number}{(default: gray) Sets the (small line) numbers base color. Note this is mixed with white, not black as the others. }
   \describe{brightness}{(default: 1) Sets the mixing proportion between each base color and black.}
-%  \describe{default}{Sets all the above to their default value}
-%  \describe{scheme}{Selects a pre-set color scheme. see below} 
   \describe{scheme}{(Defaults to \tsobj[key]{scheme}=\tsobj[value]{default}) Selects a pre-set color scheme, see below, the default scheme sets all of the above to their default value.} 
   
 \end{describelist*}
@@ -676,6 +672,55 @@ Predefined ones:
 \end{describelist*}
 
   
+\subsubsection{Command List Keys}\label{code:keys}
+The following keys are just some ``sugar syntax'' (to reduce a few keyboard strokes), and only make sense when typesetting (see \ref{ts-commands}) or describing (see \ref{desc-env}) \tsobj[pkg]{expl} commands. They are only applied in case the base format (object type, see \ref{format-keys}) is \tsobj[key]{code}, in which case a command (an item from \tsobj[marg]{csv-list}) can be any of the following:
+\begin{enumerate}[midsep]
+  \item $\backslash$\tsobj[marg]{cmd}
+  \item $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{signature}
+  \item $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{base-signature}  \{\tsobj[marg]{variants-list}\}
+\end{enumerate}
+
+In the first two cases, they will always be handle  ``as is''. The third case depends on how the key \tsobj[key]{variants} is set (see below). Besides that, the keys \tsobj[key]{TF,noTF,pTF,nopTF} ``helps'' defining conditional variants of a base command.
+  \begin{tsremark}[\color{red}Attention:]
+    The keys bellow won't check for any \tsobj[pkg]{expl} convention. It's up to the user to use them correctly.
+  \end{tsremark}
+
+%, an entry will be generate with just the base signature \tsmeta{cmd}:\tsmeta{signature} and the variants list will either be expanded as a list of entries (one for each variant) or as single entry with the variants as a bnf like list between parenthesis.
+
+\begin{describelist*}{keys}
+  \describe{variants}
+    {%
+      (defaults to \tsobj[value]{none}) This will set how the 3rd case is processed. Possible values are:
+      \begin{describelist*}{value}
+        \describe{none}{The items (in a \tsobj[marg]{csv-list}) will be handled ``as is'' (no further special treatment). That's the default behaviour.}
+        \describe{list}{A first entry will be generate with $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{base-signature} then for each \tsobj[marg]{sig-item} in \tsobj[marg]{variants-list} an entry $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{sig-item} will be generated. For example, 
+        
+        \noindent\tsverb{\tsobj[code,variants=list]{\exp_cmd:Nn {cn,cV}}} is equivalent to \tsobj[code,no index]{\tsobj{\exp_cmd:Nn,\exp_cmd:cn,\exp_cmd:Cv}}
+        }
+        \describe{compact}{A first entry will be generate with $\backslash$\tsobj[marg]{cmd}:\tsobj[marg]{base-signature} then a second (or more, see remark below) entry will generated as $\backslash$\tsobj[marg]{cmd}:(\tsobj[marg]{bnf-or}). For example,
+        
+        \noindent  \tsverb{\tsobj[code,variants=compact]{\exp_cmd:Nn {cn,cV}}}  is equivalent to
+ \tsobj[code,no index]{\tsobj{\exp_cmd:Nn, \exp_cmd:(cn|cV)}}
+        }
+      \end{describelist*}
+    \begin{tsremark}
+      In the \tsobj[value]{compact} case, a dash ``-'' item will break down the ``bnf or'' in two entries at the dash entry. This helps avoiding extra-long entries. In the \tsobj[value]{list} case, a dash ``-'' item will be ignored.
+    \end{tsremark}
+    \begin{tsremark}
+      In case of \tsobj[value,or]{list,compact} the generated entries will use a slightly fainted color (the color defined by the object type mixed with white)
+    \end{tsremark}
+    }
+  \describe{TF}{This will add a trailing \textsl{\underline{TF}} to all items. The base name won't be listed as an item.}
+  \describe{noTF}{This will preserve the base(s) name and add the \textsl{\underline{TF}} variant to all items.}
+  \describe{pTF}{This will add a trailing \textsl{\underline{TF}} and a predicate \tsobj[code,no index]{_p:} variant, to all items, and mark them as \tsobj[key]{EXP}. The base name won't be listed as an item.}
+  \describe{nopTF}{This will preserve the base(s) name and add the \textsl{\underline{TF}} and predicate \tsobj[code,no index]{_p:} variants to all items. Marking them as \tsobj[key]{EXP}.}
+  \begin{tsremark}
+    The \tsobj[key]{pTF,nopTF} also implies \tsobj[key]{EXP} since the predicate variants must be expandable (see \ref{desc-env}).
+  \end{tsremark}
+\end{describelist*}
+
+  
+  \newpage
 \subsubsection{Customization}\label{format-custom}
 
 To create  user defined groups/objects or change the predefined ones:
@@ -748,7 +793,7 @@ This creates/defines a \tsobj[marg]{new-scheme} (\tsobj[marg]{color-key-list} as
 
 
 
-
+\newpage
 \subsection{Locale}
 The following commands allows to customize the many `labels' in use, in particular the auxiliary package \tsobj[pkg]{codedescsets} holds a few locale sets, the user is invited to submit translations for a specific case/language via a PR (Push Request) at \url{https://github.com/alceu-frigeri/codedescribe}
 
@@ -777,7 +822,7 @@ The \tsobj[marg]{labels-list} can be any combination of:
   The given \tsobj[marg]{labels-list} doesn't need to be complete, though, only the given labels will be changed.
 \end{tsremark}
 \begin{tsremark}
-  The old \tsobj[code,no index]{\selectlabelset{lang}} is (now) an alias to \tsverb{\setcodelabels {label set=lang}}, and will raise a warning if called (deprecation).
+  The old \tsverb[xverb]{\selectlabelset{lang}} is (now) an alias to \tsverb[verb]{\setcodelabels {label set=lang}}, and will raise a warning if called (deprecation).
 \end{tsremark}
 
 
@@ -824,13 +869,13 @@ For example, this sets a new label set for German. In fact, since this is define
 
 \subsection{Environments}\label{desc-env}
 
-\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a note example},update=2024/02/16,update=2025/09/25]{codedescribe}
+\begin{codedescribe}[env,new=2023/05/01,update=2023/05/01,note={a  note example},update=2024/02/16,update=2025/09/25]{codedescribe}
 \begin{codesyntax}
 \tsmacro{\begin{codedescribe}}[obj-keys]{csv-list}
 \ldots
 \tsmacro{\end{codedescribe}}{}
 \end{codesyntax}
-This is the main environment to describe \tsobj[env,comma,no index]{Commands, Variables, Environments, etc.} \tsobj[marg]{csv-list} items will be listed  in the left margin. The \tsobj[env]{codesyntax} will be attached to it's right, and the rest of the text will be below them, with the usual text width.   The optional \tsobj[oarg]{obj-keys} defaults to just \tsobj[key]{code}, it can be any object type as defined at \ref{obj-types} (and \ref{format-custom}), index keys (see \ref{index keys}) or the following:
+This is the main environment to describe \tsobj[env,comma,no index]{Commands, Variables, Environments, etc.} \tsobj[marg]{csv-list} items will be listed  in the left margin. The \tsobj[env]{codesyntax} will be attached to it's right, and the rest of the text will be below them, with the usual text width.   The optional \tsobj[oarg]{obj-keys} defaults to just \tsobj[key]{code}, it can be any object type as defined at \ref{obj-types} (and \ref{format-custom}), index keys (see \ref{index keys}), command list keys (see \ref{code:keys}) or the following:
 \end{codedescribe}
 \begin{describelist*}{key}
   \describe{new}{To add a \emph{new} line.}
@@ -842,13 +887,6 @@ This is the main environment to describe \tsobj[env,comma,no index]{Commands, Va
   \describe{rulecolor}{For instance \tsmacro{\begin{codedescribe}[rulecolor=white]}{} will suppress the rules.}
   \describe{EXP}{A star \ding{72} will be added to all items, signaling the commands are fully expandable.}
   \describe{rEXP}{A hollow star \ding{73} will be added to all items, signaling the commands are restricted expandable.}
-  \describe{TF}{This will add a trailing \textsl{\underline{TF}} to all items. The base name won't be listed as an item.}
-  \describe{noTF}{This will preserve the base(s) name and add the \textsl{\underline{TF}} variant to all items.}
-  \describe{pTF}{This will add a trailing \textsl{\underline{TF}} and a predicate \tsobj[code,no index]{_p:} variant, to all items, and mark them as \tsobj[key]{EXP}. The base name won't be listed as an item.}
-  \describe{nopTF}{This will preserve the base(s) name and add the \textsl{\underline{TF}} and predicate \tsobj[code,no index]{_p:} variants to all items. Marking them as \tsobj[key]{EXP}.}
-  \begin{tsremark}
-    The keys \tsobj[key]{TF,noTF,pTF,nopTF} are just `sugar syntax' (to reduce a few keyboard strokes). They only make sense when documenting \tsobj[pkg]{expl} commands. In the case of \tsobj[key]{noTF,nopTF} the base name is also listed, otherwise it isn't. The \tsobj[key]{pTF,nopTF} also implies \tsobj[key]{EXP} since the predicate variants must be expandable.
-  \end{tsremark}
   \describe {force margin} {If set, \tsobj[meta]{csv-list} items will be listed in the margin, regardless of their width.}
 \end{describelist*}
 \begin{tsremark}
@@ -861,7 +899,7 @@ The keys \tsobj[keys]{new,update,note} can be used multiple times. (2024/02/16)
   The \tsobj[env]{codedescribe} environment `acts' as a single block! That assures the margin block, the \tsobj[env]{codesyntax} environment (block) and the following text (inside the \tsobj[env]{codedescribe} environment) will always stay in the same page.
 \end{tsremark}
 \begin{tsremark}[\color{red} Attention:]
-  If the items don't fit in the margin, the \tsobj[marg]{csv-list} will advance towards the text window, reducing the horizontal space of the \tsobj[env]{codesyntax} block. This can be changed with the \tsobj[key]{force margin}, in which case the  \tsobj[marg]{csv-list} will always be at the margin, growing leftwards (might end outside the page).
+  If the items don't fit in the margin, the \tsobj[marg]{csv-list} will advance towards the text window (up to approximately half of text width plus margin width), reducing the horizontal space of the \tsobj[env]{codesyntax} block. This can be changed with the \tsobj[key]{force margin}, in which case the  \tsobj[marg]{csv-list} will always be at the margin, growing leftwards (might end outside the page).
 \end{tsremark}
 \begin{tsremark}
 With the \tsobj[option]{strict} package option,
@@ -1013,6 +1051,9 @@ This is meant for short expressions, and not multi-line, complex code (one is be
 \end{tsremark}
 \end{codedescribe}
 
+
+
+
 \subsection{Note/Remark Commands}\label{note-commands}
 
 
@@ -1044,7 +1085,7 @@ Typesets a small note at the margin.
 \end{codedescribe}
 
 
-
+\newpage
 \subsection{Shortcuts (experimental)}\label{activ-tokens}
 This is marked as experimental because the actual chosen short cuts might change, for instance, if it crashes badly with some other package. As of now, the current implementation tries to minimize any side effect, only kicking in if, and only if, one of the given patterns is found. Moreover, once deactivated, \tsobj{\tsOff}, any previous code is fully restored. 
 %lets see !:{\code,\cmd} !::[parg]{arg,arg2}
@@ -1053,7 +1094,7 @@ This is marked as experimental because the actual chosen short cuts might change
 \tsobj{\tsOn}
 \tsobj{\tsOff}
 \end{codesyntax}
-  This will switch the `shortcuts' on and off  (active character, see below). Currently, only the character `!' is affected. \tsobj{\tsOn} preserves its status (if active or not, and related code, if any), so that \tsobj{\tsOff} can restore its full definition and status.
+  This will switch the `shortcuts' on and off. Currently, only the character `!' is affected. \tsobj{\tsOn} preserves its status (if active or not, and related code, if any), so that \tsobj{\tsOff} can restore its full definition and status.
 \begin{tsremark}
 \tsobj{\tsOn} won't try to patch the current (if any) active definition of `!', but just save it (to be restored by \tsobj{\tsOff}), before setting its own code. Moreover, whilst active, if the use don't fit any of the given patterns (below), the previous active code (if any, and active) will be executed, or just `!' if it wasn't active.
 \end{tsremark}
@@ -1062,13 +1103,14 @@ This is marked as experimental because the actual chosen short cuts might change
 \end{tsremark}
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2025/12/29,note=active chars]{!:,!::,!!,!!:,!!::}
+\begin{codedescribe}[code,new=2025/12/29,note=active char]{!:,!::,!!,!!:,!!::,!!?}
 \begin{codesyntax}
 \tsverb[code]{!:}\tsverb[marg]{[obj-type]{csv-list}} $\leftrightarrow$ \tsobj{\tsobj}
 \tsverb[code]{!::}\tsverb[marg]{[obj-type]{csv-list}} $\leftrightarrow$ \tsobj{\tsargs}
 \tsverb{!!}\tsverb[marg]{[obj-type]{verbatim text}} $\leftrightarrow$ \tsobj{\tsverb}
 \tsverb{!!:}\tsverb[marg]{{name}} $\leftrightarrow$ \tsobj{\tsmeta}
 \tsverb{!!::}\tsverb[marg]{{note}} $\leftrightarrow$ \tsobj{\tsmarginnote}
+\tsverb{!!?}\tsverb[marg]{{macro-list}[oargs-list]{margs-list}} $\leftrightarrow$ \tsobj{\tsmacro}
 \end{codesyntax}
   Once active (\tsobj{\tsOn}), \tsobj{!:} is a shortcut for \tsobj{\tsobj}, including it's optional parameter. Same for \tsobj{!::} (\tsobj{\tsargs}), and the others.
 \end{codedescribe}
@@ -1076,7 +1118,7 @@ This is marked as experimental because the actual chosen short cuts might change
 To reduce undesirable side effects, no space (or any other character besides the ones shown) is allowed between the first `!' and either the `[' or `\{', for instance \tsobj{!!:{some}} will typeset \tsmeta{some}, but  not \tsverb{!! :{some}} or \tsverb{!!: {some}} or \tsverb{!!:some}.
 \end{tsremark}
 \begin{tsremark}
-  If none of these patterns are recognized it will either leave the `!' character or execute its previous code (if it was active).
+  If none of these patterns are recognized it will either leave the `!' character or execute its previous code (if it was active). Same for the companions colon, `:', and question mark, `?', peeked in the process.
 \end{tsremark}
 
 
@@ -1163,7 +1205,9 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
 %\end{codesyntax*}
 %This is the \tsobj[env,no index]{abstract} environment from the \tsobj[pkg]{article} class.
 %\end{codedescribe}
-%
+
+
+
 %\printindex
 
 %\ExplSyntaxOn
@@ -1171,6 +1215,7 @@ This is an auxiliary package (which can be used on its own). It assumes the pack
 %\ExplSyntaxOff
 %
 %\tsOff
+
 
 
 \end{document}

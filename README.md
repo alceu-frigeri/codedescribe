@@ -96,7 +96,15 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ### Change log
-* Version 1.23 (this)
+
+* Version 1.24 (this)
+  - added a shortcut for `\tsmacro` as well
+  - ditched the global bool (force margin) from codedescribe environment.
+  - added 'faint' color (for code variants)
+  - added 'variants' key (helper for typesetting expl commands)
+  - fixing [\#36](https://github.com/alceu-frigeri/codedescribe/issues/36)
+  
+* Version 1.23
   - codelist partial refaktor: code is more regular, systematic now, regarding listings. 
     some keys got deprecated.
   - shortcuts: making `!` active, supporting `\tsobj`, `\tsargs`, `\tsverb`, `\tsmeta` and `\tsmarginnote`

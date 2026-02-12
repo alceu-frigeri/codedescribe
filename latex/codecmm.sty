@@ -12,13 +12,13 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.23} {2025/12/30}
+%% This is version {1.24} {2026/02/12}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
 %%
 %%%==============================================================================
-\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\NeedsTeXFormat{LaTeX2e}[2025/06/01]
    
 %%%%%%%
 %%%
@@ -34,8 +34,8 @@
   {
      name        = {codecmm} ,
      prefix      = {codecmm} ,
-     date        = {2025/12/30} ,
-     version     = {1.23} ,
+     date        = {2026/02/12} ,
+     version     = {1.24} ,
      description = {codedescribe/list common commands}
   }
 %%%%%%%
@@ -125,7 +125,7 @@
     \dim_set:Ne \l__codecmm_midlineskip_dim    { \fp_eval:n { #1     / 2  } pt }
     \dim_set:Ne \l__codecmm_largelineskip_dim  { \fp_eval:n { #1 * 3 / 2  } pt }
     
-    \dim_set:Ne \l__codecmm_marginminsep_dim   { \fp_eval:n { #1 * 3 / 16 } pt }
+    \dim_set:Ne \l__codecmm_marginminsep_dim   { \fp_eval:n { #1 * 4 / 16 } pt }
       
     \skip_set:Nn \l__codecmm_min_skip   { 0 pt plus 1pt minus 1pt }
      
@@ -158,12 +158,18 @@
 
 %\dim_new:N \l__codecmm_linewidth_dim
 \dim_new:N \l__codecmm_textcolwidth_dim
+\dim_new:N \l__codecmm_marginwidth_dim
+\dim_new:N \l__codecmm_maxcodeblock_dim
+\dim_new:N \l__codecmm_maxcodetab_dim
 %\fp_new:N \l__codecmm_tmpa_fp
 %\fp_new:N \l__codecmm_tmpb_fp
 
 \cs_new_protected:Npn \__codecmm_set_textcolwidth: 
   {
     \dim_set:Nn \l__codecmm_textcolwidth_dim {\linewidth}
+    \dim_set:Nn \l__codecmm_marginwidth_dim {\marginparwidth}
+    \dim_set:Ne \l__codecmm_maxcodeblock_dim  { \fp_eval:n { (\l__codecmm_textcolwidth_dim + \l__codecmm_marginwidth_dim) * 0.5} pt }
+    \dim_set:Ne \l__codecmm_maxcodetab_dim { \fp_eval:n { \l__codecmm_maxcodeblock_dim - 1.5 * \marginparsep}  pt }
 %    \dim_compare:nNnTF {\linewidth} = {\l__codecmm_linewidth_dim}
 %      {}
 %      {
@@ -175,5 +181,14 @@
 %      }
   }
 
-
+%%%
+%%% is it worth it?
+%%%
+\cs_new:Npn \__codecmm_dim_compare:NNNTF #1#2#3
+  {
+    \if_dim:w 
+      #1 #2 #3 
+      \__prg_TF_true:w
+    \fi: \use_ii:nn
+  } 
 
