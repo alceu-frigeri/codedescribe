@@ -19,7 +19,7 @@ For more details,  see the documentation,
 --------------
 
 ## Requirements
-* none besides a fairly recent LaTeX distribution as recent as 2022/06/01
+* none besides a fairly recent LaTeX distribution as recent as [2025/06/01](https://ctan.org/pkg/l3kernel)
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*)
 
 ## Installation
