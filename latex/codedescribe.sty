@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.24} {2026/02/12}
+%% This is version {1.24a} {2026/02/14}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2026/02/12} ,
-     version     = {1.24} ,
+     date        = {2026/02/14} ,
+     version     = {1.24a} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -1058,8 +1058,6 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set_eq:NN \__codedesc_typeset:n  \__codedesc_meta:n
-        \cs_set_eq:NN \__codedesc_typeset:V  \__codedesc_meta:V
-        \cs_set_eq:NN \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
       }
    } ,
 
@@ -1069,8 +1067,6 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set_eq:NN \__codedesc_typeset:n  \__codedesc_meta*:n
-        \cs_set_eq:NN \__codedesc_typeset:V  \__codedesc_meta*:V
-        \cs_set_eq:NN \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
       }
    } ,
 
@@ -1080,8 +1076,6 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set_eq:NN \__codedesc_typeset:n \tl_to_str:n
-        \cs_set_eq:NN \__codedesc_typeset:V \tl_to_str:V
-        \cs_set_eq:NN \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
       }
    } ,
 
@@ -1091,8 +1085,6 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set_eq:NN \__codedesc_typeset:n \__codedesc_verb_nospc_typeset:n
-        \cs_set_eq:NN \__codedesc_typeset:V \__codedesc_verb_nospc_typeset:V
-        \cs_set_eq:NN \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
       }
    } ,
 
@@ -1102,7 +1094,6 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set_eq:NN \__codedesc_typeset:n \__codedesc_macro_typeset:n
-        \cs_set_eq:NN \__codedesc_typeset:V \__codedesc_macro_typeset:V
         \cs_set_eq:NN \__codedesc_seq_from_clist:Nn \__codedesc_macro_seq_from_clist:Nn
       }
    } ,
@@ -1286,7 +1277,7 @@
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
         \cs_set:Npn \__codedesc_metacolor: { \__codecmm_color_select:n{#1} }
-        \cs_set:Npn \__codedesc_metafaintcolor: { \__codecmm_color_select:n{#1!80!white} }
+        \cs_set:Npn \__codedesc_metafaintcolor: { \__codecmm_color_select:n{#1!75!white} }
       }
   } ,
 }
@@ -1344,13 +1335,13 @@
 \regex_const:Nn \c__codedesc_slash_regex {^\\}
 \regex_const:Nn \c__codedesc_colon_regex {:}
 \regex_const:Nn \c__codedesc_under_regex {_}
-\regex_const:Nn \c__codedesc_spc_regex {~}
+%\regex_const:Nn \c__codedesc_spc_regex {~}
 
 \cs_new_protected:Npn \__codedesc_set_sanitize_cmds:Nn #1#2
   {
-    \str_set:Nn #1 {#2}
-    \regex_replace_all:NnN \c__codedesc_under_regex {{\\_}} #1
+    \tl_set:Nn #1 {#2}
     \str_remove_all:Nn #1 {~}
+    \regex_replace_all:NnN \c__codedesc_under_regex {{\\_}} #1
   }
 
 
@@ -1767,8 +1758,8 @@
     meta~ or .usage:n       = general ,
     meta~ or .code:n        =
       {
-        \tl_set:Nn \l__codedesc_sep_tl { \ensuremath| }
-        \tl_set:Nn \l__codedesc_lastsep_tl { \ensuremath| }
+        \tl_set:Nn \l__codedesc_sep_tl { | }
+        \tl_set:Nn \l__codedesc_lastsep_tl { | }
         \tl_set:Nn \l__codedesc_Lbrace_tl {\ensuremath\langle}
         \tl_set:Nn \l__codedesc_Rbrace_tl {\ensuremath\rangle}
       } ,
@@ -1776,8 +1767,8 @@
     bnf~ or .usage:n        = general ,
     bnf~ or .code:n         =
       {
-        \tl_set:Nn \l__codedesc_sep_tl { \ensuremath| }
-        \tl_set:Nn \l__codedesc_lastsep_tl { \ensuremath| }
+        \tl_set:Nn \l__codedesc_sep_tl { | }
+        \tl_set:Nn \l__codedesc_lastsep_tl { | }
         \tl_set:Nn \l__codedesc_Lbrace_tl {[}
         \tl_set:Nn \l__codedesc_Rbrace_tl {]}
       } ,
@@ -1785,8 +1776,8 @@
     par~ or .usage:n        = general ,
     par~ or .code:n         =
       {
-        \tl_set:Nn \l__codedesc_sep_tl { \ensuremath| }
-        \tl_set:Nn \l__codedesc_lastsep_tl { \ensuremath| }
+        \tl_set:Nn \l__codedesc_sep_tl { | }
+        \tl_set:Nn \l__codedesc_lastsep_tl { | }
         \tl_set:Nn \l__codedesc_Lbrace_tl {(}
         \tl_set:Nn \l__codedesc_Rbrace_tl {)}
       } ,
@@ -1808,17 +1799,22 @@
     \cs_set_eq:NN     \__codedesc_metasize: \small
     \cs_set_eq:NN     \__codedesc_metafont: \ttfamily
 
-    \cs_set_eq:NN     \__codedesc_metashape: \relax
+    \cs_set_eq:NN     \__codedesc_faint_test:N \use_none:n
+
+    \cs_set_eq:NN     \__codedesc_metashape: \prg_do_nothing:
     \cs_set_eq:NN     \__codedesc_metacolor: \relax
     \cs_set_eq:NN     \__codedesc_metafaintcolor: \relax
 
-    \cs_set_eq:NN     \__codedesc_shape_preadj: \relax
-    \cs_set_eq:NN     \__codedesc_shape_posadj: \relax
+    \cs_set_eq:NN     \__codedesc_shape_preadj: \prg_do_nothing:
+    \cs_set_eq:NN     \__codedesc_shape_posadj: \prg_do_nothing:
 
     \cs_set:Npn       \__codedesc_rulecolor: { \__codedesc_metacolor: }
-    \cs_set_eq:NN     \__codedesc_typeset:n \relax
-    \cs_set_eq:NN     \__codedesc_typeset:V \relax
+
+    \cs_set:Npn       \__codedesc_typeset:n {}
+    \cs_generate_variant:Nn \__codedesc_typeset:n {V}
+
     \cs_set_eq:NN     \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
+
 
     \tl_clear:N   \l__codedesc_Lbracket_tl
     \tl_clear:N   \l__codedesc_Rbracket_tl
@@ -1943,13 +1939,19 @@
   }
 \cs_generate_variant:cn {__codedesc_meta*:n} {V}
 
-    %%%%%%%
-    %%% code 'detokenized'
-    %%%%%%%
 
-\regex_const:Nn \c__codedesc_tf_regex {TF$}
-\regex_const:Nn \c__codedesc_bnfsep_regex {\|}
+%%% __faint__  ( ... ) => codedesc_faint:n { \1 }
+%%% __faint:           => codedesc_faint:n
+%%% __faintb:          => codedesc_faintbreack:n
+\regex_const:Nn \c__codedesc_faint_a_regex {__faint:}
+\regex_const:Nn \c__codedesc_faint_b_regex {__faintb:}
+\regex_const:Nn \c__codedesc_faint_c_regex {__faint__ (.*?) :}
 
+\cs_new:Npn \__codedesc_faint:n #1
+  {
+      \smash
+        { \__codedesc_metafaintcolor: { #1 } }
+  }
 
 \cs_new:Npn \__codedesc_faintbreak:n #1
   {
@@ -1958,31 +1960,32 @@
     \skip_horizontal:N \c_zero_skip
   }
 
-\regex_const:Nn \c__codedesc_faint_regex {__faint__ (.*?) :}
-\regex_const:Nn \c__codedesc_par_regex {\((.*?)\)}
-
-\cs_new:Npn \__codedesc_faint:n #1
+\cs_new:Npn \__codedesc_faint_replace:N #1
   {
-    \group_begin:
-      \smash
-        { \__codedesc_metafaintcolor: { #1 } }
-    \group_end:
+    \regex_replace_all:NnNTF \c__codedesc_faint_c_regex {\c{__codedesc_faint:n}\cB\{\1\cE\}:} #1
+      {
+        \regex_replace_all:NnNTF \c__codedesc_faint_a_regex {\c{__codedesc_faint:n}} #1
+          {
+            \regex_replace_all:NnN \c__codedesc_faint_b_regex {\c{__codedesc_faintbreak:n}} #1
+          }
+          { }
+      }
+      { }
   }
+
+    %%%%%%%
+    %%% code 'detokenized'
+    %%%%%%%
+\regex_const:Nn \c__codedesc_tf_regex {TF$}
+\regex_const:Nn \c__codedesc_bnfsep_regex {\|}
 
 \cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
-    \str_set:Nn \l__codedesc_tmpb_tl {#1}
+    \tl_set:Nn \l__codedesc_tmpb_tl {#1}
     \str_remove_all:Nn \l__codedesc_tmpb_tl {~}
 
-    \regex_replace_all:NnNTF \c__codedesc_faint_regex {\c{__codedesc_faint:n}\cB\{\1\cE\}:} \l__codedesc_tmpb_tl
-      {
-        \regex_replace_all:NnNTF \c__codedesc_bnfsep_regex {\c{__codedesc_faintbreak:n}|} \l__codedesc_tmpb_tl
-          {
-            \regex_replace_once:NnN \c__codedesc_par_regex {\c{__codedesc_faint:n}\(\1\c{__codedesc_faint:n}\)} \l__codedesc_tmpb_tl
-          }
-          {}
-      }
-      { }
+    \__codedesc_faint_test:N \l__codedesc_tmpb_tl
+
     \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l__codedesc_tmpb_tl
       {
         \tl_use:N \l__codedesc_tmpb_tl\textsl{\underline{TF}}
@@ -1996,7 +1999,7 @@
     %%%%%%%
 \cs_new_protected:Npn \__codedesc_verb_nospc_typeset:n #1
   {
-    \str_set:Nn \l__codedesc_tmpb_tl {#1}
+    \tl_set:Nn \l__codedesc_tmpb_tl {#1}
     \str_remove_all:Nn \l__codedesc_tmpb_tl {~}
     \l__codedesc_tmpb_tl
   }
@@ -2158,13 +2161,10 @@
   }
 
 
-
-
-
 %%%%%%%
-%%%  This will create a seq, processing variants (if options set)
+%%%  This will create a seq, processing variants (if option set)
 %%%%%%%
-\regex_const:Nn \c__codedesc_variant_regex {(\\[a-zA-Z]+[\ ]?[a-zA-Z_]*)[\ ]?:([nNwpD]*)[\ ]*\{([noexvVNcwpD,\ \-]*)\}}
+\regex_const:Nn \c__codedesc_variant_regex {(\\[a-zA-Z_]+):([nNwpD]*)\{([noexvVNcwpD,\-]*)\}}
 
 \cs_new:Npn \__codedesc_variant_put_right:Nnn #1#2#3
   {
@@ -2174,7 +2174,7 @@
 
 \cs_new:Npn \__codedesc_variant_put_right_par:Nnn #1#2#3
   {
-    \seq_put_right:Nn #1 {#2:(#3)}
+    \seq_put_right:Nn #1 {#2: __faint: (#3 __faint: )}
   }
 \cs_generate_variant:Nn \__codedesc_variant_put_right_par:Nnn {Noo}
 
@@ -2186,7 +2186,9 @@
         \seq_clear:N #1
         \seq_map_inline:Nn \l__codedesc_tmpb_seq
           {
-            \str_set:Nn \l__codedesc_tmpa_tl {##1}
+            \tl_set:Nn  \l__codedesc_tmpa_tl {##1}
+            \str_remove_all:Nn \l__codedesc_tmpa_tl {~}
+
             \regex_split:NoNTF \c__codedesc_variant_regex \l__codedesc_tmpa_tl \l__codedesc_tmpc_seq
               {
                 \seq_pop_left:NN \l__codedesc_tmpc_seq \l__codedesc_tmpa_tl   % garbage
@@ -2200,10 +2202,11 @@
 
                 \tl_clear:N \l__codedesc_tmpD_tl
 
-
                 \seq_pop_left:NNTF \l__codedesc_tmpc_seq \l__codedesc_tmpD_tl % first one, if any
                   {
                     \tl_set:Ne \l__codedesc_tmpa_tl { __faint__ \l__codedesc_tmpa_tl }
+                    \cs_set_eq:NN \__codedesc_faint_test:N \__codedesc_faint_replace:N
+
                     \seq_pop_right:NNTF \l__codedesc_tmpc_seq \l__codedesc_tmpE_tl   % last one, if any
                       { %% if here, then at least 2
                         \bool_if:NTF \l__codedesc_descopt_compact_bool
@@ -2219,7 +2222,7 @@
                                   }
                                   {
                                     \bool_if:NTF \l__codedesc_bnfbar_bool
-                                      { \tl_put_right:Nn \l__codedesc_tmpD_tl {|####1} }
+                                      { \tl_put_right:Nn \l__codedesc_tmpD_tl {__faintb: |####1} }
                                       {
                                         \tl_put_right:Nn \l__codedesc_tmpD_tl { ####1}
                                         \bool_set_true:N \l__codedesc_bnfbar_bool
@@ -2228,7 +2231,7 @@
                                   }
                               }
                             \bool_if:NTF \l__codedesc_bnfbar_bool
-                              { \tl_put_right:Nn \l__codedesc_tmpD_tl {|} }
+                              { \tl_put_right:Nn \l__codedesc_tmpD_tl {__faintb: |} }
                               {}
 
                             \tl_put_right:No \l__codedesc_tmpD_tl \l__codedesc_tmpE_tl
@@ -2750,19 +2753,42 @@
 \cs_new_eq:NN \typesetmacro \tsmacro
 
 
-\NewDocumentCommand \tsverb {O{code}m}
+\regex_const:Nn \c__codedesc_cmdspc_regex {(\\[^\ ]+)\ ( [ \[ \{ \} \] ] )}
+
+\NewDocumentCommand \tsverb {ssO{code}m}
   {
     \group_begin:
-      \__codedesc_metafmt_set:n {#1}
+      \__codedesc_metafmt_set:n {#3}
 
       \l__codedesc_strut_tl
       \__codedesc_metafmt:
 
-      \str_set:Nn \l__codedesc_tmpa_tl {#2}
-      \__codedesc_typeset:V \l__codedesc_tmpa_tl
+      \str_set:Nn \l__codedesc_tmpa_tl {#4}
+      \bool_if:NTF #2
+        {
+          \str_remove_all:Nn \l__codedesc_tmpa_tl {~}
+        }
+        {
+          \bool_if:NTF #1
+            {
+              \regex_replace_all:NnN \c__codedesc_cmdspc_regex {\1\2} \l__codedesc_tmpa_tl
+            }
+            {  }
+        }
+      \l__codedesc_tmpa_tl
     \group_end:
   }
 \cs_new_eq:NN \typesetverb \tsverb
+
+\NewDocumentCommand \tsfmt {O{code}m}
+  {
+    \group_begin:
+      \__codedesc_metafmt_set:n {#1}
+      \__codedesc_metafmt:
+      #2
+    \group_end:
+  }
+\cs_new_eq:NN \typesetfmt \tsfmt
 
 
 \bool_if:NTF \l__codedesc_pkgopt_indexset_bool

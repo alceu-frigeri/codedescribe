@@ -97,7 +97,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### Change log
 
-* Version 1.24 (this)
+* Version 1.24a (this)
+  - fixing [\#36](https://github.com/alceu-frigeri/codedescribe/issues/36)
+  - some code optimization: reducing the impact of variants key
+  - added `\tsfmt` (formatting alternative)
+  - documentation typos
+
+* Version 1.24
   - added a shortcut for `\tsmacro` as well
   - ditched the global bool (force margin) from codedescribe environment.
   - added 'faint' color (for code variants)
