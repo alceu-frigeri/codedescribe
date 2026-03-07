@@ -97,6 +97,9 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### Change log
 
+* Version 1.24b (next)
+  - minor code optimization
+
 * Version 1.24a (this)
   - fixing [\#36](https://github.com/alceu-frigeri/codedescribe/issues/36)
   - some code optimization: reducing the impact of variants key

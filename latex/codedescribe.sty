@@ -445,7 +445,7 @@
     %%%%%%%
 \cs_new_protected:Npn \__codedesc_set_colors:n #1
   {
-    \__codecmm_color_set:ne {c__codedesc_none_color}       { \l__codedesc_colorscheme_error_tl  ! \fp_eval:n{ 40 + 15 * #1 } ! black ! 100 }
+    \__codecmm_color_set:ne {c__codedesc_error_color}      { \l__codedesc_colorscheme_error_tl  ! \fp_eval:n{ 40 + 15 * #1 } ! black ! 100 }
   	\__codecmm_color_set:ne {c__codedesc_verb_color}       { \l__codedesc_colorscheme_verb_tl   ! \fp_eval:n{ 30 * #1 }      ! black ! 100 }
   	\__codecmm_color_set:ne {c__codedesc_marg_color}       { \l__codedesc_colorscheme_args_tl   ! \fp_eval:n{ 15 + 15 * #1 } ! black ! 100 }
   	\__codecmm_color_set:ne {c__codedesc_oarg_color}       { \l__codedesc_colorscheme_args_tl   ! \fp_eval:n{ 25 + 15 * #1 } ! black ! 100 }
@@ -562,12 +562,15 @@
 %%% makeindex especifiers
 %%%
 %%%%%%%%
+
 %%% { {level} {actual} {encap} {quote} }
 \tl_new:N \l__codedesc_index_specs_tl
 \tl_set:Nn \l__codedesc_index_specs_tl { {!} {@} {|} {"} }
+
 %%% { {arg_open} {arg_close} {range_open} {range_close} }
 \tl_new:N \l__codedesc_index_oc_specs_tl
 \tl_set:Nn \l__codedesc_index_oc_specs_tl { {\{} {\}} {(} {)} }
+
 %%% { {escape} {page_compositor} {keyword} }
 \tl_new:N \l__codedesc_index_others_specs_tl
 \tl_set:Nn \l__codedesc_index_others_specs_tl { {\\} {-} {\indexentry} }
@@ -1335,13 +1338,12 @@
 \regex_const:Nn \c__codedesc_slash_regex {^\\}
 \regex_const:Nn \c__codedesc_colon_regex {:}
 \regex_const:Nn \c__codedesc_under_regex {_}
-%\regex_const:Nn \c__codedesc_spc_regex {~}
 
 \cs_new_protected:Npn \__codedesc_set_sanitize_cmds:Nn #1#2
   {
     \tl_set:Nn #1 {#2}
     \str_remove_all:Nn #1 {~}
-    \regex_replace_all:NnN \c__codedesc_under_regex {{\\_}} #1
+    \regex_replace_all:NnN \c__codedesc_under_regex { {\\_} } #1
   }
 
 
@@ -1534,8 +1536,10 @@
   unknown.usage:n                 = general ,
 	unknown.code:n                  =
     {
-     \cs_set:Npn \__codedesc_metacolor: { \__codecmm_color_select:n{c__codedesc_none_color} }
-     \msg_error:nnxx { codedesc / errors } {object-err} {format}{\l_keys_key_str}
+     \cs_set:Npn \__codedesc_metacolor:
+      { \__codecmm_color_select:n{c__codedesc_error_color} }
+     \msg_error:nnxx { codedesc / errors } {object-err}
+      {format}{\l_keys_key_str}
     },
 }
 
@@ -1715,7 +1719,7 @@
   	unknown       .code:n   =
       {
         \cs_set:Npn \__codedesc_metacolor:
-          { \__codecmm_color_select:n{c__codedesc_none_color} }
+          { \__codecmm_color_select:n{c__codedesc_error_color} }
         \msg_error:nnxx { codedesc / errors } {object-err}
           {desc ~ format}{\l_keys_key_str}
       } ,
@@ -1785,8 +1789,10 @@
     unknown.usage:n         = general ,
   	unknown.code:n          =
       {
-       \cs_set:Npn \__codedesc_metacolor: { \__codecmm_color_select:n{c__codedesc_none_color} }
-       \msg_error:nnxx { codedesc / errors } {object-err} {list ~ format}{\l_keys_key_str}
+       \cs_set:Npn \__codedesc_metacolor:
+        { \__codecmm_color_select:n{c__codedesc_error_color} }
+       \msg_error:nnxx { codedesc / errors } {object-err}
+        {list ~ format}{\l_keys_key_str}
       } ,
   }
 
@@ -1814,7 +1820,6 @@
     \cs_generate_variant:Nn \__codedesc_typeset:n {V}
 
     \cs_set_eq:NN     \__codedesc_seq_from_clist:Nn \seq_set_from_clist:Nn
-
 
     \tl_clear:N   \l__codedesc_Lbracket_tl
     \tl_clear:N   \l__codedesc_Rbracket_tl
@@ -1977,7 +1982,6 @@
     %%% code 'detokenized'
     %%%%%%%
 \regex_const:Nn \c__codedesc_tf_regex {TF$}
-\regex_const:Nn \c__codedesc_bnfsep_regex {\|}
 
 \cs_new_protected:Npn \__codedesc_macro_typeset:n #1
   {
@@ -1986,11 +1990,10 @@
 
     \__codedesc_faint_test:N \l__codedesc_tmpb_tl
 
-    \regex_replace_once:NnNTF \c__codedesc_tf_regex {}\l__codedesc_tmpb_tl
-      {
-        \tl_use:N \l__codedesc_tmpb_tl\textsl{\underline{TF}}
-      }
-      { \l__codedesc_tmpb_tl }
+    \regex_replace_once:NnN \c__codedesc_tf_regex
+      { \c{textsl}{\c{underline}{TF}} }
+      \l__codedesc_tmpb_tl
+    \l__codedesc_tmpb_tl
   }
 \cs_generate_variant:Nn \__codedesc_macro_typeset:n {V}
 
@@ -2753,7 +2756,7 @@
 \cs_new_eq:NN \typesetmacro \tsmacro
 
 
-\regex_const:Nn \c__codedesc_cmdspc_regex {(\\[^\ ]+)\ ( [ \[ \{ \} \] ] )}
+\regex_const:Nn \c__codedesc_cmdspc_regex { (\\[^\ ]+)\ ( [ \[ \{ \} \] ] ) }
 
 \NewDocumentCommand \tsverb {ssO{code}m}
   {

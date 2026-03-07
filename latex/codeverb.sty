@@ -1,0 +1,352 @@
+%%%==============================================================================
+%% Copyright 2023-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.24a} {2026/02/14}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverb
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2025/06/01]
+
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplPackage {codeverb}
+  {
+     name        = {codeverb} ,
+     prefix      = {codeverb} ,
+     date        = {2026/02/14} ,
+     version     = {1.24a} ,
+     description = {Verbatim Environment for codelisting}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\cs_generate_variant:Nn \regex_const:Nn {c}
+
+\tl_new:N \g__codeverb_body_tl
+\tl_new:N \l__codeverb_dummy_tl %% This is a dummy, to be 'absorbed'
+\bool_new:N \l__codeverb_first_entry_bool
+            
+\tl_new:N \g__codeverb_tmpa_tl
+\tl_new:N \l__codeverb_tmpa_tl
+
+\tl_new:N \l__codeverb_left_tl
+\tl_new:N \l__codeverb_right_tl
+
+\seq_new:N \l__codeverb_tmpa_seq
+\seq_new:N \l__codeverb_lastline_seq
+
+%%% Just in case, but probably not nedded
+%\str_const:Ne \c__codeverb_hidden_space_str
+%  { \c_percent_str \c_circumflex_str \c_circumflex_str A scheol \c_percent_str }
+
+
+\seq_new:N \l__codeverb_set_other_seq
+\seq_set_from_clist:Nn \l__codeverb_set_other_seq
+  { \ ,\\,\{,\},\$,\&,\#,\^,\^^K,\_,\^^A,\%,\~,\^^J }
+\cs_new:Npn \__codeverb_set_others:
+  {
+    \seq_map_inline:Nn \l__codeverb_set_other_seq
+      { \char_set_catcode_other:n {`##1} }
+  }
+
+
+\cs_new:Npn\__codeverb_env_begin:
+  {
+    \bool_set_true:N \l__codeverb_first_entry_bool
+    \group_begin:
+      \__codeverb_set_others:  
+      \char_set_catcode_other:n {`\^^M}
+      \__codeverb_linescan:w
+  }
+
+
+\group_begin:
+  \char_set_catcode_other:n {`\^^M} \endlinechar=-1 
+  \char_set_catcode_other:n {`\^^J}
+
+  \cs_new:Npn \__codeverb_body_build:n #1 {}
+  \cs_generate_variant:Nn \__codeverb_body_build:n {o,e}  
+
+  \cs_new:Npn \__codeverb_set_env_linescan:NNNnN #1#2#3#4#5
+    {
+      \cs_new:cpn {__codeverb_#4_body_build:n} ##1
+        {
+          \bool_if:NTF \l__codeverb_first_entry_bool
+            {
+              \tl_if_blank:nTF {##1}
+                {  }
+                {
+                  \tl_gput_right:Nn #5 {^^J}
+                  \bool_set_false:N \l__codeverb_first_entry_bool
+                  \tl_gput_right:Nn #5 {##1 ^^J}
+                }
+            }
+            {
+              \tl_gput_right:Nn #5 {##1 ^^J}
+            }
+        }
+        
+      \cs_new:cpn {__codeverb_#4_linescan:w} ##1 ^^M
+        {
+          \regex_split:NnNTF  #1 {##1} \l__codeverb_tmpa_seq
+            {
+              \int_gincr:N #3
+            }
+            {}
+          \regex_split:NnNTF  #2 {##1} \l__codeverb_lastline_seq
+            {
+              \int_if_zero:nTF {#3}
+                {
+                  \seq_pop_left:NN \l__codeverb_lastline_seq \l__codeverb_left_tl
+                  \seq_pop_left:NN \l__codeverb_lastline_seq \l__codeverb_left_tl
+                  \seq_pop_right:NN \l__codeverb_lastline_seq \l__codeverb_right_tl
+                  \seq_pop_right:NN \l__codeverb_lastline_seq \l__codeverb_right_tl
+                  \tl_gset_eq:NN \g__codeverb_tmpa_tl \l__codeverb_right_tl
+                  \cs_set:Npn \__next:
+                    {
+                      \__codeverb_body_build:o \l__codeverb_left_tl
+                      \group_end: \end{#4} 
+                      \tl_retokenize:V \g__codeverb_tmpa_tl
+                    }
+                }
+                {
+                  \int_gdecr:N #3
+                  \cs_set:Npn \__next:
+                    {
+                      \__codeverb_body_build:n {##1}
+                      \__codeverb_linescan:w
+                    }
+                }
+            }
+            {
+              \cs_set:Npn \__next:
+                {
+                  \__codeverb_body_build:n {##1}
+                  \__codeverb_linescan:w
+                }
+            }
+            \__next:
+        }    
+    }
+\group_end:
+\cs_generate_variant:Nn \__codeverb_set_env_linescan:NNNnN {ccc}
+
+\cs_new:Npn \__codeverb_new_scan_env:nN #1#2
+  {
+    \int_new:c {g__#1_cnt_int}
+    \regex_const:cn {c__#1_begin_regex} {(.*)\\begin[\ ]*\{#1\}(.*)}
+    \regex_const:cn {c__#1_end_regex}   {(.*)\\end[\ ]*\{#1\}(.*)}
+    \__codeverb_set_env_linescan:cccnN {c__#1_begin_regex} {c__#1_end_regex} {g__#1_cnt_int} {#1} #2
+  }
+
+
+\cs_new:Npn \codeverb_new_environment:nnNnn #1#2#3#4#5
+  {
+    \__codeverb_new_scan_env:nN {#1} #3
+    \NewDocumentEnvironment {#1}{#2}
+      {
+        #4
+        \cs_set_eq:Nc \__codeverb_linescan:w   {__codeverb_#1_linescan:w}
+        \cs_set_eq:Nc \__codeverb_body_build:n {__codeverb_#1_body_build:n}
+        \tl_gclear:N #3
+        \__codeverb_env_begin:
+      }
+      { #5 }
+  }
+
+
+%%%%
+%%%% This is trully (w)eird... for some reason the next token has to be a command...
+%%%% which gets partially absorbed.. therefore the 'dummy' (and empty) tl below...
+%%%% 
+%\cs_new:Npn \__codeverb_set_newlinechar:w
+%  { 
+%    \int_set:Nn \tex_newlinechar:D { 10 } {}
+%  }
+%\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:Nnn  #1#2#3
+%  {
+%    \cs_new_protected:Npn #1 ##1
+%      {
+%        \group_begin:
+%          \char_set_catcode_active:N \^^J
+%          \cs_set_eq:NN ^^J \scan_stop: 
+%          \__codeverb_set_newlinechar:w \l__codeverb_dummy_tl     
+%          \tl_retokenize:e
+%            {
+%              \exp_not:N \begin{#3}
+%              ##1
+%              #2
+%            }    
+%        \group_end:           
+%      }
+%  }
+%\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:NNn {Nc}  
+
+
+
+
+\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:Nnn  #1#2#3
+  {
+    \cs_new_protected:Npn #1 ##1
+      {
+        \tl_retokenize:e
+          {
+            \exp_not:N \begin{#3}
+            ##1
+            #2
+          }    
+      }
+  }
+\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:Nnn {NV}  
+
+\cs_new_protected:Npn \codeverb_new_retokenize_envcs:Nn #1#2
+  {
+    \str_set:Nn \l__codeverb_tmpa_tl { \end{#2} }
+    \str_remove_all:Nn \l__codeverb_tmpa_tl {~}
+    \__codeverb_new_retokenize_envcs:NVn #1 \l__codeverb_tmpa_tl {#2}
+  }
+
+\cs_new_protected:Npn \codeverb_new_retokenize_cs:N #1
+  {
+    \cs_set_eq:NN #1 \tl_retokenize:n
+  }
+
+\cs_new_protected:Npn \codeverb_new_retokenize_cs:NN #1#2
+  {
+    \cs_new_protected:Npn #1
+      {
+        \tl_retokenize:V #2
+      }
+  }
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% package ends 'here'
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%
+%%% extending scontents package options !!!!
+%%% changing it's default key handling from \msg_error to 'store-env'.
+%%%
+\keys_define:nn { codeverb / codestore }
+  {
+    store-env   .tl_set:N         = \l__codeverb_opt_store_tl ,
+    store-env   .value_required:n = true ,
+    st          .tl_set:N         = \l__codeverb_opt_store_tl ,
+    st          .value_required:n = true ,
+    store-at    .tl_set:N         = \l__codeverb_opt_store_tl ,
+    store-at    .value_required:n = true ,
+
+    unknown     .undefine: ,
+    unknown     .code:n           = 
+      { 
+        \keys_set:ne {codeverb / codestore}
+          { store-env = {\l_keys_key_str} } 
+      }
+ }
+
+\cs_new_protected:Npn  \__codeverb_set_store_seq:n #1
+  {
+    \seq_if_exist:cF {g__codeverb_store_ #1 _seq}
+      {
+        \seq_new:c {g__codeverb_store_ #1 _seq}
+        \int_new:c {g__codeverb_store_ #1 _int}
+        \cs_new:cpe {__codeverb_store_ #1 _gput_right:n} ##1
+          {
+            \exp_not:N \int_gincr:N \exp_not:c {g__codeverb_store_ #1 _int}
+            \exp_not:N \seq_gput_right:Nn \exp_not:c {g__codeverb_store_ #1 _seq} {##1}
+          }      
+      }
+    \cs_set_eq:Nc \__codeverb_store_gput_right:n {__codeverb_store_ #1 _gput_right:n}
+  }
+\cs_generate_variant:Nn \__codeverb_set_store_seq:n {o} 
+\cs_generate_variant:Nn \__codeverb_store_gput_right:n {o} 
+
+
+\codeverb_new_environment:nnNnn {VerbStore} {O{default}} \g__codeverb_body_tl
+  { 
+    \tl_if_blank:nTF {#1}
+      {
+        \keys_set:nn { codeverb / codestore }{default}
+      }
+      {
+        \keys_set:nn { codeverb / codestore }{#1}
+      }
+    \__codeverb_set_store_seq:o \l__codeverb_opt_store_tl
+  }
+  {  
+    \__codeverb_store_gput_right:o \g__codeverb_body_tl
+  }
+  
+\lstnewenvironment{codeverbatimlst}
+  { \__codelist_lstset: }
+  {}
+
+\codeverb_new_retokenize_envcs:Nn \__codeverb_listing:n {codeverbatimlst}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\codeverb_new_environment:nnNnn {MYverb} {} \g__codeverb_body_tl
+  {}
+  {
+    \__codeverb_listing:n 
+      { \exp_not:V \g__codeverb_body_tl }
+  }
+  
+
+\NewDocumentCommand \codelisting {mO{1}}
+  {
+    \__codeverb_listing:n 
+      { \seq_item:cn {g__codeverb_store_ #1 _seq}{#2} }
+  }
+
+
+  
+\NewDocumentCommand \codedisp {sO{}mO{}}
+  {
+    \tl_if_blank:nTF {#4}
+      {
+        \clist_map_inline:nn {#3}
+          { \codelisting ##1 }
+      }
+      {
+        \clist_map_inline:nn {#3}
+          { 
+            \clist_map_inline:nn {#4}
+              {
+                \codelisting {##1}[####1]
+              }
+          }
+      }
+      
+  }  
+
+
+\codeverb_new_retokenize_cs:NN \testexec \g__codeverb_body_tl
+  
