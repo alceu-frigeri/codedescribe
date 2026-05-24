@@ -97,7 +97,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### Change log
 
-* Version 1.24b (this)
+* Version 1.24b/1.24c (this)
   - minor code optimization
   - fixing [\#38](https://github.com/alceu-frigeri/codedescribe/issues/38)
 
