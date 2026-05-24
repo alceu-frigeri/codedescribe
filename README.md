@@ -99,6 +99,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 * Version 1.24b (next)
   - minor code optimization
+  - fixing [\#38](https://github.com/alceu-frigeri/codedescribe/issues/38)
 
 * Version 1.24a (this)
   - fixing [\#36](https://github.com/alceu-frigeri/codedescribe/issues/36)

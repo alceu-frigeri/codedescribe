@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.24a} {2026/02/14}
+%% This is version {1.24b} {2026/05/24}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codedescribe
@@ -34,8 +34,8 @@
   {
      name        = {codedescribe} ,
      prefix      = {codedesc} ,
-     date        = {2026/02/14} ,
-     version     = {1.24a} ,
+     date        = {2026/05/24} ,
+     version     = {1.24b} ,
      description = {LaTeX Code Description/Documentation}
   }
 %%%%%%%
@@ -1069,7 +1069,7 @@
   xmeta .code:n  = {
     \tl_put_right:Nn \l__codedesc_makefmt_tmp_tl
       {
-        \cs_set_eq:NN \__codedesc_typeset:n  \__codedesc_meta*:n
+        \cs_set_eq:NN \__codedesc_typeset:n  \__codedesc_xmeta:n
       }
    } ,
 
@@ -1936,13 +1936,13 @@
     %%%%%%%
     %%% < meta > 'detokenized'
     %%%%%%%
-\cs_new_protected:Npn \__codedesc_meta*:n #1
+\cs_new_protected:Npn \__codedesc_xmeta:n #1
   {
     \mode_if_math:TF
       {   \langle     \tl_to_str:n {#1}     \rangle   } %% We shouldn't be here, but...
       { $ \langle $   \tl_to_str:n {#1}   $ \rangle $ }
   }
-\cs_generate_variant:cn {__codedesc_meta*:n} {V}
+\cs_generate_variant:cn {__codedesc_xmeta:n} {V}
 
 
 %%% __faint__  ( ... ) => codedesc_faint:n { \1 }
